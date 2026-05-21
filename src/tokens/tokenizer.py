@@ -92,36 +92,6 @@ class obg_tokenizer:
 			seq_tok.append(decode_id(idx))
 		return seq_tok
 
-	#----------hitobject conversion from token----------
-	def tok_to_hitobject(self, obj_arr):
-		#TODO
-		tok = ""
-		match obj_arr[0]:
-			case "<CIRCLE>":
-				pass
-			case "<SLIDER_HEAD_BEZIER>":
-				pass
-			case "<SLIDER_HEAD_LINEAR>":
-				pass
-			case "<SLIDER_HEAD_PERFECT>":
-				pass
-		return tok
-	
-	def tok_seq_to_hitobject(self, seq):
-		seq_tok = []
-		idx = 0
-		curr = []
-		while idx < seq:
-			if len(curr) == 0: #determine current object type (circle, slider-b/l/p)
-				curr.append(seq[idx])
-			elif seq[idx] not in self.special_start:
-				curr.append(seq[idx])
-			else:
-				tok = decode_obj(curr)
-				seq_tok.append(tok)
-				curr=[seq[idx]]
-		return seq_tok
-
 if __name__ == "__main__":
 	tokenizer = obg_tokenizer()
 	print("num_t is:", tokenizer.num_t)
