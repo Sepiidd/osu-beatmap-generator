@@ -6,8 +6,10 @@ class obg_tokenizer:
 	load_path="", 
 	special_start=["<CIRCLE>", "<SLIDER_HEAD_BEZIER>", "<SLIDER_HEAD_LINEAR>", "<SLIDER_HEAD_PERFECT>"], 
 	special_types=["<ANCHOR>", "<SLIDER_TAIL>, <SLIDER_REPEAT>"], 
-	x_max=512, 
-	y_max=384):
+	x_min=-180, 
+	x_max=691, 
+	y_min=-82, 
+	y_max=407):
 		if load_path:
 			self.load_tokens(load_path)
 			return 
@@ -20,7 +22,9 @@ class obg_tokenizer:
 		self.special_types = special_types #other special tokens
 
 		#include max value in positions
+		self.x_from = x_min
 		self.x_positions = x_max + 1
+		self.y_from = y_min
 		self.y_positions = y_max + 1
 
 		self.itot={}
@@ -31,11 +35,11 @@ class obg_tokenizer:
 			self.itot[index] = s
 			self.ttoi[s] = index
 			index+=1
-		for i in range(self.x_positions):
+		for i in range(self.x_from, self.x_positions):
 			self.itot[index] = f"X_{i}"
 			self.ttoi[f"X_{i}"] = index
 			index+=1
-		for i in range(self.y_positions):
+		for i in range(self.y_from, self.y_positions):
 			self.itot[index] = f"Y_{i}"
 			self.ttoi[f"Y_{i}"] = index
 			index+=1
@@ -53,52 +57,52 @@ class obg_tokenizer:
 				"special_start": self.special_start, 
 				"special_types": self.special_types, 
 				"special": self.special, 
+				"x_from": self.x_from,
 				"x_positions": self.x_positions, 
+				"y_from": self.y_from,
 				"y_positions": self.y_positions, 
 				"num_t": self.num_t}, 
 				f
 			)
 
-	def load_tokens(load_path):
+	def load_tokens(self, load_path):
 		with open("itot.json", "r") as f:
 			self.itot = json.load(f)
 		with open("ttoi.json", "r") as f:
 			self.ttoi = json.load(f)
 		with open("meta.json", "r") as f:
 			meta = json.load(f)
-			self.special = meta[special]
-			self.special_start = meta[special_start]
-			self.special_types = meta[special_types]
-			self.x_positions = meta[x_positions]
-			self.y_positions = meta[y_positions]
-			self.num_t = meta[num_t]
+			self.special = meta['special']
+			self.special_start = meta['special_start']
+			self.special_types = meta['special_types']
+			self.x_from = meta['x_from']
+			self.x_positions = meta['x_positions']
+			self.y_from = meta['y_from']
+			self.y_positions = meta['y_positions']
+			self.num_t = meta['num_t']
 
 	#----------encode+decode----------
-	def encode_obj(self, obj):
+	def encode(self, obj):
 		return self.ttoi[obj]
 	
 	def encode_seq(self, seq):
 		seq_ids = []
 		for obj in seq:
-			seq_enc.append(encode_obj(obj))
+			seq_ids.append(self.encode(obj))
 		return seq_ids
 
-	def decode_id(self, idx):
+	def decode(self, idx):
 		return self.itot[idx]
 
 	def decode_seq(self, seq):
 		seq_tok = []
 		for idx in seq:
-			seq_tok.append(decode_id(idx))
+			seq_tok.append(self.decode(idx))
 		return seq_tok
 
 if __name__ == "__main__":
 	tokenizer = obg_tokenizer()
 	print("num_t is:", tokenizer.num_t)
 	print("special is:", tokenizer.special)
-	#print("x_positions is:", tokenizer.x_positions)
-	#print("y_positions is:", tokenizer.y_positions)
-	#print("itot is:", tokenizer.itot)
-	#print("ttoi is:", tokenizer.ttoi)
 	tokenizer.save_tokens()
 
