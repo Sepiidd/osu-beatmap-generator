@@ -1,17 +1,19 @@
 import json
+from pathlib import Path
+BASE_DIR=Path(__file__).parent
 
 class obg_tokenizer:
 	def __init__(
 	self, 
-	load_path="", 
+	load_tokens=False, 
 	special_start=["<CIRCLE>", "<SLIDER_HEAD_BEZIER>", "<SLIDER_HEAD_LINEAR>", "<SLIDER_HEAD_PERFECT>"], 
 	special_types=["<ANCHOR>", "<SLIDER_TAIL>, <SLIDER_REPEAT>"], 
 	x_min=-180, 
 	x_max=691, 
 	y_min=-82, 
 	y_max=407):
-		if load_path:
-			self.load_tokens(load_path)
+		if load_tokens:
+			self.load_tokens()
 			return 
 
 		self.special = special_start
@@ -48,11 +50,11 @@ class obg_tokenizer:
 
 	#----------save+load tokens json----------
 	def save_tokens(self):
-		with open("itot.json", "w") as f:
+		with open(BASE_DIR / "itot.json", "w") as f:
 			json.dump(self.itot, f)
-		with open("ttoi.json", "w") as f:
+		with open(BASE_DIR / "ttoi.json", "w") as f:
 			json.dump(self.ttoi, f)
-		with open("meta.json", "w") as f:
+		with open(BASE_DIR / "meta.json", "w") as f:
 			json.dump({
 				"special_start": self.special_start, 
 				"special_types": self.special_types, 
@@ -65,12 +67,12 @@ class obg_tokenizer:
 				f
 			)
 
-	def load_tokens(self, load_path):
-		with open("itot.json", "r") as f:
+	def load_tokens(self):
+		with open(BASE_DIR / "itot.json", "r") as f:
 			self.itot = json.load(f)
-		with open("ttoi.json", "r") as f:
+		with open(BASE_DIR / "ttoi.json", "r") as f:
 			self.ttoi = json.load(f)
-		with open("meta.json", "r") as f:
+		with open(BASE_DIR / "meta.json", "r") as f:
 			meta = json.load(f)
 			self.special = meta['special']
 			self.special_start = meta['special_start']
