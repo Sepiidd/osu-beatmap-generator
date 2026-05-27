@@ -34,15 +34,19 @@ def gen_single_onset(features, target_hitobjects, curr_timestamp, context_len=7)
     return (frames, target)
 
 def gen_onset_points(features, target_hitobjects):
+    onset_frames_all = []
     onset_targets = []
     first_ms = int(target_hitobjects[0].strip().split(",")[2])
     last_ms = int(target_hitobjects[-1].strip().split(",")[2])
     first_ms_floor = (first_ms // 10) * 10
     last_ms_ceil = ceil(last_ms / 10) * 10
     for ms in range(first_ms_floor, last_ms_ceil+1, 10):
-        onset_pair = gen_single_onset(features, target_hitobjects, ms)
-        onset_targets.append(onset_pair)
-    return onset_targets
+        onset_frames, onset_target = gen_single_onset(features, target_hitobjects, ms)
+        onset_frames_all.append(onset_frames)
+        onset_targets.append(onset_target)
+    onset_frames_all = np.stack(onset_frames_all, axis=0)
+    onset_targets  = np.stack(onset_targets)
+    return onset_frames_all, onset_targets
 
 def process_osu_hitobjects(osu_path):
     with open(osu_path, "r") as osz:
@@ -79,15 +83,18 @@ if __name__ == "__main__":
     features = process_audio(audio_path)
     print("features shape is", features.shape)
 
-    onset_points = gen_onset_points(features, lines)
+    #NOTE: instead of splicing here, save entire processed spectrogram along with entire ms_list and splice during batch retrieval
+    #onset_frames, onset_targets = gen_onset_points(features, lines)
 
-    total_bytes = 0
     print("osu mem size (bytes) is", np.array(osu).nbytes)
-    total_bytes += np.array(osu).nbytes
     print("lines mem size (bytes) is", np.array(lines).nbytes)
-    total_bytes += np.array(lines).nbytes 
     print("features mem size (bytes) is", features.nbytes)
+    #print("for all onset points, frame mem size (bytes) is", onset_frames.nbytes) 
+    #print("for all onset point, target mem size (bytes) is", onset_targets.nbytes) 
+    total_bytes = 0
+    total_bytes += np.array(osu).nbytes
+    total_bytes += np.array(lines).nbytes 
     total_bytes += features.nbytes
-    print("for all onset points, mem size (bytes) is", len(onset_points) * onset_points[0][0].nbytes)
-    total_bytes += len(onset_points) * onset_points[0][0].nbytes
+    #total_bytes += onset_frames.nbytes
+    #total_bytes += onset_targets.nbytes
     print("TOTAL MEM USAGE (BYTES):", total_bytes)

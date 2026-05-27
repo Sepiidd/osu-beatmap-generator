@@ -89,3 +89,14 @@ class obj_converter():
             tokens.extend(self.hitobject_to_tok(obj.strip()))
         tokens.append(self.tokenizer.encode("<EOS>"))
         return tokens
+
+    def hitobject_to_ms(self, obj):
+        ms = int(obj.strip().split(",")[2])
+        return ms
+
+    def hitobject_seq_to_ms(self, seq):
+        ms_seq = []
+        for obj in seq:
+            ms = self.hitobject_to_ms(obj)
+            ms_seq.append(ms)
+        return ms_seq
