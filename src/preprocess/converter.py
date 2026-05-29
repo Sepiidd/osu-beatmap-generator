@@ -26,6 +26,7 @@ class obj_converter():
         '''
         converts a sequence of tokens into their respective hitobjects
         '''
+        #TODO
         seq_obj = []
         idx = 0
         curr = []
@@ -90,13 +91,33 @@ class obj_converter():
         tokens.append(self.tokenizer.encode("<EOS>"))
         return tokens
 
+    def timing_deltas(self, prev, obj, nxt):
+        ms_prev = int(prev.strip().split(",")[2]) if prev else None
+        ms_obj = int(obj.strip().split(",")[2])
+        ms_nxt = int(nxt.strip().split(",")[2]) if nxt else None
+        forward = ms_nxt - ms_obj if nxt else -1
+        backward = ms_obj - ms_prev if prev else -1
+        return forward, backward
+
     def hitobject_to_ms(self, obj):
         ms = int(obj.strip().split(",")[2])
         return ms
 
     def hitobject_seq_to_ms(self, seq):
         ms_seq = []
-        for obj in seq:
+        delta_forward = []
+        delta_backward = []
+        prev = None
+        nxt = None
+        for i, obj in enumerate(seq):
+            if i < len(seq)-1:
+                nxt = seq[i+1]
+            else:
+                nxt = None
             ms = self.hitobject_to_ms(obj)
+            forward, backward = self.timing_deltas(prev, obj, nxt)
             ms_seq.append(ms)
-        return ms_seq
+            delta_forward.append(forward)
+            delta_backward.append(backward)
+            prev = obj
+        return ms_seq, delta_forward, delta_backward
