@@ -1,11 +1,12 @@
 import time
 import sys
+import numpy as np
+import h5py
 from math import ceil
 from pathlib import Path
 from librosa import load, power_to_db, stft
 from librosa.filters import mel
 from librosa import time_to_frames   
-import numpy as np
 
 from tokens.tokenizer import obg_tokenizer
 from preprocess.converter import obj_converter
@@ -29,7 +30,7 @@ def process_osu_hitobjects(osu_path):
         line = osz.readlines()
         tokens = converter.hitobject_seq_to_tok(line)
         ms_seq, forward_deltas, backward_deltas = converter.hitobject_seq_to_ms(line)
-    return (tokens, ms_seq, forward_deltas, backward_deltas, line)
+    return (np.array(tokens), np.array(ms_seq), np.array(forward_deltas), np.array(backward_deltas))
 
 def process_audio(audio_path):
     audio, sr = load(path=audio_path, sr=SR)
@@ -46,43 +47,51 @@ def process_audio(audio_path):
     features = np.stack(features, axis=-1)
     return features
 
-def save_onset_point(audio_features, targets):
+def save_point(
+        path, song_id, diff_name, 
+        audio_features, 
+        audio_targets,
+        osu_tokens,
+        deltas_fwd,
+        deltas_back
+    ):
+    with h5py.File(path, 'a') as f:
+        #hierarchy creation
+        set_grp = f.require_group(f"{song_id}")
+        num_diffs = set_grp.attrs.get("diffs", 0)
+        grp = set_grp.require_group(f"{num_diffs}")
+        grp.attrs["diff_name"] = diff_name
+        
+        #store data
+        if "audio_feat" not in set_grp:
+            set_grp.create_dataset("audio_feat", data=audio_features)
+        grp.create_dataset("audio_targets", data=audio_targets)
+        grp.create_dataset("osu_tokens", data=osu_tokens)
+        grp.create_dataset("deltas_fwd", data=deltas_fwd)
+        grp.create_dataset("deltas_back", data=deltas_back)
+
+        #important metadata
+        set_grp.attrs["diffs"] = num_diffs + 1
+        num_samples = f.attrs.get("num_samples", 0)
+        f.attrs["num_samples"] = num_samples + 1
+
+def process_one(h5path, song_name, diff_name):
+    #TODO
+    data_path = BASE_DIR.parent.parent.parent / "data"
+    audio_path = data_path / song_name / "audio.mp3"
+
+    osu, ms_seq, forward_deltas, backward_deltas = process_osu_hitobjects(data_path / song_name / diff_name)
+    features = process_audio(audio_path)
+
+    song_id = song_name.split(" ")[0]
+    save_point(h5path, song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas)
+
+def process_many(data_path):
     #TODO
     pass
-
-def save_object_point(audio_features, deltas_back, deltas_fwd, token_targets):
-    #TODO
-    pass    
 
 if __name__ == "__main__":
     song_name = "2114540 METALITY UNITED - Saint Catastrophe"
     diff_name = "METALITY UNITED - Saint Catastrophe (Booliix) [Blessings of the Divine Above].osu"
-    path = BASE_DIR.parent.parent.parent / "data" / song_name / diff_name
-
-    osu, ms_seq, forward_deltas, backward_deltas, lines = process_osu_hitobjects(path)
-
-    audio_path = BASE_DIR.parent.parent.parent / "data" / song_name / "audio.mp3"
-    features = process_audio(audio_path)
-
-    #NOTE: instead of splicing here, save entire processed spectrogram along with entire ms_list and splice during batch retrieval
-    #onset_frames, onset_targets = gen_onset_points(features, lines)
-
-    print("lines mem size (bytes) is", np.array(lines).nbytes)
-    print("osu tokens mem size (bytes) is", np.array(osu).nbytes, "with shape", np.array(osu).shape)
-    print("ms_seq targets mem size (bytes) is", np.array(ms_seq).nbytes, "with shape", np.array(ms_seq).shape)
-    print("forward deltas mem size (bytes) is", np.array(forward_deltas).nbytes, "with shape", np.array(forward_deltas).shape)
-    print("backward deltas mem size (bytes) is", np.array(backward_deltas).nbytes, "with shape", np.array(forward_deltas).shape)
-    print("audio features mem size (bytes) is", features.nbytes, "with shape", features.shape)
-    total_bytes = 0
-    total_bytes += np.array(osu).nbytes
-    total_bytes += np.array(lines).nbytes 
-    total_bytes += np.array(ms_seq).nbytes 
-    total_bytes += np.array(forward_deltas).nbytes 
-    total_bytes += np.array(backward_deltas).nbytes 
-    total_bytes += features.nbytes
-    print("TOTAL MEM USAGE (BYTES):", total_bytes)
-
-    print("")
-    print("ms_seq first 6:", ms_seq[:6])
-    print("forward_deltas first 5:", forward_deltas[:5])
-    print("backward_deltas first 5:", backward_deltas[:5])
+    path = BASE_DIR.parent.parent / "datasets" / "partition0"
+    process_one(path, song_name, diff_name)

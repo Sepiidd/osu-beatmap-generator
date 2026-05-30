@@ -1,3 +1,4 @@
 librosa
 numpy
 matplotlib
+h5py
