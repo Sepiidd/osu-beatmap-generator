@@ -8,10 +8,10 @@ class obg_tokenizer:
 	load_tokens=False, 
 	special_start=["<CIRCLE>", "<SLIDER_HEAD_BEZIER>", "<SLIDER_HEAD_LINEAR>", "<SLIDER_HEAD_PERFECT>"], 
 	special_types=["<ANCHOR>", "<SLIDER_TAIL>, <SLIDER_REPEAT>"], 
-	x_min=-180, 
-	x_max=691, 
-	y_min=-82, 
-	y_max=407):
+	x_min=-500,     #ingame grid min -180
+	x_max=1000,      #ingame grid max 691
+	y_min=-500,      #ingame grid min -82
+	y_max=1000):     #ingame grid max 407
 		if load_tokens:
 			self.load_tokens()
 			return 

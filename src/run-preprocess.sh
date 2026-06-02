@@ -1,1 +1,1 @@
-uv run python -m preprocess.preprocess
+uv run -m preprocess.preprocess
