@@ -58,14 +58,19 @@ def save_point(
         deltas_fwd,
         deltas_back
     ):
-    print("saving", song_id, "|", diff_name)
-    with h5py.File(path, 'a') as f:
+    with h5py.File(path, 'a', track_order=True) as f:
+        if f"{song_id}" in f: #skip sample if already exists
+            sg = f.get(f"{song_id}")
+            diff_lst = [sg.get(g).attrs.get("diff_name", None) for g in list(sg.keys())]
+            if diff_name in diff_lst:
+                print("already exists:", song_id, "|", diff_name)
+                return
         #hierarchy creation
+        print("saving:", song_id, "|", diff_name)
         set_grp = f.require_group(f"{song_id}")
         num_diffs = int(set_grp.attrs.get("diffs", 0))
-        grp = set_grp.get(f"{num_diffs}")
-        if grp is None: #skip if already exists
-            return
+        num_samples = int(f.attrs.get("num_samples", 0))
+        grp = set_grp.create_group(f"{num_samples}")
         grp.attrs["diff_name"] = diff_name
         
         #store data
@@ -77,8 +82,10 @@ def save_point(
         grp.create_dataset("deltas_back", data=deltas_back)
 
         #important metadata
+        if num_diffs == 0:
+            set_grp.attrs["start_range"] = num_samples
+        set_grp.attrs["end_range"] = num_samples
         set_grp.attrs["diffs"] = num_diffs + 1
-        num_samples = int(f.attrs.get("num_samples", 0))
         f.attrs["num_samples"] = num_samples + 1
 
 def process_one(data_path, h5path, song_name, diff_name):
