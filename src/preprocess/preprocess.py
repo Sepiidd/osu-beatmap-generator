@@ -10,7 +10,6 @@ from librosa import time_to_frames
 
 from tokens.tokenizer import obg_tokenizer
 from preprocess.converter import obj_converter
-from preprocess.audio_utils import get_frames_at_time
 
 #globals
 BASE_DIR = Path(__file__).parent
