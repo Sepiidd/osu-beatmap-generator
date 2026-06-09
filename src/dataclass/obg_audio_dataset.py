@@ -1,5 +1,6 @@
 import h5py
 import numpy as np
+import torch
 from torch.utils.data import Dataset
 from pathlib import Path
 from librosa import frames_to_time
@@ -24,23 +25,19 @@ class OBGAudioDataset(Dataset):
         sample, _ = self.sample_bin_search(idx)
         audio_feat = sample["audio_feat"]
         audio_targets = sample["audio_targets"]
-        print("shape is", audio_feat.shape)
         num_frames = audio_feat.shape[1]
 
         if num_frames < self.max_seq_len: #edge, audio less than max_seq_len
             audio_feat = self.pad_feats(audio_feat)
             num_frames = audio_feat.shape[1]
-        print("frame count is", num_frames)
 
         start_idx = np.random.randint(0, num_frames-self.max_seq_len+1) 
-        print("selected start_idx is", start_idx)
 
         window_seq = self.slice_windows(audio_feat, start_idx)
-        print("window_seq shape is", window_seq.shape)
+        window_seq = np.swapaxes(window_seq, 1, 2) #swap axes bc im dumb
         targets = self.gen_targets(start_idx, audio_targets)
-        print("targets shape is", targets.shape)
 
-        return window_seq, targets
+        return torch.tensor(window_seq), torch.tensor(targets)
 
     def gen_targets(self, start_idx, audio_targets, lenience=20):
         '''
@@ -49,7 +46,6 @@ class OBGAudioDataset(Dataset):
         ms_per_frame = (HOP_LEN/SR)*1000
         targets = []
         time_ms = frames_to_time(start_idx, sr=SR, hop_length=HOP_LEN)*1000
-        print("time_ms is", time_ms)
         targets_idx = self.bin_search_closest(time_ms, audio_targets, lenience) 
         curr_target = audio_targets[targets_idx]
         for i in range(self.max_seq_len):
@@ -148,7 +144,7 @@ class OBGAudioDataset(Dataset):
             return f.attrs.get("num_samples")
 
 if __name__ == "__main__":
+    #test stuff below if needed
     h5path = BASE_DIR.parent.parent / "datasets" / "partition0"
     dataset = OBGAudioDataset(h5path, SEQUENCE_LEN)
     dataset.__getitem__(23)
-    print("done")
