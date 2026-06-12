@@ -10,7 +10,7 @@ if __name__ == "__main__":
     dataset = OBGAudioDataset(h5path, SEQUENCE_LEN)
     dataloader = DataLoader(
             dataset,
-            batch_size=16,
+            batch_size=8,
             shuffle=True
             )
     for inputs, targets in dataloader:

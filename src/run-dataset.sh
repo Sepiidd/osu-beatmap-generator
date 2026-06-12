@@ -1,1 +1,1 @@
-uv run -m data-class.obg-audio-dataset
+uv run -m dataclass.obg_audio_dataset

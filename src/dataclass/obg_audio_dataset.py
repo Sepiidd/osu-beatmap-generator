@@ -147,4 +147,6 @@ if __name__ == "__main__":
     #test stuff below if needed
     h5path = BASE_DIR.parent.parent / "datasets" / "partition0"
     dataset = OBGAudioDataset(h5path, SEQUENCE_LEN)
-    dataset.__getitem__(23)
+    window, targets = dataset.__getitem__(23)
+    print("window shape:", window.shape)
+    print("targets shape:", targets.shape)

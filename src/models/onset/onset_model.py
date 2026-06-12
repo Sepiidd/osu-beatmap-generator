@@ -1,35 +1,66 @@
 import torch
 import torch.nn as nn
 from dataclasses import dataclass
+from models.position_encoding import PositionalEncoding
+from models.layer_norm import LayerNorm
+from models.onset.transformer_block import EncoderBlock
 
 class OnsetModel(nn.Module):
     def __init__(self, config):
         super().__init__()
+        assert config.block_size is not None
         self.config = config
-        #TODO: define layers
-        self.conv1 = torch.Conv2d(
-                    in_channels=self.config.n_in1,
-                    out_channels=self.config.nout_1,
-                    kernel_size=(self.config.k_len1, self.config.k_wid1)
+        #convolutions
+        self.conv1 = nn.Conv2d(
+                    in_channels=config.n_in1,
+                    out_channels=config.n_out1,
+                    kernel_size=(config.k_len1, config.k_wid1)
                 )
-        self.maxpool1 = nn.MaxPool1d(3, stride=3)
+        self.maxpool1 = nn.MaxPool1d(config.pool_width, stride=config.pool_stride)
 
-        self.conv2 = torch.Conv2d(
-                    in_channels=self.config.nout1,
-                    out_channels=self.config.nout2,
-                    kernel_size=(self.config.k_len2, self.config.k_wid2)
+        self.conv2 = nn.Conv2d(
+                    in_channels=config.n_out1,
+                    out_channels=config.n_out2,
+                    kernel_size=(config.k_len2, config.k_wid2)
                 )
-        self.maxpool2 = nn.MaxPool1(3, stride=3)
+        self.maxpool2 = nn.MaxPool1d(config.pool_width, stride=config.pool_stride)
 
-        
+        #project to transformer embedding size
+        self.lin1 = nn.Linear(config.conv_out_size, config.n_embd)
+
+        #encode info
+        self.pe = PositionalEncoding(config.n_embd, max_len=config.block_size)
+
+        #multi-head attention, encoder only
+        self.encoders = nn.ModuleDict(dict(
+                drop = nn.Dropout(config.dropout),
+                ah = nn.ModuleList([EncoderBlock(config) for _ in range(config.n_layer)]),
+                ln = LayerNorm(config.n_embd, bias=config.bias)
+            ))
+
+        #final linear layer
+        self.lin2 = nn.Linear(config.n_embd, 1, bias=False)
+
 
     def forward(self, x):
         """ 
         TODO: reorder input for convolution layers to be shape (B*S, 3, 15, 80) i.e. (B*S, W, T, F) where B is batch size, S is sequence length, W is number of STFT window lengths, 
         T is the temporal dimension, and F is the mel bin count representing frequency buckets
+
+        input <x> comes in with shape (B, S, 15, 80, 3)
         """
-        #TODO: perform computation
-        pass
+        #TODO
+        #reorder to shape (B*S, W, T, F)
+        B, S, T, F, W = x.shape #batch size, seq len, stft time, mel freq, stft window size
+        x = x.view(B*S, T, F, W) #fold seq len into batch size for convolutions
+        x = x.permute(0, 3, 1, 2) #reorder as required by convolutions
+
+        #convolutions
+
+
+        #unroll batch, sequence dimension
+
+        #transformer stuff
 
 
 
@@ -48,14 +79,17 @@ class OnsetConfig:
     pool_width = 3
     pool_stride = 3 
 
+    #transformer setup
+    conv_out_size = 1120 #flattened output size after convolutions and pooling operations
+
     #attention blocks
     block_size: int = 512 #sequence maximum length
-    vocab_size: int = 3012 #tokenizer.py
+    vocab_size: int = 3012 #tokenizer.py, dont need this lol
     n_layer: int = 12 #number of transformer layers (EncoderBlock module)
     n_head: int = 12 #number of attention heads per EncoderBlock
     n_embd: int = 768 #embedding layer size
-    #dropout: float = 0.0 #copied over from csc413 example
-    #bias: bool = True #copied over from csc413 example
+    dropout: float = 0.0 #copied over from csc413 example
+    bias: bool = True #copied over from csc413 example
 
 if __name__ == "__main__":
     model = OnsetModel(OnsetConfig())
