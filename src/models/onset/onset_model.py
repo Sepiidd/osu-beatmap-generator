@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from dataclasses import dataclass
 from models.position_encoding import PositionalEncoding
 from models.layer_norm import LayerNorm
@@ -28,11 +29,9 @@ class OnsetModel(nn.Module):
         #project to transformer embedding size
         self.lin1 = nn.Linear(config.conv_out_size, config.n_embd)
 
-        #encode info
-        self.pe = PositionalEncoding(config.n_embd, max_len=config.block_size)
-
         #multi-head attention, encoder only
-        self.encoders = nn.ModuleDict(dict(
+        self.encoder = nn.ModuleDict(dict(
+                pe = PositionalEncoding(config.n_embd, max_len=config.block_size),
                 drop = nn.Dropout(config.dropout),
                 ah = nn.ModuleList([EncoderBlock(config) for _ in range(config.n_layer)]),
                 ln = LayerNorm(config.n_embd, bias=config.bias)
@@ -56,13 +55,28 @@ class OnsetModel(nn.Module):
         x = x.permute(0, 3, 1, 2) #reorder as required by convolutions
 
         #convolutions
+        x = self.conv1(x)
+        x = self.maxpool1(x)
 
+        x = self.conv2(x)
+        x = self.maxpool2(x)
 
         #unroll batch, sequence dimension
+        x = x.view(B, S, -1)
 
-        #transformer stuff
+        #project size, encode info
+        x = self.lin1(x)
+        x = self.encoder.pe(x)
 
-
+        #attention blocks
+        x = self.encoder.drop(x)
+        for block in self.encoder.ah:
+            x = block(x)
+        x = self.encoder.ln(x)
+        
+        #obtain logits from attended info
+        logits = self.lin2(x)
+        return logits
 
 @dataclass
 class OnsetConfig:
