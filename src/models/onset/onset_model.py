@@ -40,15 +40,10 @@ class OnsetModel(nn.Module):
         #final linear layer
         self.lin2 = nn.Linear(config.n_embd, 1, bias=False)
 
-
     def forward(self, x):
         """ 
-        TODO: reorder input for convolution layers to be shape (B*S, 3, 15, 80) i.e. (B*S, W, T, F) where B is batch size, S is sequence length, W is number of STFT window lengths, 
-        T is the temporal dimension, and F is the mel bin count representing frequency buckets
-
         input <x> comes in with shape (B, S, 15, 80, 3)
         """
-        #TODO
         #reorder to shape (B*S, W, T, F)
         B, S, T, F, W = x.shape #batch size, seq len, stft time, mel freq, stft window size
         x = x.view(B*S, T, F, W) #fold seq len into batch size for convolutions
