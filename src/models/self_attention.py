@@ -22,7 +22,7 @@ class SelfAttention(nn.Module):
 
         #output projection
         self.residual_dropout = nn.Dropout(config.dropout)
-        self.out_proj = nn.Linear(config.n_embd, config,n_embd, bias=config.bias)
+        self.out_proj = nn.Linear(config.n_embd, config.n_embd, bias=config.bias)
 
     def forward(self, x): 
         B, S, D = x.shape #batch, sequence length, dimensionality of embedding
@@ -46,7 +46,5 @@ class SelfAttention(nn.Module):
         #out projections
         y = self.residual_dropout(self.out_proj(y))
         return y
-
-
 
 

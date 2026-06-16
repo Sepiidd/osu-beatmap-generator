@@ -1,10 +1,11 @@
+import inspect
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from dataclasses import dataclass
 from models.position_encoding import PositionalEncoding
 from models.layer_norm import LayerNorm
 from models.onset.transformer_block import EncoderBlock
+from models.onset.onset_config import OnsetConfig
 
 class OnsetModel(nn.Module):
     def __init__(self, config):
@@ -73,32 +74,35 @@ class OnsetModel(nn.Module):
         logits = self.lin2(x)
         return logits
 
-@dataclass
-class OnsetConfig:
-    #convolutions
-    n_in1: int = 3
-    k_len1: int = 7
-    k_wid1: int = 3
-    n_out1: int = 10 #equal to n_in2
-    n_out2: int = 20
-    k_len2: int = 3
-    k_wid2: int = 3
+    def configure_optimizer(self, weight_decay, learning_rate, betas, device_type):
+        #get all learnable parameters
+        p_dct = {pn: p for pn, p in self.named_parameters()}
+        p_dct = {pn: p for pn, p in p_dct.items() if p.requires_grad}
+        
+        #optimizer groups
+        decay_params = [p for n,p in p_dct.items() if p.dim()>=2]
+        nodecay_params = [p for n,p in p_dct.items() if p.dim()<2]
+        opt_grps = [
+            {'params': decay_params, 'weight_decay': weight_decay},
+            {'params': nodecay_params, 'weight_decay': 0.0}
+        ]
 
-    #pooling
-    pool_width = 3
-    pool_stride = 3 
+        #element number and size tracking
+        num_decay = sum(p.numel() for p in decay_params)
+        size_decay = sum(p.nbytes for p in decay_params)
+        num_nodecay = sum(p.nbytes for p in nodecay_params)
+        size_nodecay = sum(p.nbytes for p in nodecay_params)
+        print(f"{len(decay_params)} many decay tensors, with a total of {num_decay} parameters taking up {size_decay} many bytes")
+        print(f"{len(nodecay_params)} many nodecay tensors, with a total of {num_nodecay} parameters taking up {size_nodecay} many bytes")
 
-    #transformer setup
-    conv_out_size = 1120 #flattened output size after convolutions and pooling operations
+        #check if fused implementation of adamw is available
+        fused_avail = 'fused' in inspect.signature(torch.optim.AdamW).parametersa
+        use_fused = fused_avail and device_type == 'cuda'
+        extra_args = dict(fused=True) if use_fused else dict()
 
-    #attention blocks
-    block_size: int = 512 #sequence maximum length
-    vocab_size: int = 3012 #tokenizer.py, dont need this lol
-    n_layer: int = 12 #number of transformer layers (EncoderBlock module)
-    n_head: int = 12 #number of attention heads per EncoderBlock
-    n_embd: int = 768 #embedding layer size
-    dropout: float = 0.0 #copied over from csc413 example
-    bias: bool = True #copied over from csc413 example
+        #create AdamW
+        optimizer = torch.optim.AdamW(optim_groups, lr=learning_rate, betas=betas, **extra_args)
+        return optimizer
 
 if __name__ == "__main__":
     model = OnsetModel(OnsetConfig())
