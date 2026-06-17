@@ -82,7 +82,7 @@ class OnsetModel(nn.Module):
         #optimizer groups
         decay_params = [p for n,p in p_dct.items() if p.dim()>=2]
         nodecay_params = [p for n,p in p_dct.items() if p.dim()<2]
-        opt_grps = [
+        optim_groups = [
             {'params': decay_params, 'weight_decay': weight_decay},
             {'params': nodecay_params, 'weight_decay': 0.0}
         ]
@@ -92,11 +92,11 @@ class OnsetModel(nn.Module):
         size_decay = sum(p.nbytes for p in decay_params)
         num_nodecay = sum(p.nbytes for p in nodecay_params)
         size_nodecay = sum(p.nbytes for p in nodecay_params)
-        print(f"{len(decay_params)} many decay tensors, with a total of {num_decay} parameters taking up {size_decay} many bytes")
-        print(f"{len(nodecay_params)} many nodecay tensors, with a total of {num_nodecay} parameters taking up {size_nodecay} many bytes")
+        print(f"onset model has {len(decay_params)} many decay tensors, with a total of {num_decay} parameters taking up {size_decay} many bytes")
+        print(f"onset model has {len(nodecay_params)} many nodecay tensors, with a total of {num_nodecay} parameters taking up {size_nodecay} many bytes")
 
         #check if fused implementation of adamw is available
-        fused_avail = 'fused' in inspect.signature(torch.optim.AdamW).parametersa
+        fused_avail = 'fused' in inspect.signature(torch.optim.AdamW).parameters
         use_fused = fused_avail and device_type == 'cuda'
         extra_args = dict(fused=True) if use_fused else dict()
 

@@ -20,7 +20,7 @@ def read_group(f, indent=0):
     return
 
 if __name__ == "__main__":
-    path = Path(__file__).parent.parent / "datasets" / "partition0"
+    path = Path(__file__).parent.parent / "datasets" / "train"
     with h5py.File(path, "r") as f:
         print("f attrs are:")
         for key, val in f.attrs.items():

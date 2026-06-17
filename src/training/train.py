@@ -12,21 +12,65 @@ BASE_DIR = Path(__file__).parent
 SEQUENCE_LEN = 512
 
 if __name__ == "__main__":
-    print("cuda is available:", torch.cuda.is_available())
-    h5path = BASE_DIR.parent.parent / "datasets" / "partition0"
-    dataset = OBGAudioDataset(h5path, SEQUENCE_LEN)
-    dataloader = DataLoader(
-            dataset,
+    #TODO
+    train_h5path = BASE_DIR.parent.parent / "datasets" / "train"
+    validation_h5path = BASE_DIR.parent.parent / "datasets" / "validation"
+    test_h5path = BASE_DIR.parent.parent / "datasets" / "test"
+    
+    #check if gradscaler is required
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    dtype = 'bfloat16' if torch.cuda.is_available() and torch.cuda.is_bf16_supported() else 'float16'
+    pt_dtype = {'float32': torch.float32, 'bfloat16': torch.bfloat16, 'float16': torch.float16}[dtype]
+    ctx = nullcontext() if device == 'cpu' else torch.amp.autocast(device_type=device, dtype=pt_dtype)
+    scaler = torch.amp.GradScaler(device, enabled=(dtype == 'float16')) #if not working in float16, acts as a no-op
+
+    train_dataset = OBGAudioDataset(train_h5path, SEQUENCE_LEN)
+    validation_dataset = OBGAudioDataset(validation_h5path, SEQUENCE_LEN)
+    test_dataset = OBGAudioDataset(test_h5path, SEQUENCE_LEN)
+
+    trainloader = DataLoader(
+            train_dataset,
             batch_size=8,
-            shuffle=True
+            shuffle=True,
+            pin_memory=True #for faster and async gpu transfers
             )
-    model = OnsetModel(OnsetConfig())
+    validationloader = DataLoader(
+            validation_dataset,
+            batch_size=8,
+            shuffle=True,
+            pin_memory=True #for faster and async gpu transfers
+            )
+    testloader = DataLoader(
+            test_dataset,
+            batch_size=8,
+            shuffle=True,
+            pin_memory=True #for faster and async gpu transfers
+            )
+
+    free_mem, total_mem = torch.cuda.mem_get_info()
+    print("gpu free_mem and total_mem are", free_mem, total_mem)
+    model = OnsetModel(OnsetConfig()).to(device) #also sends to gpu if possible
+    print("moved model to gpu memory")
     criterion = nn.BCEWithLogitsLoss()
 
-    #training configuration
     train_config = {
-        'epochs': 40
-        'criterion': criterion
+        'epochs': 1,
+        'criterion': criterion,
+        'scaler': scaler,
+        'weight_decay': 0.1,
+        'lr': 3e-5,
+        'beta1': 0.9,
+        'beta2': 0.99,
+        'device': device,
+        'ctx': ctx
     }
 
-    train_epochs(model, dataloader, train_config)
+    print("train_config is", train_config)
+
+    train_epochs(model, trainloader, validationloader, train_config)
+
+
+
+
+
+

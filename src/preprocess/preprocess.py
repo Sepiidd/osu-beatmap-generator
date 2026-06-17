@@ -104,6 +104,10 @@ def process_many(data_path, h5path):
     return
 
 if __name__ == "__main__":
-    h5path = BASE_DIR.parent.parent / "datasets" / "partition0"
-    data_dir = BASE_DIR.parent.parent / "data"
+    spin = input("1 for train, 2 for validation, 3 for test:\n")
+    split = "train" if spin == '1' else ("validation" if spin == '2' else ("test" if spin == '3' else "default"))
+    print("split is", split)
+
+    h5path = BASE_DIR.parent.parent / "datasets" / split
+    data_dir = BASE_DIR.parent.parent / "data" / "train" #or validation, or test
     process_many(data_dir, h5path)
