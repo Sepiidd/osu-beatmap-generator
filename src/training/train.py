@@ -55,14 +55,20 @@ if __name__ == "__main__":
 
     train_config = {
         'epochs': 1,
+        'log_interval': 10,
+        'eval_interval': 10,
+        'eval_iters': 40,
+        'device': device,
+        'ctx': ctx,
+        'train_loader': trainloader,
+        'validation_loader': validationloader,
+        'test_loader': testloader,
         'criterion': criterion,
         'scaler': scaler,
         'weight_decay': 0.1,
         'lr': 3e-5,
         'beta1': 0.9,
-        'beta2': 0.99,
-        'device': device,
-        'ctx': ctx
+        'beta2': 0.99
     }
 
     print("train_config is", train_config)
