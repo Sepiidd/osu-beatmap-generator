@@ -68,12 +68,13 @@ if __name__ == "__main__":
         'weight_decay': 0.1,
         'lr': 3e-5,
         'beta1': 0.9,
-        'beta2': 0.99
+        'beta2': 0.99,
+        'grad_clip': 1.0
     }
 
     print("train_config is", train_config)
 
-    train_epochs(model, trainloader, validationloader, train_config)
+    train_epochs(model, trainloader, train_config)
 
 
 
