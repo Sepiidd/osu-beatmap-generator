@@ -5,8 +5,10 @@ from pathlib import Path
 from torch.utils.data import DataLoader
 from torch.optim import AdamW
 from training.helpers_train import train_epochs
+from training.helpers_train import train 
 import torch.nn as nn
 import torch
+import easydict
 
 BASE_DIR = Path(__file__).parent
 SEQUENCE_LEN = 512
@@ -49,12 +51,13 @@ if __name__ == "__main__":
 
     free_mem, total_mem = torch.cuda.mem_get_info()
     print("gpu free_mem and total_mem are", free_mem, total_mem)
-    model = OnsetModel(OnsetConfig()).to(device) #also sends to gpu if possible
-    print("moved model to gpu memory")
+
     criterion = nn.BCEWithLogitsLoss()
+    model = OnsetModel(OnsetConfig()).to(device) #also sends to gpu if possible
 
     train_config = {
         'epochs': 1,
+        'max_iters': 100, #set to specific value if not passing over entire dataset per epoch
         'log_interval': 10,
         'eval_interval': 10,
         'eval_iters': 40,
@@ -69,15 +72,13 @@ if __name__ == "__main__":
         'lr': 3e-5,
         'beta1': 0.9,
         'beta2': 0.99,
-        'grad_clip': 1.0
+        'grad_clip': 1.0,
+        'grad_accumulation_steps': 4
     }
+    config = easydict.EasyDict(train_config)
 
-    print("train_config is", train_config)
+    print("config is", config)
 
-    train_epochs(model, trainloader, train_config)
-
-
-
-
-
-
+    optimizer = model.configure_optimizer(config.weight_decay, config.lr, (config.beta1, config.beta2), config.device)
+    train(model, trainloader, optimizer, config)
+#    train_epochs(model, trainloader, easydict.EasyDict(train_config))
