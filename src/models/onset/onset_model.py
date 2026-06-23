@@ -41,6 +41,14 @@ class OnsetModel(nn.Module):
         #final linear layer
         self.lin2 = nn.Linear(config.n_embd, 1, bias=False)
 
+        #initial weight randomization
+        self.apply(self._init_weights)
+        for pn, p in self.named_parameters():
+            if pn.endswith("c_proj"):
+                #gpt2 scaled init for residual projections (for attention)
+                torch.nn.init._normal(p, mean=0.0, std=0.02/math.sqrt(2 * config)) #2 comes from amount of residual connections performed
+
+
     def forward(self, x):
         """ 
         input <x> comes in with shape (B, S, 15, 80, 3)
@@ -73,6 +81,12 @@ class OnsetModel(nn.Module):
         #obtain logits from attended info
         logits = self.lin2(x)
         return logits
+
+    def _init_weights(self, module):
+        if isinstance(module, nn.Linear):
+            torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
+            if module.bias is not None:
+                torch.nn.init.zeros_(module.bias)
 
     def configure_optimizer(self, weight_decay, learning_rate, betas, device_type):
         #get all learnable parameters

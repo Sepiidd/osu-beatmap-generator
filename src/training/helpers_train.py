@@ -11,7 +11,6 @@ def eval_loss(model, train_loader, config):
     '''
     run test/evaluation time loss computation to see model accuracy
     '''
-    #TODO
     validation_loader = config['validation_loader']
     ctx = config['ctx']
     eval_iters = config['eval_iters']
@@ -71,7 +70,7 @@ def train_one_epoch(epoch_idx, model, train_loader, optimizer, config):
         -model checkpointing
         -gradient clipping
     '''
-    #TODO: gradient accumulation necessary?, randomize weight initialization (in onset model class)
+    #TODO: gradient accumulation necessary?
     criterion = config['criterion']
     scaler = config['scaler']
     device = config['device']

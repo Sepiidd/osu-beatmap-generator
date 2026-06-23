@@ -19,9 +19,9 @@ class EncoderBlock(nn.Module):
 class MLP(nn.Module): #final sigmoid layer for attention block
     def __init__(self, config):
         super().__init__()
-        self.lin1 = nn.Linear(config.n_embd, 3*config.n_embd)
+        self.c_fc = nn.Linear(config.n_embd, 3*config.n_embd)
         self.relu = nn.ReLU()
-        self.lin2 = nn.Linear(3*config.n_embd, config.n_embd)
+        self.c_proj = nn.Linear(3*config.n_embd, config.n_embd)
         self.dropout = nn.Dropout(config.dropout)
 
     def forward(self, x): 
