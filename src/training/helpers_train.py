@@ -136,8 +136,7 @@ def train(model, train_loader, optimizer, config):
                 loss = loss / grad_accumulation_steps #manipulate algebra, simulate larger batch
             inputs, targets = next(train_gen)
             scaler.scale(loss).backward()
-
-        #gradient clipping
+       #gradient clipping
         if grad_clip != 0.0:
             scaler.unscale_(optimizer)
             torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
