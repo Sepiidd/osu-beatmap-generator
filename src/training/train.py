@@ -56,20 +56,27 @@ if __name__ == "__main__":
     model = OnsetModel(OnsetConfig()).to(device) #also sends to gpu if possible
 
     train_config = {
-        'epochs': 1,
+        #train iteration amounts
+        'epochs': 1, 
         'max_iters': 100, #set to specific value if not passing over entire dataset per epoch
         'log_interval': 10,
         'eval_interval': 10,
         'eval_iters': 40,
+        'warmup_iters': 1000, #experiment with this and decay_iters
+        'lr_decay_iters': 5000,
+        #training environment
         'device': device,
         'ctx': ctx,
         'train_loader': trainloader,
         'validation_loader': validationloader,
         'test_loader': testloader,
-        'criterion': criterion,
         'scaler': scaler,
+        #model specifics
+        'criterion': criterion,
         'weight_decay': 0.1,
-        'lr': 3e-5,
+        'lr': 3e-4,
+        'min_lr': 3e-5,
+        'decay_lr': False,
         'beta1': 0.9,
         'beta2': 0.99,
         'grad_clip': 1.0,

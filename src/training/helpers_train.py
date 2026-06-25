@@ -4,6 +4,7 @@ from torch.optim import AdamW
 import torch.nn as nn
 import torch
 import time
+from datetime import datetime
 
 BASE_DIR = Path(__file__).parent
 
@@ -46,7 +47,7 @@ def eval_loss(model, train_loader, config):
     return out, accuracy
 
 def write_checkpoints(iter_idx, model, optimizer, val_loss_best, val_acc_best, config, target="onset_checkpoints"):
-    path = BASE_DIR.parent.parent / target / f"i{iter_idx}_bl{val_loss_best}_ba{val_acc_best}"
+    path = BASE_DIR.parent.parent / target / f"i{iter_idx}_bl{val_loss_best}_ba{val_acc_best}_date{datetime.now().strftime('%Y/%m/%d|%H:%M:%S')}"
     model_dict = model.state_dict()
     opt_dict = optimizer.state_dict()
 
@@ -70,6 +71,21 @@ def make_generator(dataloader, device):
             t = targets.to(device, non_blocking=True)
             yield i, t
 
+def get_lr(it, config):
+    '''
+    copied over from school reference
+    '''
+    # 1) linear warmup for warmup_iters steps
+    if it < config.warmup_iters:
+        return config.learning_rate * it / config.warmup_iters
+    # 2) if it > lr_decay_iters, return min learning rate
+    if it > config.lr_decay_iters:
+        return config.min_lr
+    # 3) in between, use cosine decay down to min learning rate
+    decay_ratio = (it - config.warmup_iters) / (config.lr_decay_iters - config.warmup_iters) #distance from warmup iters / total distance to decay
+    assert 0 <= decay_ratio <= 1
+    coeff = 0.5 * (1.0 + math.cos(math.pi * decay_ratio)) # follows cosine shaped curve with range [0,1]
+    return config.min_lr + coeff * (config.learning_rate - config.min_lr)
 
 def train(model, train_loader, optimizer, config):
     '''
@@ -103,16 +119,23 @@ def train(model, train_loader, optimizer, config):
     while True:
         #TODO: variable learning rate (startup lr, etc), debug
         break
+
         if idx >= max_iters:
             break
 
+        #variable learning rate
+        lr = get_lr(idx, config) if config.decay_lr else config.lr
+        for param_group in optimizer.param_groups:
+            param_group['lr'] = lr
+
+        #predictions, back pass
         for microstep in range(grad_accumulation_steps):
-            with ctx: #for autocast when working through gpu
+            with ctx: #autocast type gpu work 
                 logits = model(inputs)
                 loss = criterion(logits, targets)
-                loss = loss / grad_accumulation_steps #manipulate algebra to simulate larger batch size training
-            inputs, targets = next(train_gen) #prefetch next batch
-            scaler.scale(loss).backward() #backward pass
+                loss = loss / grad_accumulation_steps #manipulate algebra, simulate larger batch
+            inputs, targets = next(train_gen)
+            scaler.scale(loss).backward()
 
         #gradient clipping
         if grad_clip != 0.0:
@@ -121,7 +144,6 @@ def train(model, train_loader, optimizer, config):
 
         scaler.step(optimizer) #optimizer step
         scaler.update() #dynamically updates magnitude/scale factor of scaler
-
         optimizer.zero_grad(set_to_none=True) #set as none over setting to zero (performance)
 
         #logging, loss evaluation, model snapshot related stuff
