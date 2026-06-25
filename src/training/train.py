@@ -11,7 +11,7 @@ import torch
 import easydict
 
 BASE_DIR = Path(__file__).parent
-SEQUENCE_LEN = 512
+SEQUENCE_LEN = 512 #NOTE: move to a config?
 
 if __name__ == "__main__":
     #TODO
@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     trainloader = DataLoader(
             train_dataset,
-            batch_size=8,
+            batch_size=8, #NOTE: move to a config?
             shuffle=True,
             pin_memory=True #for faster and async gpu transfers
             )

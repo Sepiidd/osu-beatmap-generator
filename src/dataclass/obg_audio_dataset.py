@@ -27,7 +27,7 @@ class OBGAudioDataset(Dataset):
         audio_targets = sample["audio_targets"]
         num_frames = audio_feat.shape[1]
 
-        if num_frames < self.max_seq_len: #edge, audio less than max_seq_len
+        if num_frames < self.max_seq_len: #edgecase, audio less than max_seq_len
             audio_feat = self.pad_feats(audio_feat)
             num_frames = audio_feat.shape[1]
 

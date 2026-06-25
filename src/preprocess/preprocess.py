@@ -109,5 +109,5 @@ if __name__ == "__main__":
     print("split is", split)
 
     h5path = BASE_DIR.parent.parent / "datasets" / split
-    data_dir = BASE_DIR.parent.parent / "data" / "train" #or validation, or test
+    data_dir = BASE_DIR.parent.parent / "data" / "train" #TODO: or validation, or test
     process_many(data_dir, h5path)
