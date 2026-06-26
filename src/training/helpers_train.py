@@ -160,15 +160,3 @@ def train(model, train_loader, optimizer, config):
             print(f"evaluation accuracies {idx}: train loss {losses['train']:.4f} accuracy {accuracy['train']:.4f}, validation loss {losses['val']:.4f}, accuracy {accuracy['val']:.4f}")
             write_checkpoints(idx, model, optimizer, val_acc, val_acc_best, config)
         idx+=1
-
-
-#NOTE: NO LONGER NEEDED
-def train_epochs(model, train_loader, config):
-    #iterate <epochs> many times
-    optimizer = model.configure_optimizer(config.weight_decay, config.lr, (config.beta1, config.beta2), config.device)
-    for epoch in range(config.epochs):
-        print("\n")
-        print(f"=====EPOCH NUMBER: {epoch}=====")
-        train_one_epoch(epoch, model, train_loader, optimizer, config)
-
-

@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from models.position_encoding import PositionalEncoding
 from models.layer_norm import LayerNorm
 from models.onset.transformer_block import EncoderBlock
-from models.onset.onset_config import OnsetConfig
+from configs.onset_config import OnsetConfig
 
 class OnsetModel(nn.Module):
     def __init__(self, config):

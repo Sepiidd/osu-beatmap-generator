@@ -1,6 +1,6 @@
 from generate.onset_generator_class import OnsetGenerator 
 from models.onset.onset_model import OnsetModel
-from models.onset.onset_config import OnsetConfig
+from configs.onset_config import OnsetConfig
 from pathlib import Path
 import torch
 

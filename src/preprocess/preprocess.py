@@ -7,16 +7,17 @@ from pathlib import Path
 from librosa import load, power_to_db, stft
 from librosa.filters import mel
 from librosa import time_to_frames   
-
 from tokens.tokenizer import obg_tokenizer
 from preprocess.converter import obj_converter
+from configs.audio_config import AudioConfig
 
 #globals
 BASE_DIR = Path(__file__).parent
-N_FFT=[512, 1024, 2048] #n_fft param in stft (also sets win_len with no argument)
-HOP_LEN=221 #stft stride param, ~10ms=HOP_LEN/22050 * 1000 where 22050 is default librosa sr
-N_MEL=80
-SR=22050
+configA = AudioConfig()
+N_FFT = configA.n_fft
+HOP_LEN = configA.hop_len
+N_MEL = configA.n_mel
+SR = configA.sr
 
 tokenizer = obg_tokenizer(load_tokens=False)
 converter = obj_converter(tokenizer=tokenizer)
@@ -109,5 +110,5 @@ if __name__ == "__main__":
     print("split is", split)
 
     h5path = BASE_DIR.parent.parent / "datasets" / split
-    data_dir = BASE_DIR.parent.parent / "data" / "train" #TODO: or validation, or test
+    data_dir = BASE_DIR.parent.parent / "data" / split 
     process_many(data_dir, h5path)

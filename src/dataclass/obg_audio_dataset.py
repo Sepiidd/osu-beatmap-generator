@@ -5,12 +5,14 @@ from torch.utils.data import Dataset
 from pathlib import Path
 from librosa import frames_to_time
 from preprocess.audio_utils import get_frames_at_idx
+from configs.audio_config import AudioConfig
 
 #GLOBALS
 BASE_DIR = Path(__file__).parent
-SR = 22050
-SEQUENCE_LEN = 512 #equal to roughly 5 seconds of audio
-HOP_LEN=221
+configA = AudioConfig()
+SR = configA.sr
+SEQUENCE_LEN = configA.sequence_len #equal to roughly 5 seconds of audio
+HOP_LEN = configA.hop_len
 
 class OBGAudioDataset(Dataset):
     def __init__(self, h5path, max_seq_len):
