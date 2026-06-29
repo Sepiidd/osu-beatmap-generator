@@ -48,6 +48,8 @@ def process_audio(audio_path):
 
         features.append(normalized)
     features = np.stack(features, axis=-1)
+    #m, t, w = features.shape
+    #print("shape of features is:", m, t, w)
     return features
 
 def save_point(

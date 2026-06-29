@@ -11,7 +11,7 @@ def get_frames_at_idx(audio_feat, idx, context_len=7):
     frames = None
     if idx-context_len < 0: #idx too close to start
         num_pad = abs(idx-context_len)
-        frames = audio_feat[:, idx:idx+context_len+1, :]
+        frames = audio_feat[:, idx-(context_len-num_pad):idx+context_len+1, :]
         frames = np.pad(frames, ((0,0), (num_pad, 0), (0,0)), mode="constant")
     elif (idx+context_len)-max_frame > 0: #idx too close to end
         num_pad = abs((idx+context_len)-max_frame)
