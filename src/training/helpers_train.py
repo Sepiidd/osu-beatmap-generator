@@ -117,7 +117,7 @@ def train(model, train_loader, optimizer, config):
     inputs, targets = next(train_gen) #first batch
 
     while True:
-        #TODO: variable learning rate (startup lr, etc), debug
+        #TODO: debug
         break
 
         if idx >= max_iters:
