@@ -18,14 +18,14 @@ class OnsetModel(nn.Module):
                     out_channels=config.n_out1,
                     kernel_size=(config.k_len1, config.k_wid1)
                 )
-        self.maxpool1 = nn.MaxPool1d(config.pool_width, stride=config.pool_stride)
+        self.maxpool1 = nn.MaxPool2d(config.pool1_width, stride=config.pool1_stride)
 
         self.conv2 = nn.Conv2d(
                     in_channels=config.n_out1,
                     out_channels=config.n_out2,
                     kernel_size=(config.k_len2, config.k_wid2)
                 )
-        self.maxpool2 = nn.MaxPool1d(config.pool_width, stride=config.pool_stride)
+        self.maxpool2 = nn.MaxPool2d(config.pool2_width, stride=config.pool2_stride)
 
         #project to transformer embedding size
         self.lin1 = nn.Linear(config.conv_out_size, config.n_embd)
@@ -51,7 +51,7 @@ class OnsetModel(nn.Module):
 
     def forward(self, x):
         """ 
-        input <x> comes in with shape (B, S, 15, 80, 3)
+        input <x> is expected to come in with shape (B, S, 15, 80, 3)
         """
         #reorder to shape (B*S, W, T, F)
         B, S, T, F, W = x.shape #batch size, seq len, stft time, mel freq, stft window size
@@ -66,7 +66,7 @@ class OnsetModel(nn.Module):
         x = self.maxpool2(x)
 
         #unroll batch, sequence dimension
-        x = x.view(B, S, -1)
+        x = x.reshape(B, S, -1)
 
         #project size, encode info
         x = self.lin1(x)

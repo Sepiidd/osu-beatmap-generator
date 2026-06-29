@@ -12,11 +12,13 @@ class OnsetConfig:
     k_wid2: int = 3 
 
     #pooling
-    pool_width = 3 
-    pool_stride = 3 
+    pool1_width = 3 
+    pool1_stride = 3 
+    pool2_width = (1, 3)
+    pool2_stride = 3 
 
     #transformer setup
-    conv_out_size = 1120 #flattened output size after convolutions and pooling operations
+    conv_out_size = 160 #flattened output size after convolutions and pooling operations
 
     #attention blocks
     block_size: int = 512 #sequence maximum length

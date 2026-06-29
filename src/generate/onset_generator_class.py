@@ -36,19 +36,18 @@ class OnsetGenerator():
         m, t, w = features.shape
         len_batch = self.sequence_len * self.batch_size
         batch_seq = []
-        print("start, end are", start, end)
         for i in range(start, end): 
             if i>=t: #indexing past features max length
                 break
             splice = get_frames_at_idx(features, i)
-            print("shape of splice is", splice.shape)
             batch_seq.append(splice)
+            splice = np.swapaxes(splice, 0, 1)
         batch_seq = np.stack(batch_seq)
 
         if t-start < len_batch:
-            batch_seq = np.reshape(batch_seq, (1, final_seq_len, configA.n_mel, 15, len(configA.n_fft)))
+            batch_seq = np.reshape(batch_seq, (1, -1, 15, configA.n_mel, len(configA.n_fft)))
         else:
-            batch_seq = np.reshape(batch_seq, (self.batch_size, self.sequence_len, configA.n_mel, 15, len(configA.n_fft)))
+            batch_seq = np.reshape(batch_seq, (self.batch_size, self.sequence_len, 15, configA.n_mel, len(configA.n_fft)))
         return batch_seq
 
     def song_to_onsets(self, path):
@@ -64,21 +63,23 @@ class OnsetGenerator():
 
         len_batch = self.sequence_len * self.batch_size
         idx = 0
+        iter_num = 0
         #loop over features and track index:
         while idx < t:
+            print(f"starting iter num {iter_num}, making predictions over indices ({idx}-{idx+len_batch}). NOTE: t={t}")
             #batch, splice, index features
             batch_seq = self.make_batch_sequence(features, idx, idx+len_batch)
-            print("shape of batch_seq is", batch_seq.shape)
 
             #perform model predictions
             batch_predictions = self.batch_to_onsets(batch_seq)
-            batch_predictions.view(-1) #flatten batch into one sequence again
+            batch_predictions = batch_predictions.view(-1) #flatten batch into one sequence again
 
             predictions_len = batch_predictions.shape[0]
-            batch_num_p = torch.ones(preditions_len)
+            print("pred len is", predictions_len)
+            batch_num_p = torch.ones(predictions_len)
 
-            batch_num_p = F.pad(batch_num_p, (idx, t-(idx+len_batch)))
-            batch_predictions = F.pad(batch_predictions, (idx, t-(idx+len_batch)))
+            batch_num_p = F.pad(batch_num_p, (idx, t-(idx+predictions_len)))
+            batch_predictions = F.pad(batch_predictions, (idx, t-(idx+predictions_len)))
 
             predictions = predictions + batch_predictions
             num_predictions = num_predictions + batch_num_p 
@@ -88,7 +89,7 @@ class OnsetGenerator():
         predictions = predictions / num_predictions #TODO: ensure all predictions are in range [0,1]
 
         #plot for testing
-        plot_thresholds(predictions, "plot_test")
+        self.plot_thresholds(predictions, "plot_test")
 
         #apply hamming window across batch
         #apply fixed threshold to obtain predictions
@@ -99,7 +100,7 @@ class OnsetGenerator():
         '''
         plots predictions' onset probabilities on a line graph, save to <file_name>.png
         '''
-        plt.plot(probabilities)
+        plt.plot(probabilities.cpu().detach().numpy())
         plt.xlabel("Ordered Index")
         plt.ylabel("Onset Probability")
         plt.ylim(0,1)

@@ -25,9 +25,9 @@ class MLP(nn.Module): #final sigmoid layer for attention block
         self.dropout = nn.Dropout(config.dropout)
 
     def forward(self, x): 
-        x = self.lin1(x)
+        x = self.c_fc(x)
         x = self.relu(x)
-        x = self.lin2(x)
+        x = self.c_proj(x)
         x = self.dropout(x)
         return x
 
