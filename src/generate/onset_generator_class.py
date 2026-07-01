@@ -5,19 +5,25 @@ import matplotlib.pyplot as plt
 import numpy as np
 from configs.audio_config import AudioConfig
 from configs.training_config import TrainingConfig
+from configs.gen_config import GenConfig 
 from preprocess.audio_utils import get_frames_at_idx
 
 #globals
 configA = AudioConfig()
 configT = TrainingConfig()
+configG = GenConfig()
 
 class OnsetGenerator():
     def __init__(self, model):
-        #TODO
         self.model = model
         self.batch_size = configT.batch_size
-        self.overlap_len = 64 #NOTE: play around with this number
+        self.overlap_len = configG.overlap_len 
         self.sequence_len = configA.sequence_len
+
+        self.prediction_threshold = configG.prediction_threshold
+        self.hamming_window_len = configG.hamming_window_len
+
+        self.model.eval()
 
     def batch_to_onsets(self, inputs):
         '''
@@ -39,9 +45,8 @@ class OnsetGenerator():
         for i in range(start, end): 
             if i>=t: #indexing past features max length
                 break
-            splice = get_frames_at_idx(features, i)
+            splice = get_frames_at_idx(features, i) #(15, 80, 3) shape
             batch_seq.append(splice)
-            splice = np.swapaxes(splice, 0, 1)
         batch_seq = np.stack(batch_seq)
 
         if t-start < len_batch:
@@ -54,7 +59,6 @@ class OnsetGenerator():
         '''
         convert entire song found at <path> into a list of onset probabilities
         '''
-        #TODO: overlap windows, sum probabilities and overlap count, then average predictions?
         features = process_audio(path) #entire song -> filtered spectrogram
         m, t, w = features.shape #shape of: mel bins, time (frame idx), window length
 
@@ -66,7 +70,6 @@ class OnsetGenerator():
         iter_num = 0
         #loop over features and track index:
         while idx < t:
-            print(f"starting iter num {iter_num}, making predictions over indices ({idx}-{idx+len_batch}). NOTE: t={t}")
             #batch, splice, index features
             batch_seq = self.make_batch_sequence(features, idx, idx+len_batch)
 
@@ -75,7 +78,6 @@ class OnsetGenerator():
             batch_predictions = batch_predictions.view(-1) #flatten batch into one sequence again
 
             predictions_len = batch_predictions.shape[0]
-            print("pred len is", predictions_len)
             batch_num_p = torch.ones(predictions_len)
 
             batch_num_p = F.pad(batch_num_p, (idx, t-(idx+predictions_len)))
@@ -84,17 +86,30 @@ class OnsetGenerator():
             predictions = predictions + batch_predictions
             num_predictions = num_predictions + batch_num_p 
 
-            idx += len_batch
+            print(f"completed iter num {iter_num}, making predictions over indices ({idx}-{idx+len_batch}). NOTE: t={t}, pred len is {predictions_len}")
+
+            idx += len_batch-self.overlap_len
+            iter_num += 1
         #average predictions
-        predictions = predictions / num_predictions #TODO: ensure all predictions are in range [0,1]
+        predictions = predictions / num_predictions 
 
         #plot for testing
         self.plot_thresholds(predictions, "plot_test")
 
         #apply hamming window across batch
-        #apply fixed threshold to obtain predictions
+        ham_window = torch.hamming_window(self.hamming_window_len, periodic=False) 
+
+        #padding to maintain <output_len>=<input_len>
+        #normalize hamming window to sum to one, keeps output  
+        smoothed = F.conv1d(predictions.view(1, 1, -1), ham_window.view(1, 1, -1) / ham_window.sum(), padding=self.hamming_window_len//2) 
+
         #convert positive prediction indices into timestamps
+        predictions = (smoothed > self.prediction_threshold).squeeze() #remove extra 1 dimensions along with boolean filter
+        predictions_idx = torch.nonzero(predictions, as_tuple=True)[0] 
+        print("predictions indices are", predictions_idx)
         
+        times = predictions_idx * configA.hop_len / configA.sr #calculation described by <https://librosa.org/doc/latest/generated/librosa.frames_to_time.html>
+        return times
 
     def plot_thresholds(self, probabilities, file_name):
         '''

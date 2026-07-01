@@ -27,5 +27,7 @@ if __name__ == '__main__':
 
     print("beginning onset generation...")
     print("command line arguments are:", arguments)
-    path = BASE_DIR.parent.parent / 'songs' / arguments[0]
+    path = BASE_DIR.parent.parent / 'music' / arguments[0]
     onsets = generator.song_to_onsets(path)
+    print("shape of onsets is", onsets.shape)
+    print("onsets list is", onsets)
