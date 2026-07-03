@@ -15,7 +15,7 @@ class TrainingConfig():
         #==========STATIC VALUES==========
         #training iteration breakpoints
         self.sequence_len = SEQ_LEN
-        self.max_iters = 100
+        self.max_iters = 10000
         self.log_interval = 10
         self.eval_interval = 10
         self.eval_iters = 40
@@ -42,10 +42,10 @@ class TrainingConfig():
         #check if cuda is available
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         #check if gradscaler is required
-        dtype = 'bfloat16' if torch.cuda.is_available() and torch.cuda.is_bf16_supported() else 'float16'
-        pt_dtype = {'float32': torch.float32, 'bfloat16': torch.bfloat16, 'float16': torch.float16}[dtype]
-        self.ctx = nullcontext() if self.device == 'cpu' else torch.amp.autocast(device_type=self.device, dtype=pt_dtype)
-        self.scaler = torch.amp.GradScaler(self.device, enabled=(dtype == 'float16')) #if not working in float16, acts as a no-op
+        self.dtype = 'bfloat16' if torch.cuda.is_available() and torch.cuda.is_bf16_supported() else 'float16'
+        self.pt_dtype = {'float32': torch.float32, 'bfloat16': torch.bfloat16, 'float16': torch.float16}[self.dtype]
+        self.ctx = nullcontext() if self.device == 'cpu' else torch.amp.autocast(device_type=self.device, dtype=self.pt_dtype)
+        self.scaler = torch.amp.GradScaler(self.device, enabled=(self.dtype == 'float16')) #if not working in float16, acts as a no-op
         #BCE loss function
         self.criterion = nn.BCEWithLogitsLoss()
         #dataloaders
