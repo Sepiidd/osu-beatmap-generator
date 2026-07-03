@@ -15,11 +15,11 @@ if __name__ == '__main__':
 
     print("initializing model...")
     model = OnsetModel(OnsetConfig())
-    #model_state_name = ""
-    #model_state_path = BASE_DIR.parent.parent / "onset_checkpoints" / model_state_name
-    #print("loading weights into model...")
-    #checkpoint = torch.load(model_state_path, weights_only=True)
-    #model.load_state_dict(checkpoint['model_state_dict'])
+    model_state_name = "test_680iters_10_maps"
+    model_state_path = BASE_DIR.parent.parent / "onset_saved" / model_state_name
+    print("loading weights into model...")
+    checkpoint = torch.load(model_state_path, weights_only=True)
+    model.load_state_dict(checkpoint['model_state_dict'])
     model.eval()
 
     print("creating generator...")
