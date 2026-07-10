@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     print("initializing model...")
     model = OnsetModel(OnsetConfig())
-    model_state_name = "test_680iters_10_maps"
+    model_state_name = "real-5200iters"
     model_state_path = BASE_DIR.parent.parent / "onset_saved" / model_state_name
     print("loading weights into model...")
     checkpoint = torch.load(model_state_path, weights_only=True)
@@ -28,6 +28,7 @@ if __name__ == '__main__':
     print("beginning onset generation...")
     print("command line arguments are:", arguments)
     path = BASE_DIR.parent.parent / 'music' / arguments[0]
-    onsets = generator.song_to_onsets(path)
+    onsets, predictions = generator.song_to_onsets(path)
     print("shape of onsets is", onsets.shape)
+    print("predictions shape is", predictions.shape)
     print("onsets list is", onsets)

@@ -22,6 +22,16 @@ SR = configA.sr
 tokenizer = obg_tokenizer(load_tokens=False)
 converter = obj_converter(tokenizer=tokenizer)
 
+def in_h5(path, song_id, diff_name):
+    with h5py.File(path, 'a', track_order=True) as f:
+        if f"{song_id}" in f: #skip sample if already exists
+            sg = f.get(f"{song_id}")
+            diff_lst = [sg.get(g).attrs.get("diff_name", None) for g in list(sg.keys())]
+            if diff_name in diff_lst:
+                print("already exists:", song_id, "|", diff_name)
+                return True
+    return False
+
 def process_osu(osu_path):
     with open(osu_path, "r") as osz:
         line = ""
@@ -61,12 +71,6 @@ def save_point(
         deltas_back
     ):
     with h5py.File(path, 'a', track_order=True) as f:
-        if f"{song_id}" in f: #skip sample if already exists
-            sg = f.get(f"{song_id}")
-            diff_lst = [sg.get(g).attrs.get("diff_name", None) for g in list(sg.keys())]
-            if diff_name in diff_lst:
-                print("already exists:", song_id, "|", diff_name)
-                return
         #hierarchy creation
         print("saving:", song_id, "|", diff_name)
         set_grp = f.require_group(f"{song_id}")
@@ -91,10 +95,17 @@ def save_point(
         f.attrs["num_samples"] = num_samples + 1
 
 def process_one(data_path, h5path, song_name, diff_name):
+    song_id = song_name.split(" ")[0]
+    if in_h5(h5path, song_id, diff_name):
+        return
+
     osu, ms_seq, forward_deltas, backward_deltas, mp3 = process_osu(data_path / song_name / diff_name)
+
+#    print("osu path is", data_path / song_name / diff_name)
+#    print("audio path is", data_path / song_name / mp3)
+
     features = process_audio(data_path / song_name / mp3)
 
-    song_id = song_name.split(" ")[0]
     save_point(h5path, song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas)
 
 def process_many(data_path, h5path):

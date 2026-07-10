@@ -94,6 +94,7 @@ class OnsetGenerator():
         predictions = predictions / num_predictions 
 
         #plot for testing
+        print("shape of predictions before hamming", predictions.shape)
         self.plot_thresholds(predictions, "plot_test")
 
         #apply hamming window across batch
@@ -104,12 +105,13 @@ class OnsetGenerator():
         smoothed = F.conv1d(predictions.view(1, 1, -1), ham_window.view(1, 1, -1) / ham_window.sum(), padding=self.hamming_window_len//2) 
 
         #convert positive prediction indices into timestamps
-        predictions = (smoothed > self.prediction_threshold).squeeze() #remove extra 1 dimensions along with boolean filter
-        predictions_idx = torch.nonzero(predictions, as_tuple=True)[0] 
-        print("predictions indices are", predictions_idx)
+        predictions_bool = (smoothed > self.prediction_threshold).squeeze() #remove extra 1 dimensions along with boolean filter
+        print("predictions bool shape is", predictions_bool.shape)
+        predictions_idx = torch.nonzero(predictions_bool, as_tuple=True)[0] 
+        print("predictions idx are", predictions_idx)
         
         times = predictions_idx * configA.hop_len / configA.sr #calculation described by <https://librosa.org/doc/latest/generated/librosa.frames_to_time.html>
-        return times
+        return times, predictions
 
     def plot_thresholds(self, probabilities, file_name):
         '''

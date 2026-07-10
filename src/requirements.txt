@@ -3,4 +3,5 @@ numpy
 matplotlib
 h5py
 torch
+torchvision
 easydict

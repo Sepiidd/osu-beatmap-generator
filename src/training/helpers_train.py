@@ -7,6 +7,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch
 import time
+import math
 
 BASE_DIR = Path(__file__).parent
 configG = GenConfig()
@@ -16,7 +17,6 @@ def eval_loss(model, train_loader, validation_loader, config):
     '''
     run test/evaluation time loss computation to see model accuracy
     '''
-    #TODO: debug, use better metric than accuracy
     ctx = config.ctx
     eval_iters = config.eval_iters
     criterion = config.criterion
@@ -44,7 +44,7 @@ def eval_loss(model, train_loader, validation_loader, config):
             inputs, targets = next(loader)
             with ctx:
                 logits = model(inputs).squeeze()
-                targets = targets.to(config.pt_dtype) #match type of logits
+                targets = targets.squeeze().to(config.pt_dtype) #match type of logits
                 loss = criterion(logits, targets)
             losses[i] = loss.item()
             predictions = F.sigmoid(logits)
@@ -60,7 +60,10 @@ def eval_loss(model, train_loader, validation_loader, config):
             batch_correct = (predictions == targets).sum().item()
             correct += batch_correct 
             
-            total += targets.shape[0]*targets.shape[1] #batch size * sequence length
+            if len(targets.shape) == 1:
+                total += targets.shape[0] # sequence length
+            else:
+                total += targets.shape[0]*targets.shape[1] #batch size * sequence length
             i+=1
 
         #average loss, determine stats 
@@ -80,18 +83,13 @@ def write_checkpoints(iter_idx, model, optimizer,
                       train_best,
                       val_loss,
                       val_best,
-                      train_precision,
-                      train_precision_best,
-                      train_recall,
-                      train_recall_best,
-                      val_precision,
-                      val_precision_best,
-                      val_recall,
-                      val_recall_best,
+                      train_f_score,
+                      train_f_score_best,
+                      val_f_score,
+                      val_f_score_best,
                       config, target="onset_checkpoints"
     ):
-    #TODO: debug, fix 
-    path = BASE_DIR.parent.parent / target / f"iter{iter_idx}_tlossb{train_best:.4f}vlossb{val_best:.4f}_tprecb{train_precision_best:.4f}trecb{train_recall_best:.4f}vprecb{val_precision_best:.4f}vrecb{val_recall_best:.4f}_date{datetime.now().strftime('%Y-%m-%d|%H:%M:%S')}"
+    path = BASE_DIR.parent.parent / target / f"iter{iter_idx}_tlossb{train_best:.4f}vlossb{val_best:.4f}_tfb{train_f_score_best:.4f}vfb{val_f_score_best:.4f}_date{datetime.now().strftime('%Y-%m-%d|%H:%M:%S')}"
     model_dict = model.state_dict()
     opt_dict = optimizer.state_dict()
 
@@ -103,14 +101,10 @@ def write_checkpoints(iter_idx, model, optimizer,
         'train_best': train_best,
         'val_loss': val_loss,
         'val_best': val_best,
-        'train_precision': train_precision,
-        'train_precision_best': train_precision_best,
-        'train_recall': train_recall,
-        'train_recall_best': train_recall_best,
-        'val_precision': val_precision,
-        'val_precision_best': val_precision_best,
-        'val_recall': val_recall,
-        'val_recall_best': val_recall_best
+        'train_f_score': train_f_score,
+        'train_f_score_best': train_f_score_best,
+        'val_f_score': val_f_score,
+        'val_f_score_best': val_f_score_best
     }
     torch.save(obj, path)
 
@@ -159,16 +153,15 @@ def train(model, train_loader, optimizer, config):
     max_iters = config.max_iters
     log_interval = config.log_interval
     eval_interval = config.eval_iters
+    checkpoint_iters = config.checkpoint_iters
     grad_clip = config.grad_clip
     grad_accumulation_steps = config.grad_accumulation_steps
 
     #stats
     val_best = float('inf')
     train_best = float('inf')
-    train_precision_best = 0.0
-    val_precision_best = 0.0
-    train_recall_best = 0.0
-    val_recall_best = 0.0
+    train_f_score_best = 0.0
+    val_f_score_best = 0.0
 
     t0 = time.time()
     model.train()
@@ -181,10 +174,7 @@ def train(model, train_loader, optimizer, config):
     eval_train_gen = make_generator(train_loader, device)
     eval_val_gen = make_generator(config.validation_loader, device)
     while True:
-        free_mem, total_mem = torch.cuda.mem_get_info()
-#        print(f"loop idx {idx} | gpu free_mem: {free_mem}, total_mem: {total_mem}")
         #TODO: debug
-
         if idx >= max_iters:
             break
 
@@ -198,7 +188,7 @@ def train(model, train_loader, optimizer, config):
             with ctx: #autocast type gpu work 
 
                 logits = model(inputs).squeeze()
-                targets = targets.to(config.pt_dtype) #match type of logits
+                targets = targets.squeeze().to(config.pt_dtype) #match type of logits
                 loss = criterion(logits, targets)
                 loss = loss / grad_accumulation_steps #manipulate algebra, simulate larger batch
             inputs, targets = next(train_gen)
@@ -222,26 +212,22 @@ def train(model, train_loader, optimizer, config):
             losses, stats = eval_loss(model, eval_train_gen, eval_val_gen, config)
 
             train_f_score = stats['train']['f_score']
+            train_f_score_best = train_f_score if train_f_score > train_f_score_best else train_f_score_best
             val_f_score = stats['val']['f_score']
+            val_f_score_best = val_f_score if val_f_score > val_f_score_best else val_f_score_best
 
             train_loss = losses['train']
             train_best = train_loss if train_loss < train_best else train_best
             val_loss = losses['val']
             val_best = val_loss if val_loss < val_best else val_best
 
-            train_precision = stats['train']['precision']
-            train_precision_best = train_precision if train_precision > train_precision_best else train_precision_best
-            val_precision = stats['val']['precision']
-            val_precision_best = val_precision if val_precision > val_precision_best else val_precision_best
-
-            train_recall = stats['train']['recall']
-            train_recall_best = train_recall if train_recall > train_recall_best else train_recall_best
-            val_recall = stats['val']['recall']
-            val_recall_best = val_recall if val_recall > val_recall_best else val_recall_best
-
             print(f"evaluation accuracies at step {idx}: train loss {losses['train']:.4f}, validation loss {losses['val']:.4f} | f-score train {train_f_score} f-score val {val_f_score}")
 
-            write_checkpoints(idx, model, optimizer, train_loss, train_best, val_loss, val_best, train_precision, train_precision_best, train_recall, train_recall_best, val_precision, val_precision_best, val_recall, val_recall_best, config)
+            if idx % checkpoint_iters == 0:
+                free_mem, total_mem = torch.cuda.mem_get_info()
+                print(f"writing checkpoints and memory check | gpu free_mem: {free_mem}, total_mem: {total_mem}")
+                write_checkpoints(idx, model, optimizer, train_loss, train_best, val_loss, val_best, train_f_score, train_f_score_best, val_f_score, val_f_score_best, config)
+
         idx+=1
 
 
