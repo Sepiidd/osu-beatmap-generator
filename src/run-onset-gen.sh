@@ -1,1 +1,1 @@
-uv run -m generate.generate_onsets IMANU\ \&\ KUCKA\ -\ It\'s\ Our\ Destiny\ \(Cuepric\ Remix\)
+uv run -m generate.generate_onsets Capriccio\ of\ My\ Mind.mp3

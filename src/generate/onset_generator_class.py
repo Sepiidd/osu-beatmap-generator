@@ -13,10 +13,12 @@ configA = AudioConfig()
 configT = TrainingConfig()
 configG = GenConfig()
 
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
 class OnsetGenerator():
     def __init__(self, model):
         self.model = model
-        self.batch_size = configT.batch_size
+        self.batch_size = configG.batch_size
         self.overlap_len = configG.overlap_len 
         self.sequence_len = configA.sequence_len
 
@@ -30,7 +32,9 @@ class OnsetGenerator():
         converts a batch of input data into onset probabilities, along with post model prediction operations e.g. hamming window
         '''
         inp = torch.from_numpy(inputs)
-        logits = self.model(inp)
+        inp = inp.to(device)
+        with torch.no_grad():
+            logits = self.model(inp)
         #apply sigmoid for binary classification probabilities
         return F.sigmoid(logits) 
 
@@ -62,8 +66,8 @@ class OnsetGenerator():
         features = process_audio(path) #entire song -> filtered spectrogram
         m, t, w = features.shape #shape of: mel bins, time (frame idx), window length
 
-        num_predictions = torch.zeros(t)
-        predictions = torch.zeros(t)
+        num_predictions = torch.zeros(t).to(device)
+        predictions = torch.zeros(t).to(device)
 
         len_batch = self.sequence_len * self.batch_size
         idx = 0
@@ -78,7 +82,7 @@ class OnsetGenerator():
             batch_predictions = batch_predictions.view(-1) #flatten batch into one sequence again
 
             predictions_len = batch_predictions.shape[0]
-            batch_num_p = torch.ones(predictions_len)
+            batch_num_p = torch.ones(predictions_len).to(device)
 
             batch_num_p = F.pad(batch_num_p, (idx, t-(idx+predictions_len)))
             batch_predictions = F.pad(batch_predictions, (idx, t-(idx+predictions_len)))
@@ -98,7 +102,7 @@ class OnsetGenerator():
         self.plot_thresholds(predictions, "plot_test")
 
         #apply hamming window across batch
-        ham_window = torch.hamming_window(self.hamming_window_len, periodic=False) 
+        ham_window = torch.hamming_window(self.hamming_window_len, periodic=False).to(device)
 
         #padding to maintain <output_len>=<input_len>
         #normalize hamming window to sum to one, keeps output  

@@ -41,8 +41,8 @@ class TrainingConfig():
         self.pin_memory = True
         #criterion
 #        self.criterion = nn.BCEWithLogitsLoss() #binary cross entropy
-        self.crit_alpha = 0.7
-        self.crit_gamma = 2.0
+        self.crit_alpha = 0.25
+        self.crit_gamma = 4.0
         self.crit_reduction = "mean" 
         self.criterion = lambda logits, targets: ops.sigmoid_focal_loss(logits, targets, alpha=self.crit_alpha, gamma=self.crit_gamma, reduction=self.crit_reduction) #focal loss
 

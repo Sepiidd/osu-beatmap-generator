@@ -15,12 +15,14 @@ if __name__ == '__main__':
 
     print("initializing model...")
     model = OnsetModel(OnsetConfig())
-    model_state_name = "real-5200iters"
+    model_state_name = "real-4600iters-overfit"
     model_state_path = BASE_DIR.parent.parent / "onset_saved" / model_state_name
     print("loading weights into model...")
     checkpoint = torch.load(model_state_path, weights_only=True)
     model.load_state_dict(checkpoint['model_state_dict'])
     model.eval()
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    model.to(device)
 
     print("creating generator...")
     generator = OnsetGenerator(model)

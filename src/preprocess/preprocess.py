@@ -76,12 +76,14 @@ def save_point(
         set_grp = f.require_group(f"{song_id}")
         num_diffs = int(set_grp.attrs.get("diffs", 0))
         num_samples = int(f.attrs.get("num_samples", 0))
+        num_songs = int(f.attrs.get("num_songs", 0))
         grp = set_grp.create_group(f"{num_samples}")
         grp.attrs["diff_name"] = diff_name
         
         #store data
         if "audio_feat" not in set_grp:
             set_grp.create_dataset("audio_feat", data=audio_features)
+            f.attrs["num_songs"] = num_songs + 1
         grp.create_dataset("audio_targets", data=audio_targets)
         grp.create_dataset("osu_tokens", data=osu_tokens)
         grp.create_dataset("deltas_fwd", data=deltas_fwd)

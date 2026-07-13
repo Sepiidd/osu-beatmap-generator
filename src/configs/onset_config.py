@@ -26,6 +26,6 @@ class OnsetConfig:
     n_layer: int = 12 #number of transformer layers (EncoderBlock module)
     n_head: int = 12 #number of attention heads per EncoderBlock
     n_embd: int = 768 #embedding layer size
-    dropout: float = 0.0 #copied over from csc413 example
+    dropout: float = 0.2 #copied over from csc413 example
     bias: bool = True #copied over from csc413 example
 

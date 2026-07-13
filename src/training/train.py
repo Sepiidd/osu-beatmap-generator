@@ -9,13 +9,28 @@ import torch.nn as nn
 import torch
 import easydict
 
-
 BASE_DIR = Path(__file__).parent
 
 if __name__ == "__main__":
     config = TrainingConfig()
 
-    model = OnsetModel(OnsetConfig()).to(config.device) #also sends to gpu if possible
+    fresh_input = input("1 for fresh training, 2 for loading model for training: ")
+    is_fresh_model = True if fresh_input == "1" else False
 
+    model = OnsetModel(OnsetConfig()) #also sends to gpu if possible
+
+    starting_idx = 0
+    if not is_fresh_model:
+        model_path = input("path to model state dict: ")
+        try:
+            model_path = Path(model_path).resolve()
+            checkpoint = torch.load(model_path, weights_only=True)
+            model.load_state_dict(checkpoint['model_state_dict'])
+            starting_idx = checkpoint['iter_idx']
+        except Exception as e:
+            print("exception encountered:", e)
+            exit(1)
+
+    model = model.to(config.device)
     optimizer = model.configure_optimizer(config.weight_decay, config.lr, (config.beta1, config.beta2), config.device)
-    train(model, config.train_loader, optimizer, config)
+    train(model, config.train_loader, optimizer, config, starting_idx)
