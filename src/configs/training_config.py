@@ -26,10 +26,10 @@ class TrainingConfig():
         #model training specifics
         self.weight_decay = 0.1
         self.lr = 3e-4
-        self.beta1 = 0.9
-        self.beta2 = 0.99
+        self.beta1 = 0.9 #adamw
+        self.beta2 = 0.99 #adamw
         self.min_lr = 3e-5
-        self.decay_lr = False
+        self.decay_lr = False #variable learning rate scheduler
         self.grad_clip = 1.0
         self.grad_accumulation_steps = 4
         #dataloaders

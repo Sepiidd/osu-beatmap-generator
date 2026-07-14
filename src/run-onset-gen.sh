@@ -1,1 +1,1 @@
-uv run -m generate.generate_onsets Capriccio\ of\ My\ Mind.mp3
+uv run -m generate.generate_onsets saint_catastrophe.mp3

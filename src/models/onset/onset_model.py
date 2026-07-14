@@ -18,14 +18,14 @@ class OnsetModel(nn.Module):
                     out_channels=config.n_out1,
                     kernel_size=(config.k_len1, config.k_wid1)
                 )
-        self.maxpool1 = nn.MaxPool2d(config.pool1_width, stride=config.pool1_stride)
+        self.maxpool1 = nn.MaxPool1d(config.pool1_width, stride=config.pool1_stride)
 
         self.conv2 = nn.Conv2d(
                     in_channels=config.n_out1,
                     out_channels=config.n_out2,
                     kernel_size=(config.k_len2, config.k_wid2)
                 )
-        self.maxpool2 = nn.MaxPool2d(config.pool2_width, stride=config.pool2_stride)
+        self.maxpool2 = nn.MaxPool1d(config.pool2_width, stride=config.pool2_stride)
 
         #project to transformer embedding size
         self.lin1 = nn.Linear(config.conv_out_size, config.n_embd)
@@ -38,8 +38,10 @@ class OnsetModel(nn.Module):
                 ln = LayerNorm(config.n_embd, bias=config.bias)
             ))
 
-        #final linear layer
-        self.lin2 = nn.Linear(config.n_embd, 1, bias=False)
+        #final linear layers
+#        self.lin2 = nn.Linear(config.n_embd, 1, bias=False)
+        self.lin2 = nn.Linear(config.n_embd, config.n_embd // 2, bias=False)
+        self.lin3 = nn.Linear(config.n_embd // 2, 1, bias=False)
 
         #initial weight randomization
         self.apply(self._init_weights)
@@ -60,10 +62,24 @@ class OnsetModel(nn.Module):
 
         #convolutions
         x = self.conv1(x)
+        #reshape, fold
+        BS, C, T, F = x.shape #batch size * seq len, output channels, stft time, mel freq
+        x = x.permute(0, 2, 1, 3) #move stft time dimension next to batch/seq_len dimension
+        x = x.reshape(BS * T, C, F)
         x = self.maxpool1(x)
+        #unfold, reshape
+        x = x.reshape(BS, T, C, -1)
+        x = x.permute(0, 2, 1, 3)
 
         x = self.conv2(x)
+        #reshape, fold
+        BS, C, T, F = x.shape
+        x = x.permute(0, 2, 1, 3)
+        x = x.reshape(BS * T, C, F)
         x = self.maxpool2(x)
+        #unfold, reshape
+        x = x.reshape(BS, T, C, -1)
+        x = x.permute(0, 2, 1, 3)
 
         #unroll batch, sequence dimension
         x = x.reshape(B, S, -1)
@@ -79,7 +95,8 @@ class OnsetModel(nn.Module):
         x = self.encoder.ln(x)
         
         #obtain logits from attended info
-        logits = self.lin2(x)
+        x = self.lin2(x)
+        logits = self.lin3(x)
         return logits
 
     def _init_weights(self, module):
