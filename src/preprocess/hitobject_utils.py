@@ -36,3 +36,39 @@ def first_bit_idx_int(num):
         if is_set:
             return i
     return -1
+
+def augment_reflect_x():
+    """
+    flip all hitobjects across the x axis
+    """
+    #TODO
+    pass
+
+def augment_reflect_y():
+    """
+    flip all hitobjects across the y axis
+    """
+    #TODO
+    pass
+
+def augment_reflect_xy():
+    """
+    flip all hitobjects across both axes
+    """
+    #TODO
+    pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

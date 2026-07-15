@@ -1,5 +1,9 @@
 from librosa import time_to_frames
+import librosa.effects as E
 import numpy as np
+from configs.audio_config import AudioConfig
+
+configA = AudioConfig()
 
 def get_frames_at_time(features, time_ms):
     time_s = time_ms / 1000
@@ -20,3 +24,52 @@ def get_frames_at_idx(audio_feat, idx, context_len=7):
     else:
         frames = audio_feat[:, idx-context_len:idx+context_len+1, :]
     return frames
+
+def augment_pitch(audio, shift=2):
+    """
+    increase/decrease pitch by <shift> steps (default 2) 
+
+    <audio>: raw audio time series
+    """
+    return E.pitch_shift(audio, sr=configA.sr, n_steps=shift)
+
+def augment_speed(audio, target_ms, fwd_d, bwd_d, rate=1.2):
+    """
+    increase speed of audio by <rate> (default 1.2x), update related osu information accordingly
+
+    <audio>: raw audio time series
+    <target_ms>: array of timestamps representing ground truth onset
+    <fwd_d>: difference in time between onset <i> and <i+1> for all <i> in <target_ms>
+    <bwd_d>: difference in time between onset <i> and <i-1> for all <i> in <target_ms>
+    <rate>: multiplier which to speed up/down the audio by
+    """
+    augmented_a = E.time_stretch(audio, rate=rate)
+   
+    #update osu related timings
+    i = 0
+    while i < len(target_ms):
+        target_ms[i] = target_ms[i] / rate
+        fwd_d[i] = fwd_d[i] / rate
+        bwd_d[i] = bwd_d[i] / rate
+
+        i+=1
+    return augmented_a
+
+def augment_frequency_mask(audio_feats):
+    """
+    zero out a random frequency band
+
+    <audio_feats>: np array of shape (80, N, 3) where N is the number of frames for the original audio series
+    """
+    band_selection = np.random.randint(configA.n_mel)
+    audio_feats[band_selection, :, :] = 0
+    return audio_feats
+
+
+
+
+
+
+
+
+

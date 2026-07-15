@@ -58,9 +58,14 @@ def process_audio(audio_path):
 
         features.append(normalized)
     features = np.stack(features, axis=-1)
-    #m, t, w = features.shape
-    #print("shape of features is:", m, t, w)
+    #shape of features is: 80 13212 3
+#    m, t, w = features.shape
+#    print("shape of features is:", m, t, w)
     return features
+
+def augment_sample():
+    #TODO
+    pass
 
 def save_point(
         path, song_id, diff_name, 
@@ -102,11 +107,10 @@ def process_one(data_path, h5path, song_name, diff_name):
         return
 
     osu, ms_seq, forward_deltas, backward_deltas, mp3 = process_osu(data_path / song_name / diff_name)
+    song_path = data_path / song_name / mp3
+    features = process_audio(song_path)
 
-#    print("osu path is", data_path / song_name / diff_name)
-#    print("audio path is", data_path / song_name / mp3)
-
-    features = process_audio(data_path / song_name / mp3)
+    #TODO: augmentation
 
     save_point(h5path, song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas)
 
