@@ -1,3 +1,7 @@
+#globals
+X_MIDDLE = 256 #playfield center on x-axis
+Y_MIDDLE = 192 #playfield center on y-axis
+
 def find_type(obj):
     separated = obj.strip().split(",")
     t = int(separated[3])
@@ -37,36 +41,92 @@ def first_bit_idx_int(num):
             return i
     return -1
 
-def augment_reflect_x():
+def dist_to_mid_x(x):
+    return X_MIDDLE - x
+
+def dist_to_mid_y(y):
+    return Y_MIDDLE - y
+
+def augment_reflect_x(osu):
     """
     flip all hitobjects across the x axis
-    """
-    #TODO
-    pass
 
-def augment_reflect_y():
+    <osu>: file object referencing actual .osu file (starts at hitobjects)
+
+    returns list of raw string hitobjects with augmentation applied
+    """
+    #TODO: debug, test
+    augmented = []
+    line = osu.readline()
+    while line:
+        stripped = line.strip()
+        split = stripped.split(',')
+        x = split[0]
+        to_mid = dist_to_mid_x(int(x))
+        new_x = X_MIDDLE + to_mid if x < X_MIDDLE else X_MIDDLE - to_mid
+
+        end_idx = stripped.find(',')
+        new_str = str(new_x) + stripped[end_idx+1] 
+
+        augmented.append(new_str)
+        line = osu.readline()
+    return augmented
+
+def augment_reflect_y(osu):
     """
     flip all hitobjects across the y axis
-    """
-    #TODO
-    pass
 
-def augment_reflect_xy():
+    <osu>: file object referencing actual .osu file (starts at hitobjects)
+
+    returns list of raw string hitobjects with augmentation applied
+    """
+    #TODO: debug, test
+    augmented = []
+    line = osu.readline()
+    while line:
+        stripped = line.strip()
+        split = stripped.split(',')
+        x = split[0]
+        y = split[1]
+        to_mid = dist_to_mid_y(int(y))
+        new_y = Y_MIDDLE + to_mid if y < Y_MIDDLE else Y_MIDDLE - to_mid
+
+        end_idx = stripped.find(',', stripped.find(','))
+        new_str = str(x) + ',' + str(new_y) + stripped[end_idx] 
+
+        augmented.append(new_str)
+        line = osu.readline()
+    return augmented
+
+def augment_reflect_xy(osu):
     """
     flip all hitobjects across both axes
+
+    <osu>: file object referencing actual .osu file (starts at hitobjects)
+
+    returns list of raw string hitobjects with augmentation applied
     """
-    #TODO
-    pass
+    #TODO: debug, test
+    augmented = []
+    line = osu.readline()
+    while line:
+        stripped = line.strip()
+        split = stripped.split(',')
+        x = split[0]
+        y = split[1]
 
+        to_mid = dist_to_mid_x(int(x))
+        new_x = X_MIDDLE + to_mid if x < X_MIDDLE else X_MIDDLE - to_mid
 
+        to_mid = dist_to_mid_y(int(y))
+        new_y = Y_MIDDLE + to_mid if y < Y_MIDDLE else Y_MIDDLE - to_mid
 
+        end_idx = stripped.find(',', stripped.find(','))
+        new_str = str(new_x) + ',' + str(new_y) + stripped[end_idx] 
 
-
-
-
-
-
-
+        augmented.append(new_str)
+        line = osu.readline()
+    return augmented
 
 
 

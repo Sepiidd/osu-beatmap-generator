@@ -10,6 +10,12 @@ from librosa import time_to_frames
 from tokens.tokenizer import obg_tokenizer
 from preprocess.converter import obj_converter
 from configs.audio_config import AudioConfig
+from preprocess.hitobject_utils import augment_reflect_x
+from preprocess.hitobject_utils import augment_reflect_y
+from preprocess.hitobject_utils import augment_reflect_xy
+from preprocess.audio_utils import augment_pitch 
+from preprocess.audio_utils import augment_speed 
+from preprocess.audio_utils import augment_frequency_mask
 
 #globals
 BASE_DIR = Path(__file__).parent
@@ -32,18 +38,18 @@ def in_h5(path, song_id, diff_name):
                 return True
     return False
 
-def process_osu(osu_path):
-    with open(osu_path, "r") as osz:
-        line = ""
-        while not line.startswith("AudioFilename: "):
-            line = osz.readline()
-        mp3 = line.strip()[15:]
-        while not line.startswith("[HitObjects]"):
-            line = osz.readline()
-        line = osz.readlines()
-        tokens = converter.hitobject_seq_to_tok(line)
-        ms_seq, forward_deltas, backward_deltas = converter.hitobject_seq_to_ms(line)
-    return (np.array(tokens), np.array(ms_seq), np.array(forward_deltas), np.array(backward_deltas), mp3)
+def process_osu(osz):
+    line = ""
+    while not line.startswith("AudioFilename: "):
+        line = osz.readline()
+    mp3 = line.strip()[15:]
+    while not line.startswith("[HitObjects]"):
+        line = osz.readline()
+    hitobj_idx = osz.tell()
+    line = osz.readlines()
+    tokens = converter.hitobject_seq_to_tok(line)
+    ms_seq, forward_deltas, backward_deltas = converter.hitobject_seq_to_ms(line)
+    return (np.array(tokens), np.array(ms_seq), np.array(forward_deltas), np.array(backward_deltas), mp3, hitobj_idx)
 
 def process_audio(audio_path):
     audio, sr = load(path=audio_path, sr=SR)
@@ -62,10 +68,6 @@ def process_audio(audio_path):
 #    m, t, w = features.shape
 #    print("shape of features is:", m, t, w)
     return features
-
-def augment_sample():
-    #TODO
-    pass
 
 def save_point(
         path, song_id, diff_name, 
@@ -101,18 +103,62 @@ def save_point(
         set_grp.attrs["diffs"] = num_diffs + 1
         f.attrs["num_samples"] = num_samples + 1
 
+def augment_osu(osz):
+    augmented_x_flip_raw = augment_reflect_x(osz) 
+    augmented_x_flip = converter.hitobject_seq_to_tok(augmented_x_flip) 
+    osz.seek(hitobj_idx) #reset file pointer to start of hitobjects
+
+    augmented_y_flip = [] #dummy for now (disk space limit)
+#    augmented_y_flip_raw = augment_reflect_y(osz)
+#    augmented_y_flip = converter.hitobject_seq_to_tok(augmented_y_flip) 
+#    osz.seek(hitobj_idx) #reset file pointer to start of hitobjects
+
+    augmented_xy_flip = [] #dummy for now (disk space limit)
+#    augmented_xy_flip_raw = augment_reflect_xy(osz)
+#    augmented_xy_flip = converter.hitobject_seq_to_tok(augmented_xy_flip)
+
+#    osz.seek(hitobj_idx) #reset file pointer to start of hitobjects
+    return (augmented_x_flip, augmented_y_flip, augmented_xy_flip)
+
+def augment_audio(song_path, targets, fwd, bwd):
+    #rate change
+    augmented_targets = targets[:]
+    augmented_fwd = forward_deltas[:]
+    augmented_bwd = backward_deltas[:] 
+    augmented_speed = augment_speed(song_path, augmented_targets, augmented_fwd, augmented_bwd)
+
+    #pitch change
+    augmented_pitch = np.array([]) #dummy placeholder
+#    augmented_pitch = augment_pitch(song_path)
+
+    #frequency mask
+    augmented_freq = np.array([]) #dummy placeholder
+#    augmented_freq = augment_frequency_mask(features)
+    return (augmented_speed, augmented_targets, augmented_fwd, augmented_bwd)
+
 def process_one(data_path, h5path, song_name, diff_name):
     song_id = song_name.split(" ")[0]
     if in_h5(h5path, song_id, diff_name):
         return
 
-    osu, ms_seq, forward_deltas, backward_deltas, mp3 = process_osu(data_path / song_name / diff_name)
+    osu_path = data_path / song_name / diff_name
+    with open(osu_path, "r") as osz:
+        osu, ms_seq, forward_deltas, backward_deltas, mp3, hitobj_idx = process_osu(osz)
+        osz.seek(hitobj_idx) #reset file pointer to start of hitobjects
+
+        #augmentation (osu)
+        augmented_x_flip, augmented_y_flip, augmented_xy_flip, = augment_osu(osz)
+
     song_path = data_path / song_name / mp3
     features = process_audio(song_path)
 
-    #TODO: augmentation
+    #augmentation (audio)
+    augmented_speed, augmented_targets, augmented_fwd, augmented_bwd, augmented_pitch, augmented_freq = augment_audio(song_path, ms_seq, forward_deltas, backward_deltas)
 
     save_point(h5path, song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas)
+    save_point(h5path, song_id+"x_flip_speedup", diff_name+"x_flip_speedup", augmented_speed, augmented_targets, augmented_x_flip, augmented_fwd, augmented_bwd)
+#    save_point(h5path, song_id+"y_flip_speedup", diff_name+"y_flip_pitchup", features, ms_seq, augmented_y_flip, forward_deltas, backward_deltas)
+#    save_point(h5path, song_id+"xy_flip_freq_mask", diff_name+"xy_flip_freq_mask", features, ms_seq, augmented_xy_flip, forward_deltas, backward_deltas)
 
 def process_many(data_path, h5path):
     for d in data_path.iterdir():
