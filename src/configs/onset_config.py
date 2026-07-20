@@ -1,4 +1,7 @@
 from dataclasses import dataclass
+from configs.audio_config import AudioConfig
+
+configA = AudioConfig()
 
 @dataclass
 class OnsetConfig:
@@ -18,14 +21,14 @@ class OnsetConfig:
     pool2_stride = 3 
 
     #transformer setup
-    conv_out_size = 1120 #flattened output size after convolutions and pooling operations (work this math manually) n_out2*()*()
+    conv_out_size = 1120 #flattened output size after convolutions and pooling operations (work this math manually) 
 
     #attention blocks
-    block_size: int = 512 #sequence maximum length
+    block_size: int = configA.sequence_len #sequence maximum length
     vocab_size: int = 3012 #tokenizer.py, dont need this lol
     n_layer: int = 12 #number of transformer layers (EncoderBlock module)
     n_head: int = 12 #number of attention heads per EncoderBlock, NOTE: n_embd % n_head = 0
-    n_embd: int = 384 #embedding layer size, NOTE: n_embd % n_head = 0
-    dropout: float = 0.4 
+    n_embd: int = 768 #embedding layer size, NOTE: n_embd % n_head = 0
+    dropout: float = 0.2
     bias: bool = True #copied over from csc413 example
 

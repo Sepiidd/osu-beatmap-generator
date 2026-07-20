@@ -128,7 +128,7 @@ def get_lr(it, config):
     '''
     # 1) linear warmup for warmup_iters steps
     if it < config.warmup_iters:
-        return config.learning_rate * it / config.warmup_iters
+        return config.lr * it / config.warmup_iters
     # 2) if it > lr_decay_iters, return min learning rate
     if it > config.lr_decay_iters:
         return config.min_lr
@@ -136,7 +136,7 @@ def get_lr(it, config):
     decay_ratio = (it - config.warmup_iters) / (config.lr_decay_iters - config.warmup_iters) #distance from warmup iters / total distance to decay
     assert 0 <= decay_ratio <= 1
     coeff = 0.5 * (1.0 + math.cos(math.pi * decay_ratio)) # follows cosine shaped curve with range [0,1]
-    return config.min_lr + coeff * (config.learning_rate - config.min_lr)
+    return config.min_lr + coeff * (config.lr - config.min_lr)
 
 def train(model, train_loader, optimizer, config, starting_idx=0):
     '''

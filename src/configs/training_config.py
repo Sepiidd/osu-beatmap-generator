@@ -16,20 +16,20 @@ class TrainingConfig():
         #==========STATIC VALUES==========
         #training iteration breakpoints
         self.sequence_len = SEQ_LEN
-        self.max_iters = 10000
+        self.max_iters = 3000
         self.log_interval = 10
         self.eval_interval = 10
         self.eval_iters = 50 #factor of checkpoint_iters
-        self.warmup_iters = 1000 #experiment with this and decay_iters
-        self.lr_decay_iters = 5000
+        self.warmup_iters = 500 #experiment with this and decay_iters
+        self.lr_decay_iters = 1500
         self.checkpoint_iters = 200 #multiple of eval_iters
         #model training specifics
-        self.weight_decay = 0.1
+        self.weight_decay = 0.1 #adamw
         self.lr = 3e-4
         self.beta1 = 0.9 #adamw
         self.beta2 = 0.99 #adamw
         self.min_lr = 3e-5
-        self.decay_lr = False #variable learning rate scheduler
+        self.decay_lr = True #variable learning rate scheduler
         self.grad_clip = 1.0
         self.grad_accumulation_steps = 4
         #dataloaders

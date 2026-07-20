@@ -22,8 +22,10 @@ if __name__ == "__main__":
     starting_idx = 0
     if not is_fresh_model:
         model_path = input("path to model state dict: ")
+        print("model_path before resolving is:", model_path)
         try:
             model_path = Path(model_path).resolve()
+            print("model_path after resolving is:", model_path)
             checkpoint = torch.load(model_path, weights_only=True)
             model.load_state_dict(checkpoint['model_state_dict'])
             starting_idx = checkpoint['iter_idx']

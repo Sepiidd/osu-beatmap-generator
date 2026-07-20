@@ -51,8 +51,7 @@ def process_osu(osz):
     ms_seq, forward_deltas, backward_deltas = converter.hitobject_seq_to_ms(line)
     return (np.array(tokens), np.array(ms_seq), np.array(forward_deltas), np.array(backward_deltas), mp3, hitobj_idx)
 
-def process_audio(audio_path):
-    audio, sr = load(path=audio_path, sr=SR)
+def process_audio(audio, sr):
     features = []
     for i, n in enumerate(N_FFT):
         transformed = stft(audio, n_fft=n, hop_length=HOP_LEN, center=True)
@@ -103,9 +102,9 @@ def save_point(
         set_grp.attrs["diffs"] = num_diffs + 1
         f.attrs["num_samples"] = num_samples + 1
 
-def augment_osu(osz):
+def augment_osu(osz, hitobj_idx):
     augmented_x_flip_raw = augment_reflect_x(osz) 
-    augmented_x_flip = converter.hitobject_seq_to_tok(augmented_x_flip) 
+    augmented_x_flip = converter.hitobject_seq_to_tok(augmented_x_flip_raw) 
     osz.seek(hitobj_idx) #reset file pointer to start of hitobjects
 
     augmented_y_flip = [] #dummy for now (disk space limit)
@@ -123,8 +122,8 @@ def augment_osu(osz):
 def augment_audio(song_path, targets, fwd, bwd):
     #rate change
     augmented_targets = targets[:]
-    augmented_fwd = forward_deltas[:]
-    augmented_bwd = backward_deltas[:] 
+    augmented_fwd = fwd[:]
+    augmented_bwd = bwd[:] 
     augmented_speed = augment_speed(song_path, augmented_targets, augmented_fwd, augmented_bwd)
 
     #pitch change
@@ -134,39 +133,70 @@ def augment_audio(song_path, targets, fwd, bwd):
     #frequency mask
     augmented_freq = np.array([]) #dummy placeholder
 #    augmented_freq = augment_frequency_mask(features)
-    return (augmented_speed, augmented_targets, augmented_fwd, augmented_bwd)
+
+    return (augmented_speed, augmented_targets, augmented_fwd, augmented_bwd, augmented_pitch, augmented_freq)
 
 def process_one(data_path, h5path, song_name, diff_name):
     song_id = song_name.split(" ")[0]
     if in_h5(h5path, song_id, diff_name):
-        return
+        return []
 
+    #osu
     osu_path = data_path / song_name / diff_name
     with open(osu_path, "r") as osz:
         osu, ms_seq, forward_deltas, backward_deltas, mp3, hitobj_idx = process_osu(osz)
         osz.seek(hitobj_idx) #reset file pointer to start of hitobjects
 
         #augmentation (osu)
-        augmented_x_flip, augmented_y_flip, augmented_xy_flip, = augment_osu(osz)
+        augmented_x_flip, augmented_y_flip, augmented_xy_flip, = augment_osu(osz, hitobj_idx)
 
+    #audio
     song_path = data_path / song_name / mp3
-    features = process_audio(song_path)
+    audio, sr = load(path=song_path, sr=SR)
+    features = process_audio(audio, sr)
 
     #augmentation (audio)
     augmented_speed, augmented_targets, augmented_fwd, augmented_bwd, augmented_pitch, augmented_freq = augment_audio(song_path, ms_seq, forward_deltas, backward_deltas)
+    speed_features = process_audio(augmented_speed, sr)
 
-    save_point(h5path, song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas)
-    save_point(h5path, song_id+"x_flip_speedup", diff_name+"x_flip_speedup", augmented_speed, augmented_targets, augmented_x_flip, augmented_fwd, augmented_bwd)
-#    save_point(h5path, song_id+"y_flip_speedup", diff_name+"y_flip_pitchup", features, ms_seq, augmented_y_flip, forward_deltas, backward_deltas)
-#    save_point(h5path, song_id+"xy_flip_freq_mask", diff_name+"xy_flip_freq_mask", features, ms_seq, augmented_xy_flip, forward_deltas, backward_deltas)
+    to_save = []
+    original = (song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas)
+    speed = (song_id+"-x_flip_speedup", "x_flip_speedup:"+diff_name, speed_features, augmented_targets, augmented_x_flip, augmented_fwd, augmented_bwd)
+    to_save.extend([original, speed])
+
+    return to_save
+    #TODO: issue - multiple diffs will be written to a new song group, but indexed incorrectly (diff1-1, diff1aug-2, diff2-3, diff2aug-4 instead of diff1-1 diff2-2 diff1aug-3 diff2aug-4)
+#    save_point(h5path, song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas)
+#    save_point(h5path, song_id+"-x_flip_speedup", "x_flip_speedup:"+diff_name, speed_features, augmented_targets, augmented_x_flip, augmented_fwd, augmented_bwd)
+
+
+    #uncomment if more training data required
+#    save_point(h5path, song_id+"-y_flip_pitchup", "y_flip_pitchup:"+diff_name, features, ms_seq, augmented_y_flip, forward_deltas, backward_deltas)
+#    save_point(h5path, song_id+"-xy_flip_freq_mask", "xy_flip_freq_mask:"+diff_name, features, ms_seq, augmented_xy_flip, forward_deltas, backward_deltas)
+
+def save_set(arg_list, h5path):
+    for args in arg_list:
+        save_point(h5path, *args)
 
 def process_many(data_path, h5path):
     for d in data_path.iterdir():
         song_name = d.name
+        
+        augmentations = []
+        originals = []
+        speedups = []
+        augmentations.append(originals)
+        augmentations.append(speedups)
+
         for f in d.iterdir():
             if f.suffix == ".osu":
                 diff_name = f.name
-                process_one(data_path, h5path, song_name, diff_name)
+                to_save = process_one(data_path, h5path, song_name, diff_name)
+                if len(to_save)>=1: originals.append(to_save[0])
+                if len(to_save)>=2: speedups.append(to_save[1])
+        #save entire mapsets at once
+        for augmentation in augmentations:
+            save_set(augmentation, h5path)
     return
 
 if __name__ == "__main__":
