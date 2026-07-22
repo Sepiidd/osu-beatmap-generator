@@ -57,15 +57,18 @@ def augment_speed(audio, target_ms, fwd_d, bwd_d, rate=1.2):
         i+=1
     return augmented_a
 
-def augment_frequency_mask(audio_feats):
+def augment_frequency_mask(audio_feats, max_aug=15):
     """
     zero out a random frequency band
 
     <audio_feats>: np array of shape (80, N, 3) where N is the number of frames for the original audio series
     """
-    band_selection = np.random.randint(configA.n_mel)
-    audio_feats[band_selection, :, :] = 0
-    return audio_feats
+    augmented = audio_feats.copy()
+    num_augmentations = np.random.randint(max_aug)
+    for i in range(num_augmentations):
+        band_selection = np.random.randint(configA.n_mel)
+        augmented[band_selection, :, :] = 0
+    return augmented 
 
 
 
