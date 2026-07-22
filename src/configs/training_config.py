@@ -3,12 +3,15 @@ from dataclass.obg_audio_dataset import OBGAudioDataset
 from torch.utils.data import DataLoader
 from pathlib import Path
 from configs.audio_config import AudioConfig
+from configs.preprocess_config import PreprocessConfig 
 import torch
 import torch.nn as nn
 import torchvision.ops as ops
 
 BASE_DIR = Path(__file__).parent
 SEQ_LEN = AudioConfig().sequence_len
+
+configP = PreprocessConfig()
 
 #not dataclass requires more logic
 class TrainingConfig():
@@ -33,9 +36,9 @@ class TrainingConfig():
         self.grad_clip = 1.0
         self.grad_accumulation_steps = 4
         #dataloaders
-        self.train_path = BASE_DIR.parent.parent / "datasets" / "train"
-        self.validation_path = BASE_DIR.parent.parent / "datasets" / "validation" 
-        self.test_path = BASE_DIR.parent.parent / "datasets" / "test"
+        self.train_path = configP.h5parent / "datasets" / "train"
+        self.validation_path = configP.h5parent / "datasets" / "validation" 
+        self.test_path = configP.h5parent / "datasets" / "test"
         self.batch_size = 32
         self.shuffle = True
         self.pin_memory = True

@@ -90,7 +90,7 @@ def y_flip_cl(obj):
     to_mid = dist_to_mid_y(int(y))
     new_y = Y_MIDDLE + to_mid 
 
-    end_idx = stripped.find(',', stripped.find(','))
+    end_idx = stripped.find(',', stripped.find(',') + 1)
     new_str = str(x) + ',' + str(new_y) + stripped[end_idx:] 
 
     return new_str
@@ -129,7 +129,7 @@ def xy_flip_cl(obj):
     to_mid = dist_to_mid_y(y)
     new_y = Y_MIDDLE + to_mid 
 
-    end_idx = stripped.find(',', stripped.find(','))
+    end_idx = stripped.find(',', stripped.find(',')+1)
     new_str = str(new_x) + ',' + str(new_y) + stripped[end_idx:] 
 
     return new_str
@@ -189,15 +189,14 @@ def augment_reflect_y(osu):
 
     returns list of raw string hitobjects with augmentation applied
     """
-    #TODO: debug, test
     augmented = []
     line = osu.readline()
     while line:
         stripped = line.strip()
-        t = find_type(stripped)
+        t, slides = find_type(stripped)
 
         new_str = y_flip_cl(stripped)
-        if t == "slider":
+        if t.startswith("slider"):
             new_str = y_flip_anchor(new_str)
 
         augmented.append(new_str)
@@ -212,15 +211,14 @@ def augment_reflect_xy(osu):
 
     returns list of raw string hitobjects with augmentation applied
     """
-    #TODO: debug, test
     augmented = []
     line = osu.readline()
     while line:
         stripped = line.strip()
-        t = find_type(stripped)
+        t, slides = find_type(stripped)
 
         new_str = xy_flip_cl(stripped)
-        if t == "slider":
+        if t.startswith("slider"):
             new_str = xy_flip_anchor(new_str)
 
         augmented.append(new_str)

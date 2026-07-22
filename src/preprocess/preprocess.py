@@ -111,17 +111,16 @@ def augment_osu(osz, hitobj_idx):
     osz.seek(hitobj_idx) #reset file pointer to start of hitobjects
 
     augmented_y_flip_raw = augment_reflect_y(osz)
-    augmented_y_flip = converter.hitobject_seq_to_tok(augmented_y_flip) 
+    augmented_y_flip = converter.hitobject_seq_to_tok(augmented_y_flip_raw) 
     osz.seek(hitobj_idx) #reset file pointer to start of hitobjects
 
-    augmented_xy_flip = [] #dummy for now (disk space limit)
     augmented_xy_flip_raw = augment_reflect_xy(osz)
-    augmented_xy_flip = converter.hitobject_seq_to_tok(augmented_xy_flip)
-
+    augmented_xy_flip = converter.hitobject_seq_to_tok(augmented_xy_flip_raw)
     osz.seek(hitobj_idx) #reset file pointer to start of hitobjects
+
     return (augmented_x_flip, augmented_y_flip, augmented_xy_flip)
 
-def augment_audio(song_path, features targets, fwd, bwd):
+def augment_audio(song_path, features, targets, fwd, bwd):
     #rate change
     augmented_targets = targets[:]
     augmented_fwd = fwd[:]
@@ -158,7 +157,7 @@ def process_one(data_path, h5path, song_name, diff_name):
         osz.seek(hitobj_idx) #reset file pointer to start of hitobjects
 
         #augmentation (osu)
-        augmented_x_flip, augmented_y_flip, augmented_xy_flip, = augment_osu(osz, hitobj_idx)
+        augmented_x_flip, augmented_y_flip, augmented_xy_flip, = augment_osu(osz, hitobj_idx) #NOTE: possible optimization: only perform required augmentations according to exists_*
 
     #audio
     song_path = data_path / song_name / mp3
@@ -173,7 +172,7 @@ def process_one(data_path, h5path, song_name, diff_name):
     if not exists_original: to_save.append((song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas))
     if not exists_speedup: to_save.append((song_id+"-x_flip_speedup", "x_flip_speedup:"+diff_name, speed_features, augmented_targets, augmented_x_flip, augmented_fwd, augmented_bwd))
     if not exists_pitchup: to_save.append((song_id+"-y_flip_pitchup", "y_flip_pitchup:"+diff_name, features, ms_seq, augmented_y_flip, forward_deltas, backward_deltas))
-    if not exists_mask: to_save.append(song_id+"-xy_flip_freq_mask", "xy_flip_freq_mask:"+diff_name, features, ms_seq, augmented_xy_flip, forward_deltas, backward_deltas))
+    if not exists_mask: to_save.append((song_id+"-xy_flip_freq_mask", "xy_flip_freq_mask:"+diff_name, features, ms_seq, augmented_xy_flip, forward_deltas, backward_deltas))
 
     return to_save
 
