@@ -83,8 +83,8 @@ def eval_loss(model, train_loader, validation_loader, config):
     model.train()
     return out, stats 
 
-def write_checkpoints(iter_idx, model, optimizer, stats, config, target="onset_checkpoints"):
-    path = BASE_DIR.parent.parent / target / f"iter{iter_idx}_tlossb{stats['train_loss_best']:.4f}vlossb{stats['val_loss_best']:.4f}_tfb{stats['train_f_score_best']}vfb{stats['val_f_score_best']}_date{datetime.now().strftime('%Y-%m-%d|%H:%M:%S')}"
+def write_checkpoints(iter_idx, model, optimizer, stats, config):
+    path = Path(config.checkpoint_path) / f"iter{iter_idx}_tlossb{stats['train_loss_best']:.4f}vlossb{stats['val_loss_best']:.4f}_tfb{stats['train_f_score_best']}vfb{stats['val_f_score_best']}_date{datetime.now().strftime('%Y-%m-%d|%H:%M:%S')}"
     model_dict = model.state_dict()
     opt_dict = optimizer.state_dict()
 
@@ -171,6 +171,7 @@ def train(model, train_loader, optimizer, config, starting_idx=0):
 
     train_gen = make_generator(train_loader, device)
     idx = starting_idx
+
     inputs, targets = next(train_gen) #first batch
 
     #for eval_loss function
@@ -243,7 +244,7 @@ def train(model, train_loader, optimizer, config, starting_idx=0):
                 "val_loss_best": val_loss_best,
             }
 
-            print(f"evaluation step {idx} - loss: train {losses['train']:.4f}, val {losses['val']:.4f} | f-score: train {train_f_score} val {val_f_score} | aucpr: train {stats['train']['aucpr']} val {stats['val']['aucpr']} | precision: train {stats['train']['precision']} val {stats['val']['precision']} | recall: train {stats['train']['recall']} val {stats['val']['recall']}")  
+            print(f"evaluation step {idx} - loss: train {losses['train']:.4f}, val {losses['val']:.4f} | f-score: train {train_f_score} val {val_f_score} | aucpr: train {stats['train']['aucpr']} val {stats['val']['aucpr']} gap {stats['train']['aucpr']-stats['val']['aucpr']} | precision: train {stats['train']['precision']} val {stats['val']['precision']} | recall: train {stats['train']['recall']} val {stats['val']['recall']}")  
 
             if idx % checkpoint_iters == 0:
                 free_mem, total_mem = torch.cuda.mem_get_info()

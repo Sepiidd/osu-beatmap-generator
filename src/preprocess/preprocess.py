@@ -105,50 +105,10 @@ def save_point(
         set_grp.attrs["diffs"] = num_diffs + 1
         f.attrs["num_samples"] = num_samples + 1
 
-def augment_osu(osz, hitobj_idx):
-    augmented_x_flip_raw = augment_reflect_x(osz) 
-    augmented_x_flip = converter.hitobject_seq_to_tok(augmented_x_flip_raw) 
-    osz.seek(hitobj_idx) #reset file pointer to start of hitobjects
-
-    augmented_y_flip_raw = augment_reflect_y(osz)
-    augmented_y_flip = converter.hitobject_seq_to_tok(augmented_y_flip_raw) 
-    osz.seek(hitobj_idx) #reset file pointer to start of hitobjects
-
-    augmented_xy_flip_raw = augment_reflect_xy(osz)
-    augmented_xy_flip = converter.hitobject_seq_to_tok(augmented_xy_flip_raw)
-    osz.seek(hitobj_idx) #reset file pointer to start of hitobjects
-
-    return (augmented_x_flip, augmented_y_flip, augmented_xy_flip)
-
-def augment_audio(song_path, features, targets, fwd, bwd):
-    #rate change
-    augmented_targets = targets[:]
-    augmented_fwd = fwd[:]
-    augmented_bwd = bwd[:] 
-    augmented_speed = augment_speed(song_path, augmented_targets, augmented_fwd, augmented_bwd)
-
-    #pitch change
-    augmented_pitch = augment_pitch(song_path)
-
-    #frequency mask
-    augmented_freq = augment_frequency_mask(features)
-
-    return (augmented_speed, augmented_targets, augmented_fwd, augmented_bwd, augmented_pitch, augmented_freq)
-
 def process_one(data_path, h5path, song_name, diff_name):
     song_id = song_name.split(" ")[0]
-    exists_original = False
-    exists_speedup = False
-    exists_pitchup = False
-    exists_mask = False
     if in_h5(h5path, song_id, diff_name):
-        exists_original = True
-    if in_h5(h5path, song_id+"-x_flip_speedup", "x_flip_speedup:"+diff_name):
-        exists_speedup = True 
-    if in_h5(h5path, song_id+"-y_flip_pitchup", "y_flip_pitchup:"+diff_name):
-        exists_pitchup = True
-    if in_h5(h5path, song_id+"-xy_flip_freq_mask", "xy_flip_freq_mask:"+diff_name):
-        exists_mask = True 
+       return [] 
 
     #osu
     osu_path = data_path / song_name / diff_name
@@ -156,23 +116,14 @@ def process_one(data_path, h5path, song_name, diff_name):
         osu, ms_seq, forward_deltas, backward_deltas, mp3, hitobj_idx = process_osu(osz)
         osz.seek(hitobj_idx) #reset file pointer to start of hitobjects
 
-        #augmentation (osu)
-        augmented_x_flip, augmented_y_flip, augmented_xy_flip, = augment_osu(osz, hitobj_idx) #NOTE: possible optimization: only perform required augmentations according to exists_*
-
     #audio
+    #NOTE: pitch/time-shift audio augmentation must be performed here (no way to delay augmentation to data loader stage)
     song_path = data_path / song_name / mp3
     audio, sr = load(path=song_path, sr=SR)
     features = process_audio(audio, sr)
 
-    #augmentation (audio)
-    augmented_speed, augmented_targets, augmented_fwd, augmented_bwd, augmented_pitch, augmented_freq = augment_audio(song_path, features, ms_seq, forward_deltas, backward_deltas)
-    speed_features = process_audio(augmented_speed, sr)
-
     to_save = []
-    if not exists_original: to_save.append((song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas))
-    if not exists_speedup: to_save.append((song_id+"-x_flip_speedup", "x_flip_speedup:"+diff_name, speed_features, augmented_targets, augmented_x_flip, augmented_fwd, augmented_bwd))
-    if not exists_pitchup: to_save.append((song_id+"-y_flip_pitchup", "y_flip_pitchup:"+diff_name, features, ms_seq, augmented_y_flip, forward_deltas, backward_deltas))
-    if not exists_mask: to_save.append((song_id+"-xy_flip_freq_mask", "xy_flip_freq_mask:"+diff_name, features, ms_seq, augmented_xy_flip, forward_deltas, backward_deltas))
+    to_save.append((song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas))
 
     return to_save
 
@@ -183,28 +134,14 @@ def save_set(arg_list, h5path):
 def process_many(data_path, h5path):
     for d in data_path.iterdir():
         song_name = d.name
-        
-        augmentations = []
-        originals = []
-        speedups = []
-        pitch = []
-        masked = []
-        augmentations.append(originals)
-        augmentations.append(speedups)
-        augmentations.append(pitch)
-        augmentations.append(masked)
-
+        to_save = []
         for f in d.iterdir():
             if f.suffix == ".osu":
                 diff_name = f.name
-                to_save = process_one(data_path, h5path, song_name, diff_name)
-                if len(to_save)>=1: originals.append(to_save[0])
-                if len(to_save)>=2: speedups.append(to_save[1])
-                if len(to_save)>=3: pitch.append(to_save[2])
-                if len(to_save)>=4: masked.append(to_save[3])
+                to_save.extend(process_one(data_path, h5path, song_name, diff_name))
         #save entire mapsets at once
-        for augmentation in augmentations:
-            save_set(augmentation, h5path)
+        for song_args in to_save:
+            save_point(h5path, *song_args)
     return
 
 if __name__ == "__main__":

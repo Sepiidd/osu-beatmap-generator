@@ -15,10 +15,13 @@ SEQUENCE_LEN = configA.sequence_len #equal to roughly 5 seconds of audio
 HOP_LEN = configA.hop_len
 
 class OBGAudioDataset(Dataset):
-    def __init__(self, h5path, max_seq_len):
+    def __init__(self, h5path, max_seq_len, augment=False, augmentations=[]):
         self.h5path = h5path
         self.num_samples = self.get_len(h5path)
         self.max_seq_len = max_seq_len
+        self.augment = augment #augmentation bool flag
+        self.augmentations = augmentations.copy() #list of functions, for which each takes in inputs and targets, returns augmented inputs and targets
+        self.augmentations.append(lambda x, y: (x, y))
 
     def __len__(self):
         return self.num_samples
@@ -27,6 +30,12 @@ class OBGAudioDataset(Dataset):
         sample, _ = self.sample_bin_search(idx)
         audio_feat = sample["audio_feat"]
         audio_targets = sample["audio_targets"]
+
+        #TODO: perform and retrieve augmentation, debug
+        if self.augment:
+            option_select = np.random.randint(0, len(self.augmentations))
+            audio_feat, audio_targets = self.augmentations[option_select](audio_feat, audio_targets)
+
         num_frames = audio_feat.shape[1]
 
         if num_frames < self.max_seq_len: #edgecase, audio less than max_seq_len

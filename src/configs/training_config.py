@@ -4,6 +4,10 @@ from torch.utils.data import DataLoader
 from pathlib import Path
 from configs.audio_config import AudioConfig
 from configs.preprocess_config import PreprocessConfig 
+from preprocess.audio_utils import augment_speed
+from preprocess.audio_utils import augment_pitch
+from preprocess.audio_utils import augment_frequency_mask
+from preprocess.audio_utils import augment_temporal_mask
 import torch
 import torch.nn as nn
 import torchvision.ops as ops
@@ -19,16 +23,16 @@ class TrainingConfig():
         #==========STATIC VALUES==========
         #training iteration breakpoints
         self.sequence_len = SEQ_LEN
-        self.max_iters = 3000
+        self.max_iters = 2500
         self.log_interval = 10
-        self.eval_interval = 10
+        self.eval_interval = 10 #not used (?)
         self.eval_iters = 50 #factor of checkpoint_iters
         self.warmup_iters = 500 #experiment with this and decay_iters
-        self.lr_decay_iters = 1500
-        self.checkpoint_iters = 200 #multiple of eval_iters
+        self.lr_decay_iters = 2000
+        self.checkpoint_iters = 100 #multiple of eval_iters
         #model training specifics
-        self.weight_decay = 0.1 #adamw
-        self.lr = 3e-4
+        self.weight_decay = 0.05 #adamw
+        self.lr = 3e-3
         self.beta1 = 0.9 #adamw
         self.beta2 = 0.99 #adamw
         self.min_lr = 3e-5
@@ -36,18 +40,19 @@ class TrainingConfig():
         self.grad_clip = 1.0
         self.grad_accumulation_steps = 4
         #dataloaders
-        self.train_path = configP.h5parent / "datasets" / "train"
-        self.validation_path = configP.h5parent / "datasets" / "validation" 
-        self.test_path = configP.h5parent / "datasets" / "test"
+        self.train_path = Path(configP.h5_parent) / "datasets" / "train"
+        self.validation_path = Path(configP.h5_parent) / "datasets" / "validation" 
+        self.test_path = Path(configP.h5_parent) / "datasets" / "test"
+        self.checkpoint_path = Path(configP.checkpoint) / "onset_checkpoints"
         self.batch_size = 32
         self.shuffle = True
         self.pin_memory = True
         #criterion
-#        self.criterion = nn.BCEWithLogitsLoss() #binary cross entropy
-        self.crit_alpha = 0.25
-        self.crit_gamma = 3.0
-        self.crit_reduction = "mean" 
-        self.criterion = lambda logits, targets: ops.sigmoid_focal_loss(logits, targets, alpha=self.crit_alpha, gamma=self.crit_gamma, reduction=self.crit_reduction) #focal loss
+        self.criterion = nn.BCEWithLogitsLoss() #binary cross entropy
+#        self.crit_alpha = 0.25
+#        self.crit_gamma = 2.0
+#        self.crit_reduction = "mean" 
+#        self.criterion = lambda logits, targets: ops.sigmoid_focal_loss(logits, targets, alpha=self.crit_alpha, gamma=self.crit_gamma, reduction=self.crit_reduction) #focal loss
 
         #==========COMPUTED VALUES==========
         #check if cuda is available
@@ -58,8 +63,12 @@ class TrainingConfig():
         self.ctx = nullcontext() if self.device == 'cpu' else torch.amp.autocast(device_type=self.device, dtype=self.pt_dtype)
         self.scaler = torch.amp.GradScaler(self.device, enabled=(self.dtype == 'float16')) #if not working in float16, acts as a no-op
         #dataloaders
+#        a_spd = lambda x, y: augment_speed(x, y) #inputs, targets
+#        a_ptch = lambda x, y: (augment_pitch(x), y) #inputs, targets
+        a_frq = lambda x, y: (augment_frequency_mask(x), y) #inputs, targets
+        a_time = lambda x, y: (augment_temporal_mask(x), y) #inputs, targets
         self.train_loader = DataLoader(
-            OBGAudioDataset(self.train_path, self.sequence_len),
+            OBGAudioDataset(self.train_path, self.sequence_len, augment=True, augmentations=[a_frq, a_time]),
             batch_size=self.batch_size, 
             shuffle=self.shuffle,
             pin_memory=self.pin_memory #for faster and async gpu transfers

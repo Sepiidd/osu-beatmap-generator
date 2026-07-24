@@ -1,6 +1,7 @@
 import librosa.effects as E
 import librosa
 import numpy as np
+import torchaudio.transforms as T
 from librosa import time_to_frames
 from configs.audio_config import AudioConfig
 
@@ -35,7 +36,25 @@ def augment_pitch(audio, shift=2):
     audio, sr = librosa.load(audio)
     return E.pitch_shift(audio, sr=configA.sr, n_steps=shift)
 
-def augment_speed(audio, target_ms, fwd_d, bwd_d, rate=1.2):
+def augment_speed(audio, target_ms, rate=1.2):
+    """
+    increase speed of audio by <rate> (default 1.2x), update related osu information accordingly
+
+    <audio>: raw audio path 
+    <target_ms>: array of timestamps representing ground truth onset
+    <rate>: multiplier which to speed up/down the audio by
+    """
+    audio, sr = librosa.load(audio)
+    augmented_a = E.time_stretch(audio, rate=rate)
+   
+    #update osu related timings
+    i = 0
+    while i < len(target_ms):
+        target_ms[i] = target_ms[i] / rate
+        i+=1
+    return augmented_a, target_ms
+
+def augment_speed_all(audio, target_ms, fwd_d, bwd_d, rate=1.2):
     """
     increase speed of audio by <rate> (default 1.2x), update related osu information accordingly
 
@@ -57,7 +76,7 @@ def augment_speed(audio, target_ms, fwd_d, bwd_d, rate=1.2):
         i+=1
     return augmented_a
 
-def augment_frequency_mask(audio_feats, max_aug=15):
+def augment_frequency_mask(audio_feats, max_aug=5):
     """
     zero out a random frequency band
 
@@ -69,6 +88,28 @@ def augment_frequency_mask(audio_feats, max_aug=15):
         band_selection = np.random.randint(configA.n_mel)
         augmented[band_selection, :, :] = 0
     return augmented 
+
+def augment_temporal_mask(audio_feats, max_aug=30):
+    """
+    zero out a random time
+
+    <audio_feats>: np array of shape (80, N, 3) where N is the number of frames for the original audio series
+    """
+    augmented = audio_feats.copy()
+    num_augmentations = np.random.randint(max_aug)
+    for i in range(num_augmentations):
+        num_frames = audio_feats.shape[1]
+        band_selection = np.random.randint(num_frames-num_augmentations)
+        augmented[:, band_selection:band_selection+num_augmentations, :] = 0
+    return augmented 
+
+
+
+
+
+
+
+
 
 
 

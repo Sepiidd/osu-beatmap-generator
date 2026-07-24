@@ -5,4 +5,5 @@ h5py
 torch
 torchvision
 torchmetrics
+torchaudio
 easydict
