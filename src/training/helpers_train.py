@@ -53,14 +53,16 @@ def eval_loss(model, train_loader, validation_loader, config):
 
             aucpr_calc.update(predictions, targets.to(int))
 
+            predictions = predictions >= configG.prediction_threshold 
+
             batch_tp = (predictions * targets).sum()
             tp += batch_tp
             batch_fp = (predictions * (1-targets)).sum()
             fp += batch_fp
-            batch_fn = ((1-predictions) * targets).sum()
+            batch_fn = ((~predictions) * targets).sum()
             fn += batch_fn
-
-            predictions = predictions >= configG.prediction_threshold 
+#            print("batch_fn is", batch_fn.item(), "total fn is", fn.item())
+            
             batch_correct = (predictions == targets).sum().item()
             correct += batch_correct 
 
@@ -71,6 +73,7 @@ def eval_loss(model, train_loader, validation_loader, config):
             i+=1
 
         #average loss, determine stats 
+#        print("tp, fp, fn is", tp.item(), fp.item(), fn.item())
         precision = (tp / (tp+fp + 1e-7)).item() #of all positive predictions, which were correct
         recall = (tp / (tp+fn + 1e-7)).item()
         f_score = (2*tp) / (2*tp+fp+fn + 1e-7)

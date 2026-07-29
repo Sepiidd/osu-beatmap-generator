@@ -62,7 +62,7 @@ def process_audio(audio, sr):
         mel_filter = mel(sr=SR, n_fft=n, n_mels=N_MEL)
         filtered = mel_filter @ transformed
         log_scaled = power_to_db(filtered, ref=np.max)
-        normalized = (log_scaled - np.mean(log_scaled)) / np.std(log_scaled)
+        normalized = (log_scaled - np.mean(log_scaled, axis=1, keepdims=True)) / np.std(log_scaled, axis=1, keepdims=True)
 
         features.append(normalized)
     features = np.stack(features, axis=-1)

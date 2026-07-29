@@ -3,6 +3,7 @@ import torch.nn.functional as F
 import torch
 import matplotlib.pyplot as plt
 import numpy as np
+from librosa import load
 from configs.audio_config import AudioConfig
 from configs.training_config import TrainingConfig
 from configs.gen_config import GenConfig 
@@ -59,11 +60,19 @@ class OnsetGenerator():
             batch_seq = np.reshape(batch_seq, (self.batch_size, self.sequence_len, 15, configA.n_mel, len(configA.n_fft)))
         return batch_seq
 
-    def song_to_onsets(self, path):
+    def path_to_onsets(self, path):
         '''
         convert entire song found at <path> into a list of onset probabilities
         '''
-        features = process_audio(path) #entire song -> filtered spectrogram
+        audio, sr = load(path=path, sr=configA.sr)
+        features = process_audio(audio, sr)
+        return self.song_to_onsets(features)
+
+    def song_to_onsets(self, features):
+        '''
+        convert features spectrogram to list of onset probabilities
+        NOTE: expects input in form of (m, t, w) as describedc directly below
+        '''
         m, t, w = features.shape #shape of: mel bins, time (frame idx), window length
 
         num_predictions = torch.zeros(t).to(device)
@@ -75,7 +84,7 @@ class OnsetGenerator():
         #loop over features and track index:
         while idx < t:
             #batch, splice, index features
-            batch_seq = self.make_batch_sequence(features, idx, idx+len_batch)
+            batch_seq = self.make_batch_sequence(features, idx, idx+len_batch) #reshaped to (t, m, w)
 
             #perform model predictions
             batch_predictions = self.batch_to_onsets(batch_seq)
@@ -98,8 +107,8 @@ class OnsetGenerator():
         predictions = predictions / num_predictions 
 
         #plot for testing
-        print("shape of predictions before hamming", predictions.shape)
-        self.plot_thresholds(predictions, "plot_test")
+#        print("shape of predictions before hamming", predictions.shape)
+#        self.plot_thresholds(predictions, "plot_test")
 
         #apply hamming window across batch
         ham_window = torch.hamming_window(self.hamming_window_len, periodic=False).to(device)
@@ -107,12 +116,13 @@ class OnsetGenerator():
         #padding to maintain <output_len>=<input_len>
         #normalize hamming window to sum to one, keeps output  
         smoothed = F.conv1d(predictions.view(1, 1, -1), ham_window.view(1, 1, -1) / ham_window.sum(), padding=self.hamming_window_len//2) 
+        self.plot_thresholds(smoothed.squeeze(), "plot_test_smoothed")
 
         #convert positive prediction indices into timestamps
         predictions_bool = (smoothed > self.prediction_threshold).squeeze() #remove extra 1 dimensions along with boolean filter
-        print("predictions bool shape is", predictions_bool.shape)
+#        print("predictions bool shape is", predictions_bool.shape)
         predictions_idx = torch.nonzero(predictions_bool, as_tuple=True)[0] 
-        print("predictions idx are", predictions_idx)
+#        print("predictions idx are", predictions_idx)
         
         times = predictions_idx * configA.hop_len / configA.sr #calculation described by <https://librosa.org/doc/latest/generated/librosa.frames_to_time.html>
         return times, predictions

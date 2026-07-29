@@ -15,13 +15,16 @@ SEQUENCE_LEN = configA.sequence_len #equal to roughly 5 seconds of audio
 HOP_LEN = configA.hop_len
 
 class OBGAudioDataset(Dataset):
-    def __init__(self, h5path, max_seq_len, augment=False, augmentations=[]):
+    def __init__(self, h5path, max_seq_len, augment=False, augmentations=[], benchmark=False):
         self.h5path = h5path
         self.num_samples = self.get_len(h5path)
         self.max_seq_len = max_seq_len
         self.augment = augment #augmentation bool flag
         self.augmentations = augmentations.copy() #list of functions, for which each takes in inputs and targets, returns augmented inputs and targets
         self.augmentations.append(lambda x, y: (x, y))
+        self.benchmark = benchmark
+
+        self.song_num_frames = None #update per song
 
     def __len__(self):
         return self.num_samples
@@ -31,22 +34,26 @@ class OBGAudioDataset(Dataset):
         audio_feat = sample["audio_feat"]
         audio_targets = sample["audio_targets"]
 
-        #TODO: perform and retrieve augmentation, debug
         if self.augment:
             option_select = np.random.randint(0, len(self.augmentations))
             audio_feat, audio_targets = self.augmentations[option_select](audio_feat, audio_targets)
 
         num_frames = audio_feat.shape[1]
+        self.song_num_frames = num_frames
 
         if num_frames < self.max_seq_len: #edgecase, audio less than max_seq_len
             audio_feat = self.pad_feats(audio_feat)
             num_frames = audio_feat.shape[1]
 
-        start_idx = np.random.randint(0, num_frames-self.max_seq_len+1) 
+        start_idx = np.random.randint(0, num_frames-self.max_seq_len+1) if not self.benchmark else 0
+        max_len = self.max_seq_len if not self.benchmark else num_frames
 
-        window_seq = self.slice_windows(audio_feat, start_idx)
+        window_seq = self.slice_windows(audio_feat, start_idx, max_len)
         window_seq = np.swapaxes(window_seq, 1, 2) #swap axes bc im dumb
         targets = self.gen_targets(start_idx, audio_targets)
+
+        if self.benchmark:
+            return torch.tensor(audio_feat), torch.tensor(targets)
 
         return torch.tensor(window_seq), torch.tensor(targets)
 
@@ -59,7 +66,8 @@ class OBGAudioDataset(Dataset):
         time_ms = frames_to_time(start_idx, sr=SR, hop_length=HOP_LEN)*1000
         targets_idx = self.bin_search_closest(time_ms, audio_targets, lenience) 
         curr_target = audio_targets[targets_idx]
-        for i in range(self.max_seq_len):
+        max_seq_len = self.max_seq_len if not self.benchmark else self.song_num_frames
+        for i in range(max_seq_len):
             time_ms = frames_to_time(start_idx+i, sr=SR, hop_length=HOP_LEN)*1000
             t = 0
             if abs(curr_target-time_ms) < lenience:
@@ -69,13 +77,13 @@ class OBGAudioDataset(Dataset):
             targets.append(t)
         return np.array(targets)
 
-    def slice_windows(self, audio_feat, start_idx):
+    def slice_windows(self, audio_feat, start_idx, max_len):
         '''
         retrieve <self.max_seq_len> many 15x80x3 (centered input frame+context, mel frequency, window length) slices of <audio_feat>, starting from <start_idx>
         '''
         slices = []
         i = 0
-        while i < self.max_seq_len:
+        while i < max_len:
             slices.append(get_frames_at_idx(audio_feat, start_idx+i))
             i += 1
         stacked = np.stack(slices, axis=0)
