@@ -2,6 +2,7 @@ import time
 import sys
 import numpy as np
 import h5py
+import rosu_pp_py as R
 from math import ceil
 from pathlib import Path
 from librosa import load, power_to_db, stft
@@ -30,6 +31,7 @@ SR = configA.sr
 
 tokenizer = obg_tokenizer(load_tokens=False)
 converter = obj_converter(tokenizer=tokenizer)
+diff_calculator = R.Difficulty(lazer=False)
 
 def in_h5(path, song_id, diff_name):
     with h5py.File(path, 'a', track_order=True) as f:
@@ -77,7 +79,10 @@ def save_point(
         audio_targets,
         osu_tokens,
         deltas_fwd,
-        deltas_back
+        deltas_back,
+        stars,
+        aim,
+        speed
     ):
     with h5py.File(path, 'a', track_order=True) as f:
         #hierarchy creation
@@ -97,6 +102,9 @@ def save_point(
         grp.create_dataset("osu_tokens", data=osu_tokens)
         grp.create_dataset("deltas_fwd", data=deltas_fwd)
         grp.create_dataset("deltas_back", data=deltas_back)
+        grp.create_dataset("stars", data=stars)
+        grp.create_dataset("aim", data=aim)
+        grp.create_dataset("speed", data=speed)
 
         #important metadata
         if num_diffs == 0:
@@ -116,6 +124,13 @@ def process_one(data_path, h5path, song_name, diff_name):
         osu, ms_seq, forward_deltas, backward_deltas, mp3, hitobj_idx = process_osu(osz)
         osz.seek(hitobj_idx) #reset file pointer to start of hitobjects
 
+    #osu difficulty calc    
+    bmap = R.Beatmap(path = str(osu_path))
+    ratings = diff_calculator.calculate(bmap)
+    stars = ratings.stars
+    aim = ratings.aim
+    speed = ratings.speed
+
     #audio
     #NOTE: pitch/time-shift audio augmentation must be performed here (no way to delay augmentation to data loader stage)
     song_path = data_path / song_name / mp3
@@ -123,7 +138,7 @@ def process_one(data_path, h5path, song_name, diff_name):
     features = process_audio(audio, sr)
 
     to_save = []
-    to_save.append((song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas))
+    to_save.append((song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas, stars, aim, speed))
 
     return to_save
 

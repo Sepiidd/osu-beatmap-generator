@@ -57,7 +57,7 @@ class OBGAudioDataset(Dataset):
 
         return torch.tensor(window_seq), torch.tensor(targets)
 
-    def gen_targets(self, start_idx, audio_targets, lenience=20):
+    def gen_targets(self, start_idx, audio_targets, lenience=5):
         '''
         generates sequence of 0,1 representing negative and positive targets for each 10=(HOP_LEN/SR)*1000 milliseconds  found in <audio_feat>, starting from <start_time>
         '''
@@ -98,7 +98,7 @@ class OBGAudioDataset(Dataset):
         padded = np.pad(audio_feat, ((0, 0), (0, to_pad), (0, 0)))
         return padded
 
-    def bin_search_closest(self, target, lst, lenience=20):
+    def bin_search_closest(self, target, lst, lenience=5):
         '''
         return index of closest element (prefer lower index) to <target> within <lst>
         *literally just binary search but more lenient on pointer assignment

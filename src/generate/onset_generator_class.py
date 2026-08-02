@@ -44,6 +44,10 @@ class OnsetGenerator():
         create a batch of size <self.batch_size>, containing sequences of length <self.sequence_len>
         lowers batch size if necessary
         '''
+
+        if hasattr(features, "is_cuda") and features.is_cuda:
+            features = features.to('cpu') #copy to cpu for numpy if required
+
         m, t, w = features.shape
         len_batch = self.sequence_len * self.batch_size
         batch_seq = []
@@ -107,7 +111,6 @@ class OnsetGenerator():
         predictions = predictions / num_predictions 
 
         #plot for testing
-#        print("shape of predictions before hamming", predictions.shape)
 #        self.plot_thresholds(predictions, "plot_test")
 
         #apply hamming window across batch
@@ -116,23 +119,21 @@ class OnsetGenerator():
         #padding to maintain <output_len>=<input_len>
         #normalize hamming window to sum to one, keeps output  
         smoothed = F.conv1d(predictions.view(1, 1, -1), ham_window.view(1, 1, -1) / ham_window.sum(), padding=self.hamming_window_len//2) 
-        self.plot_thresholds(smoothed.squeeze(), "plot_test_smoothed")
 
         #convert positive prediction indices into timestamps
         predictions_bool = (smoothed > self.prediction_threshold).squeeze() #remove extra 1 dimensions along with boolean filter
-#        print("predictions bool shape is", predictions_bool.shape)
         predictions_idx = torch.nonzero(predictions_bool, as_tuple=True)[0] 
-#        print("predictions idx are", predictions_idx)
         
         times = predictions_idx * configA.hop_len / configA.sr #calculation described by <https://librosa.org/doc/latest/generated/librosa.frames_to_time.html>
+        times = times * 1000
         return times, predictions
 
-    def plot_thresholds(self, probabilities, file_name):
+    def plot_thresholds(self, probabilities, file_name, timestamps=[], alpha=0.7, start_plot_from=2000, plot_first_many=2000):
         '''
         plots predictions' onset probabilities on a line graph, save to <file_name>.png
         '''
-        plt.plot(probabilities.cpu().detach().numpy())
-        plt.xlabel("Ordered Index")
+        plt.plot(probabilities.cpu().detach().numpy()[start_plot_from:start_plot_from+plot_first_many], alpha=alpha)
+        plt.xlabel(f"First {plot_first_many} Indices From Index {start_plot_from}")
         plt.ylabel("Onset Probability")
         plt.ylim(0,1)
         plt.title("Onset Probability Over Time")

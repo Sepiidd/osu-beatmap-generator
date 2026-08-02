@@ -2,6 +2,11 @@
 X_MIDDLE = 256 #playfield center on x-axis
 Y_MIDDLE = 192 #playfield center on y-axis
 
+def find_time(obj):
+    obj = obj.strip()
+    separated = obj.split(',')
+    return separated[2]
+
 def find_type(obj):
     separated = obj.strip().split(",")
     t = int(separated[3])

@@ -16,11 +16,14 @@ def read_group(f, indent=0):
             print(vert + hori + k, "is a group:")
             read_group(thing, indent=indent+2)
         elif isinstance(thing, h5py.Dataset):
-            print(vert + hori + k, "is a dataset with size", thing[:].shape)
+            if thing.shape == ():
+                print(vert + hori + k, "is a dataset with size", thing.shape, "it's contents are", thing[()])
+            else:
+                print(vert + hori + k, "is a dataset with size", thing.shape)
     return
 
 if __name__ == "__main__":
-    split = 'test'
+    split = 'train'
     path = Path(__file__).parent.parent / "datasets" / split 
     with h5py.File(path, "r") as f:
         print("f attrs are:")
