@@ -1,0 +1,2106 @@
+f attrs are:
+num_songs: 97
+num_samples: 152
+
+1771017 attributes are:
+diffs: 3
+end_range: 2
+start_range: 0
+1771017 is a group:
+  0 attributes are:
+  diff_name: 69 de 74 - Aratanaru Ketsui (Reywateil) [Phynta's LEGGENDARIA].osu
+L_0 is a group:
+L___aim is a dataset with size () it's contents are 3.5314719901210117
+L___audio_targets is a dataset with size (740,)
+L___deltas_back is a dataset with size (740,)
+L___deltas_fwd is a dataset with size (740,)
+L___osu_tokens is a dataset with size (3743,)
+L___speed is a dataset with size () it's contents are 3.0813348458373304
+L___stars is a dataset with size () it's contents are 6.816605978127012
+  1 attributes are:
+  diff_name: 69 de 74 - Aratanaru Ketsui (Reywateil) [The Determination].osu
+L_1 is a group:
+L___aim is a dataset with size () it's contents are 3.9171016596203243
+L___audio_targets is a dataset with size (664,)
+L___deltas_back is a dataset with size (664,)
+L___deltas_fwd is a dataset with size (664,)
+L___osu_tokens is a dataset with size (3416,)
+L___speed is a dataset with size () it's contents are 3.0355652898768413
+L___stars is a dataset with size () it's contents are 7.259660956383929
+  2 attributes are:
+  diff_name: 69 de 74 - Aratanaru Ketsui (Reywateil) [Flask's BLACK ANOTHER].osu
+L_2 is a group:
+L___aim is a dataset with size () it's contents are 3.1940136846589255
+L___audio_targets is a dataset with size (719,)
+L___deltas_back is a dataset with size (719,)
+L___deltas_fwd is a dataset with size (719,)
+L___osu_tokens is a dataset with size (3473,)
+L___speed is a dataset with size () it's contents are 2.868126466248484
+L___stars is a dataset with size () it's contents are 6.236454659180105
+L_audio_feat is a dataset with size (80, 13212, 3)
+1062625 attributes are:
+diffs: 1
+end_range: 3
+start_range: 3
+1062625 is a group:
+  3 attributes are:
+  diff_name: cosMo@BousouP - For UltraPlayers (toybot) [INFINITE].osu
+L_3 is a group:
+L___aim is a dataset with size () it's contents are 3.1432194903686357
+L___audio_targets is a dataset with size (736,)
+L___deltas_back is a dataset with size (736,)
+L___deltas_fwd is a dataset with size (736,)
+L___osu_tokens is a dataset with size (3503,)
+L___speed is a dataset with size () it's contents are 3.1188965464606846
+L___stars is a dataset with size () it's contents are 6.420652583141163
+L_audio_feat is a dataset with size (80, 12075, 3)
+869649 attributes are:
+diffs: 2
+end_range: 5
+start_range: 4
+869649 is a group:
+  4 attributes are:
+  diff_name: 455-38B - G e n g a o z o - f o o n (ktgster) [Extreme].osu
+L_4 is a group:
+L___aim is a dataset with size () it's contents are 3.9470843753186604
+L___audio_targets is a dataset with size (1238,)
+L___deltas_back is a dataset with size (1238,)
+L___deltas_fwd is a dataset with size (1238,)
+L___osu_tokens is a dataset with size (5270,)
+L___speed is a dataset with size () it's contents are 2.9281325614921734
+L___stars is a dataset with size () it's contents are 7.22500506469138
+  5 attributes are:
+  diff_name: 455-38B - G e n g a o z o - f o o n (ktgster) [Extra].osu
+L_5 is a group:
+L___aim is a dataset with size () it's contents are 3.105877263643229
+L___audio_targets is a dataset with size (1142,)
+L___deltas_back is a dataset with size (1142,)
+L___deltas_fwd is a dataset with size (1142,)
+L___osu_tokens is a dataset with size (5018,)
+L___speed is a dataset with size () it's contents are 2.8075824112695016
+L___stars is a dataset with size () it's contents are 6.081073002290394
+L_audio_feat is a dataset with size (80, 18012, 3)
+1344480 attributes are:
+diffs: 1
+end_range: 6
+start_range: 6
+1344480 is a group:
+  6 attributes are:
+  diff_name: Akihiro Honda - Battle! (Elite Four)  Battle! (SolgaleoLunala) (Hobbes2) [Extra].osu
+L_6 is a group:
+L___aim is a dataset with size () it's contents are 3.9055639671996394
+L___audio_targets is a dataset with size (978,)
+L___deltas_back is a dataset with size (978,)
+L___deltas_fwd is a dataset with size (978,)
+L___osu_tokens is a dataset with size (4658,)
+L___speed is a dataset with size () it's contents are 2.801195176626511
+L___stars is a dataset with size () it's contents are 7.086925422558903
+L_audio_feat is a dataset with size (80, 17581, 3)
+1876207 attributes are:
+diffs: 1
+end_range: 7
+start_range: 7
+1876207 is a group:
+  7 attributes are:
+  diff_name: Sad Keyboard Guy, Myntian & Sleepless - ChromaSurge (Camo) [Camo & funny's Aurora].osu
+L_7 is a group:
+L___aim is a dataset with size () it's contents are 3.766002089608971
+L___audio_targets is a dataset with size (1914,)
+L___deltas_back is a dataset with size (1914,)
+L___deltas_fwd is a dataset with size (1914,)
+L___osu_tokens is a dataset with size (10046,)
+L___speed is a dataset with size () it's contents are 3.2178127413876085
+L___stars is a dataset with size () it's contents are 7.21161211342262
+L_audio_feat is a dataset with size (80, 35322, 3)
+1730072 attributes are:
+diffs: 3
+end_range: 10
+start_range: 8
+1730072 is a group:
+  10 attributes are:
+  diff_name: Chroma - Destroy, Destroy, Destroy The Happy End (Ancelysia) [...].osu
+L_10 is a group:
+L___aim is a dataset with size () it's contents are 3.912471251266876
+L___audio_targets is a dataset with size (1521,)
+L___deltas_back is a dataset with size (1521,)
+L___deltas_fwd is a dataset with size (1521,)
+L___osu_tokens is a dataset with size (20882,)
+L___speed is a dataset with size () it's contents are 3.520856889799201
+L___stars is a dataset with size () it's contents are 7.645976287369728
+  8 attributes are:
+  diff_name: Chroma - Destroy, Destroy, Destroy The Happy End (Ancelysia) [Ryo's Expert].osu
+L_8 is a group:
+L___aim is a dataset with size () it's contents are 3.1641027208978794
+L___audio_targets is a dataset with size (1192,)
+L___deltas_back is a dataset with size (1192,)
+L___deltas_fwd is a dataset with size (1192,)
+L___osu_tokens is a dataset with size (7379,)
+L___speed is a dataset with size () it's contents are 3.059575800598836
+L___stars is a dataset with size () it's contents are 6.383235002945036
+  9 attributes are:
+  diff_name: Chroma - Destroy, Destroy, Destroy The Happy End (Ancelysia) [atlas' Extreme].osu
+L_9 is a group:
+L___aim is a dataset with size () it's contents are 3.7907170198763684
+L___audio_targets is a dataset with size (1296,)
+L___deltas_back is a dataset with size (1296,)
+L___deltas_fwd is a dataset with size (1296,)
+L___osu_tokens is a dataset with size (8027,)
+L___speed is a dataset with size () it's contents are 2.8948939862495946
+L___stars is a dataset with size () it's contents are 6.9952910341116255
+L_audio_feat is a dataset with size (80, 28037, 3)
+1928502 attributes are:
+diffs: 1
+end_range: 11
+start_range: 11
+1928502 is a group:
+  11 attributes are:
+  diff_name: ONIMAI SISTERS - HimegotoCriSisters (Kurashina Asuka) [onimai thursdays].osu
+L_11 is a group:
+L___aim is a dataset with size () it's contents are 3.548450076553206
+L___audio_targets is a dataset with size (1100,)
+L___deltas_back is a dataset with size (1100,)
+L___deltas_fwd is a dataset with size (1100,)
+L___osu_tokens is a dataset with size (4541,)
+L___speed is a dataset with size () it's contents are 2.967312513124839
+L___stars is a dataset with size () it's contents are 6.742098749019086
+L_audio_feat is a dataset with size (80, 21377, 3)
+1306572 attributes are:
+diffs: 1
+end_range: 12
+start_range: 12
+1306572 is a group:
+  12 attributes are:
+  diff_name: Marmalade butcher - Amanita (DeviousPanda) [Collab Extreme].osu
+L_12 is a group:
+L___aim is a dataset with size () it's contents are 3.6081172458243684
+L___audio_targets is a dataset with size (1461,)
+L___deltas_back is a dataset with size (1461,)
+L___deltas_fwd is a dataset with size (1461,)
+L___osu_tokens is a dataset with size (6770,)
+L___speed is a dataset with size () it's contents are 3.134061021547909
+L___stars is a dataset with size () it's contents are 6.952427321601117
+L_audio_feat is a dataset with size (80, 21122, 3)
+1079428 attributes are:
+diffs: 1
+end_range: 13
+start_range: 13
+1079428 is a group:
+  13 attributes are:
+  diff_name: True Damage - GIANTS (feat. Becky G, Keke Palmer, SOYEON, DUCKWRTH, Thutmose) (Crissa) [Living like GIANTS].osu
+L_13 is a group:
+L___aim is a dataset with size () it's contents are 3.28166331300116
+L___audio_targets is a dataset with size (799,)
+L___deltas_back is a dataset with size (799,)
+L___deltas_fwd is a dataset with size (799,)
+L___osu_tokens is a dataset with size (4955,)
+L___speed is a dataset with size () it's contents are 2.67149604589699
+L___stars is a dataset with size () it's contents are 6.177836246213597
+L_audio_feat is a dataset with size (80, 19126, 3)
+1175569 attributes are:
+diffs: 1
+end_range: 14
+start_range: 14
+1175569 is a group:
+  14 attributes are:
+  diff_name: Vicetone & Tony Igy - Astronomia (Camellia Remix) (RLC) [oh my god she has earmuffs on she can't hear us].osu
+L_14 is a group:
+L___aim is a dataset with size () it's contents are 3.5599269947858216
+L___audio_targets is a dataset with size (926,)
+L___deltas_back is a dataset with size (926,)
+L___deltas_fwd is a dataset with size (926,)
+L___osu_tokens is a dataset with size (5606,)
+L___speed is a dataset with size () it's contents are 2.9682684125858723
+L___stars is a dataset with size () it's contents are 6.756948068383849
+L_audio_feat is a dataset with size (80, 16985, 3)
+1178771 attributes are:
+diffs: 1
+end_range: 15
+start_range: 15
+1178771 is a group:
+  15 attributes are:
+  diff_name: Kakeru - Do you love me (feat. rintaru) (Kastellan) [Extreme].osu
+L_15 is a group:
+L___aim is a dataset with size () it's contents are 3.6655896950505986
+L___audio_targets is a dataset with size (1190,)
+L___deltas_back is a dataset with size (1190,)
+L___deltas_fwd is a dataset with size (1190,)
+L___osu_tokens is a dataset with size (8081,)
+L___speed is a dataset with size () it's contents are 3.0344097143867543
+L___stars is a dataset with size () it's contents are 6.9399324833623774
+L_audio_feat is a dataset with size (80, 22315, 3)
+795610 attributes are:
+diffs: 1
+end_range: 16
+start_range: 16
+795610 is a group:
+  16 attributes are:
+  diff_name: Camellia ft. Yukacco - Be Wild (hi-mei) [Inspiration].osu
+L_16 is a group:
+L___aim is a dataset with size () it's contents are 4.153667355545826
+L___audio_targets is a dataset with size (1117,)
+L___deltas_back is a dataset with size (1117,)
+L___deltas_fwd is a dataset with size (1117,)
+L___osu_tokens is a dataset with size (7175,)
+L___speed is a dataset with size () it's contents are 3.1423248266134025
+L___stars is a dataset with size () it's contents are 7.644237799178891
+L_audio_feat is a dataset with size (80, 31056, 3)
+240964 attributes are:
+diffs: 1
+end_range: 17
+start_range: 17
+240964 is a group:
+  17 attributes are:
+  diff_name: An - Encryption (lahphnya) [AR9.5].osu
+L_17 is a group:
+L___aim is a dataset with size () it's contents are 3.310945940899027
+L___audio_targets is a dataset with size (582,)
+L___deltas_back is a dataset with size (582,)
+L___deltas_fwd is a dataset with size (582,)
+L___osu_tokens is a dataset with size (2684,)
+L___speed is a dataset with size () it's contents are 2.807916562214176
+L___stars is a dataset with size () it's contents are 6.32285588779442
+L_audio_feat is a dataset with size (80, 12180, 3)
+194910 attributes are:
+diffs: 2
+end_range: 19
+start_range: 18
+194910 is a group:
+  18 attributes are:
+  diff_name: ESTi - HELIX (Edit ver.) (Hollow Wings) [EX EX].osu
+L_18 is a group:
+L___aim is a dataset with size () it's contents are 3.7282221164674034
+L___audio_targets is a dataset with size (619,)
+L___deltas_back is a dataset with size (619,)
+L___deltas_fwd is a dataset with size (619,)
+L___osu_tokens is a dataset with size (2621,)
+L___speed is a dataset with size () it's contents are 2.4121671060482957
+L___stars is a dataset with size () it's contents are 6.615371519042379
+  19 attributes are:
+  diff_name: ESTi - HELIX (Edit ver.) (Hollow Wings) [fanzhen's EX].osu
+L_19 is a group:
+L___aim is a dataset with size () it's contents are 3.4363949744696836
+L___audio_targets is a dataset with size (632,)
+L___deltas_back is a dataset with size (632,)
+L___deltas_fwd is a dataset with size (632,)
+L___osu_tokens is a dataset with size (2708,)
+L___speed is a dataset with size () it's contents are 2.5667194630292065
+L___stars is a dataset with size () it's contents are 6.3022013881108805
+L_audio_feat is a dataset with size (80, 14111, 3)
+1014706 attributes are:
+diffs: 1
+end_range: 20
+start_range: 20
+1014706 is a group:
+  20 attributes are:
+  diff_name: Kicco - Akari no Arika (Gillstar) [Killstar's Expert].osu
+L_20 is a group:
+L___aim is a dataset with size () it's contents are 3.7810757940377346
+L___audio_targets is a dataset with size (1383,)
+L___deltas_back is a dataset with size (1383,)
+L___deltas_fwd is a dataset with size (1383,)
+L___osu_tokens is a dataset with size (7829,)
+L___speed is a dataset with size () it's contents are 3.085287945496523
+L___stars is a dataset with size () it's contents are 7.12340602058552
+L_audio_feat is a dataset with size (80, 29350, 3)
+1703921 attributes are:
+diffs: 3
+end_range: 23
+start_range: 21
+1703921 is a group:
+  21 attributes are:
+  diff_name: MisomyL - Amnehilesie (Realazy) [Down's Extra].osu
+L_21 is a group:
+L___aim is a dataset with size () it's contents are 3.242856300719776
+L___audio_targets is a dataset with size (737,)
+L___deltas_back is a dataset with size (737,)
+L___deltas_fwd is a dataset with size (737,)
+L___osu_tokens is a dataset with size (4322,)
+L___speed is a dataset with size () it's contents are 3.0149163912471617
+L___stars is a dataset with size () it's contents are 6.42603002777969
+  22 attributes are:
+  diff_name: MisomyL - Amnehilesie (Realazy) [Cubby's Expert].osu
+L_22 is a group:
+L___aim is a dataset with size () it's contents are 3.671958798690764
+L___audio_targets is a dataset with size (718,)
+L___deltas_back is a dataset with size (718,)
+L___deltas_fwd is a dataset with size (718,)
+L___osu_tokens is a dataset with size (4217,)
+L___speed is a dataset with size () it's contents are 3.1584538967730853
+L___stars is a dataset with size () it's contents are 7.0491192439189785
+  23 attributes are:
+  diff_name: MisomyL - Amnehilesie (Realazy) [descente aux enfers].osu
+L_23 is a group:
+L___aim is a dataset with size () it's contents are 3.6600492937347275
+L___audio_targets is a dataset with size (888,)
+L___deltas_back is a dataset with size (888,)
+L___deltas_fwd is a dataset with size (888,)
+L___osu_tokens is a dataset with size (4601,)
+L___speed is a dataset with size () it's contents are 3.5436394533651256
+L___stars is a dataset with size () it's contents are 7.388183519169419
+L_audio_feat is a dataset with size (80, 15461, 3)
+1712558 attributes are:
+diffs: 3
+end_range: 26
+start_range: 24
+1712558 is a group:
+  24 attributes are:
+  diff_name: Getty vs. DJ DiA - Antifront Gears (Xavier Owens II) [Ilay's Extra].osu
+L_24 is a group:
+L___aim is a dataset with size () it's contents are 3.1653232195602605
+L___audio_targets is a dataset with size (733,)
+L___deltas_back is a dataset with size (733,)
+L___deltas_fwd is a dataset with size (733,)
+L___osu_tokens is a dataset with size (4358,)
+L___speed is a dataset with size () it's contents are 2.7190527462949285
+L___stars is a dataset with size () it's contents are 6.0735864317838395
+  25 attributes are:
+  diff_name: Getty vs. DJ DiA - Antifront Gears (Xavier Owens II) [#oit2022 edit].osu
+L_25 is a group:
+L___aim is a dataset with size () it's contents are 3.6965484241179154
+L___audio_targets is a dataset with size (776,)
+L___deltas_back is a dataset with size (776,)
+L___deltas_fwd is a dataset with size (776,)
+L___osu_tokens is a dataset with size (9866,)
+L___speed is a dataset with size () it's contents are 3.010715569523541
+L___stars is a dataset with size () it's contents are 6.959844845670809
+  26 attributes are:
+  diff_name: Getty vs. DJ DiA - Antifront Gears (Xavier Owens II) [Break-action].osu
+L_26 is a group:
+L___aim is a dataset with size () it's contents are 3.77130619897801
+L___audio_targets is a dataset with size (776,)
+L___deltas_back is a dataset with size (776,)
+L___deltas_fwd is a dataset with size (776,)
+L___osu_tokens is a dataset with size (9866,)
+L___speed is a dataset with size () it's contents are 3.0339955085334323
+L___stars is a dataset with size () it's contents are 7.07171623942751
+L_audio_feat is a dataset with size (80, 14485, 3)
+530685 attributes are:
+diffs: 1
+end_range: 27
+start_range: 27
+530685 is a group:
+  27 attributes are:
+  diff_name: Eve - GekkaMidare Botan (Meg) [Meg&Roll_Pan's E-Xtra].osu
+L_27 is a group:
+L___aim is a dataset with size () it's contents are 3.595398813205309
+L___audio_targets is a dataset with size (1189,)
+L___deltas_back is a dataset with size (1189,)
+L___deltas_fwd is a dataset with size (1189,)
+L___osu_tokens is a dataset with size (4958,)
+L___speed is a dataset with size () it's contents are 3.150180700424565
+L___stars is a dataset with size () it's contents are 6.951242744604649
+L_audio_feat is a dataset with size (80, 29928, 3)
+972932 attributes are:
+diffs: 1
+end_range: 28
+start_range: 28
+972932 is a group:
+  28 attributes are:
+  diff_name: James Landino - Hide And Seek (Mirash) [Expert].osu
+L_28 is a group:
+L___aim is a dataset with size () it's contents are 3.386589988896615
+L___audio_targets is a dataset with size (974,)
+L___deltas_back is a dataset with size (974,)
+L___deltas_fwd is a dataset with size (974,)
+L___osu_tokens is a dataset with size (3575,)
+L___speed is a dataset with size () it's contents are 3.0199593847317296
+L___stars is a dataset with size () it's contents are 6.593680506450667
+L_audio_feat is a dataset with size (80, 14126, 3)
+2109754 attributes are:
+diffs: 1
+end_range: 29
+start_range: 29
+2109754 is a group:
+  29 attributes are:
+  diff_name: ChouCho - BLESS YoUr NAME (Cut Ver.) (tsundereSam) [yandereSam's Prologue I].osu
+L_29 is a group:
+L___aim is a dataset with size () it's contents are 4.136424421973682
+L___audio_targets is a dataset with size (631,)
+L___deltas_back is a dataset with size (631,)
+L___deltas_fwd is a dataset with size (631,)
+L___osu_tokens is a dataset with size (2561,)
+L___speed is a dataset with size () it's contents are 2.5104924976758225
+L___stars is a dataset with size () it's contents are 7.258101949745881
+L_audio_feat is a dataset with size (80, 12525, 3)
+345086 attributes are:
+diffs: 1
+end_range: 30
+start_range: 30
+345086 is a group:
+  30 attributes are:
+  diff_name: Carpenter Brut - Anarchy Road (Voyen) [2070].osu
+L_30 is a group:
+L___aim is a dataset with size () it's contents are 3.8290964883003173
+L___audio_targets is a dataset with size (741,)
+L___deltas_back is a dataset with size (741,)
+L___deltas_fwd is a dataset with size (741,)
+L___osu_tokens is a dataset with size (3365,)
+L___speed is a dataset with size () it's contents are 2.583591040896749
+L___stars is a dataset with size () it's contents are 6.851541116484908
+L_audio_feat is a dataset with size (80, 21257, 3)
+836053 attributes are:
+diffs: 1
+end_range: 31
+start_range: 31
+836053 is a group:
+  31 attributes are:
+  diff_name: USAO - Dynamite (Camellia's MACHO TNT REMIX) (Slaked) [KABOOM].osu
+L_31 is a group:
+L___aim is a dataset with size () it's contents are 3.714159516791308
+L___audio_targets is a dataset with size (1402,)
+L___deltas_back is a dataset with size (1402,)
+L___deltas_fwd is a dataset with size (1402,)
+L___osu_tokens is a dataset with size (8015,)
+L___speed is a dataset with size () it's contents are 3.1963971909656625
+L___stars is a dataset with size () it's contents are 7.1315077546367736
+L_audio_feat is a dataset with size (80, 26007, 3)
+1020387 attributes are:
+diffs: 3
+end_range: 34
+start_range: 32
+1020387 is a group:
+  32 attributes are:
+  diff_name: Camellia - B L A C K - R A Y (Mir) [Obtrusion].osu
+L_32 is a group:
+L___aim is a dataset with size () it's contents are 3.603553714983984
+L___audio_targets is a dataset with size (1076,)
+L___deltas_back is a dataset with size (1076,)
+L___deltas_fwd is a dataset with size (1076,)
+L___osu_tokens is a dataset with size (7187,)
+L___speed is a dataset with size () it's contents are 2.8191308578489913
+L___stars is a dataset with size () it's contents are 6.697849293840128
+  33 attributes are:
+  diff_name: Camellia - B L A C K - R A Y (Mir) [Ducknorriss' Extreme].osu
+L_33 is a group:
+L___aim is a dataset with size () it's contents are 3.3116312525869973
+L___audio_targets is a dataset with size (1063,)
+L___deltas_back is a dataset with size (1063,)
+L___deltas_fwd is a dataset with size (1063,)
+L___osu_tokens is a dataset with size (6512,)
+L___speed is a dataset with size () it's contents are 2.749209350116633
+L___stars is a dataset with size () it's contents are 6.276117731935009
+  34 attributes are:
+  diff_name: Camellia - B L A C K - R A Y (Mir) [Transparency].osu
+L_34 is a group:
+L___aim is a dataset with size () it's contents are 3.6544814719507572
+L___audio_targets is a dataset with size (1104,)
+L___deltas_back is a dataset with size (1104,)
+L___deltas_fwd is a dataset with size (1104,)
+L___osu_tokens is a dataset with size (6713,)
+L___speed is a dataset with size () it's contents are 2.8771500698263357
+L___stars is a dataset with size () it's contents are 6.805753498414964
+L_audio_feat is a dataset with size (80, 27739, 3)
+199244 attributes are:
+diffs: 1
+end_range: 35
+start_range: 35
+199244 is a group:
+  35 attributes are:
+  diff_name: kors k as teranoid - Bad Maniacs (P o M u T a) [Extreme].osu
+L_35 is a group:
+L___aim is a dataset with size () it's contents are 3.2528494631732943
+L___audio_targets is a dataset with size (459,)
+L___deltas_back is a dataset with size (459,)
+L___deltas_fwd is a dataset with size (459,)
+L___osu_tokens is a dataset with size (2429,)
+L___speed is a dataset with size () it's contents are 2.842336972395685
+L___stars is a dataset with size () it's contents are 6.282375047588232
+L_audio_feat is a dataset with size (80, 12016, 3)
+107475 attributes are:
+diffs: 1
+end_range: 36
+start_range: 36
+107475 is a group:
+  36 attributes are:
+  diff_name: OSTER project - Capriccio of My Mind (7odoa) [Extra].osu
+L_36 is a group:
+L___aim is a dataset with size () it's contents are 3.4741827428102203
+L___audio_targets is a dataset with size (1610,)
+L___deltas_back is a dataset with size (1610,)
+L___deltas_fwd is a dataset with size (1610,)
+L___osu_tokens is a dataset with size (6122,)
+L___speed is a dataset with size () it's contents are 3.329678519923465
+L___stars is a dataset with size () it's contents are 6.979664767340513
+L_audio_feat is a dataset with size (80, 23953, 3)
+1779259 attributes are:
+diffs: 1
+end_range: 37
+start_range: 37
+1779259 is a group:
+  37 attributes are:
+  diff_name: Ekcle - Crafted In Ice (Mir) [Translucence (tourney ver.)].osu
+L_37 is a group:
+L___aim is a dataset with size () it's contents are 3.774618199922073
+L___audio_targets is a dataset with size (1088,)
+L___deltas_back is a dataset with size (1088,)
+L___deltas_fwd is a dataset with size (1088,)
+L___osu_tokens is a dataset with size (7736,)
+L___speed is a dataset with size () it's contents are 3.083167954053174
+L___stars is a dataset with size () it's contents are 7.113691085985688
+L_audio_feat is a dataset with size (80, 29876, 3)
+1571703 attributes are:
+diffs: 1
+end_range: 38
+start_range: 38
+1571703 is a group:
+  38 attributes are:
+  diff_name: lapix - Dolphika (KChronoZ) [modelista].osu
+L_38 is a group:
+L___aim is a dataset with size () it's contents are 3.7594798114400874
+L___audio_targets is a dataset with size (858,)
+L___deltas_back is a dataset with size (858,)
+L___deltas_fwd is a dataset with size (858,)
+L___osu_tokens is a dataset with size (5081,)
+L___speed is a dataset with size () it's contents are 2.9698839519181224
+L___stars is a dataset with size () it's contents are 7.0086531296314885
+L_audio_feat is a dataset with size (80, 14352, 3)
+2329780 attributes are:
+diffs: 1
+end_range: 39
+start_range: 39
+2329780 is a group:
+  39 attributes are:
+  diff_name: REQUiRE - buggin' (Alvearia) [A WHAT].osu
+L_39 is a group:
+L___aim is a dataset with size () it's contents are 3.858156831100475
+L___audio_targets is a dataset with size (918,)
+L___deltas_back is a dataset with size (918,)
+L___deltas_fwd is a dataset with size (918,)
+L___osu_tokens is a dataset with size (4685,)
+L___speed is a dataset with size () it's contents are 3.1555662718133126
+L___stars is a dataset with size () it's contents are 7.274343485523975
+L_audio_feat is a dataset with size (80, 15216, 3)
+119103 attributes are:
+diffs: 1
+end_range: 40
+start_range: 40
+119103 is a group:
+  40 attributes are:
+  diff_name: goreshit - fly, heart!  fly! (eLy) [vs ELY Over Stream].osu
+L_40 is a group:
+L___aim is a dataset with size () it's contents are 3.3619299824349316
+L___audio_targets is a dataset with size (953,)
+L___deltas_back is a dataset with size (953,)
+L___deltas_fwd is a dataset with size (953,)
+L___osu_tokens is a dataset with size (4358,)
+L___speed is a dataset with size () it's contents are 3.0973748065071876
+L___stars is a dataset with size () it's contents are 6.635680878488985
+L_audio_feat is a dataset with size (80, 17436, 3)
+473210 attributes are:
+diffs: 1
+end_range: 41
+start_range: 41
+473210 is a group:
+  41 attributes are:
+  diff_name: Lon - [Yuru Fuwa Jukai Girl] (End-Time) [KaKateKoyeahHhHhHhH].osu
+L_41 is a group:
+L___aim is a dataset with size () it's contents are 3.997974083523983
+L___audio_targets is a dataset with size (877,)
+L___deltas_back is a dataset with size (877,)
+L___deltas_fwd is a dataset with size (877,)
+L___osu_tokens is a dataset with size (4277,)
+L___speed is a dataset with size () it's contents are 3.0489336388139914
+L___stars is a dataset with size () it's contents are 7.374680363630778
+L_audio_feat is a dataset with size (80, 19076, 3)
+542317 attributes are:
+diffs: 1
+end_range: 42
+start_range: 42
+542317 is a group:
+  42 attributes are:
+  diff_name: Memme - Avalanche (Kalindraz) [Harmonical Catastrophe.].osu
+L_42 is a group:
+L___aim is a dataset with size () it's contents are 3.330637493724269
+L___audio_targets is a dataset with size (798,)
+L___deltas_back is a dataset with size (798,)
+L___deltas_fwd is a dataset with size (798,)
+L___osu_tokens is a dataset with size (4025,)
+L___speed is a dataset with size () it's contents are 2.9319315678671356
+L___stars is a dataset with size () it's contents are 6.45129512429181
+L_audio_feat is a dataset with size (80, 12050, 3)
+1317690 attributes are:
+diffs: 1
+end_range: 43
+start_range: 43
+1317690 is a group:
+  43 attributes are:
+  diff_name: Camellia - fastest crash (Camellia's paroxysmal Energetic Hitech Remix) (iLyne) [Terminal Velocity].osu
+L_43 is a group:
+L___aim is a dataset with size () it's contents are 3.5095295427083903
+L___audio_targets is a dataset with size (1908,)
+L___deltas_back is a dataset with size (1908,)
+L___deltas_fwd is a dataset with size (1908,)
+L___osu_tokens is a dataset with size (10835,)
+L___speed is a dataset with size () it's contents are 2.9308990544011784
+L___stars is a dataset with size () it's contents are 6.665045086975844
+L_audio_feat is a dataset with size (80, 36518, 3)
+874575 attributes are:
+diffs: 1
+end_range: 44
+start_range: 44
+874575 is a group:
+  44 attributes are:
+  diff_name: Mirai Akari - Akari ga Yattekita zo (HICCA) [Hai!].osu
+L_44 is a group:
+L___aim is a dataset with size () it's contents are 3.301045416841
+L___audio_targets is a dataset with size (1404,)
+L___deltas_back is a dataset with size (1404,)
+L___deltas_fwd is a dataset with size (1404,)
+L___osu_tokens is a dataset with size (8222,)
+L___speed is a dataset with size () it's contents are 2.6743435060754557
+L___stars is a dataset with size () it's contents are 6.204351197203706
+L_audio_feat is a dataset with size (80, 30031, 3)
+697087 attributes are:
+diffs: 1
+end_range: 45
+start_range: 45
+697087 is a group:
+  45 attributes are:
+  diff_name: Y&Co. - Daisuke (kwk) [SourPls].osu
+L_45 is a group:
+L___aim is a dataset with size () it's contents are 3.5498657426471616
+L___audio_targets is a dataset with size (734,)
+L___deltas_back is a dataset with size (734,)
+L___deltas_fwd is a dataset with size (734,)
+L___osu_tokens is a dataset with size (2633,)
+L___speed is a dataset with size () it's contents are 3.0666737365124814
+L___stars is a dataset with size () it's contents are 6.825928362874931
+L_audio_feat is a dataset with size (80, 12164, 3)
+694200 attributes are:
+diffs: 3
+end_range: 48
+start_range: 46
+694200 is a group:
+  46 attributes are:
+  diff_name: ak+q - Excelsia (Sotarks) [Extra].osu
+L_46 is a group:
+L___aim is a dataset with size () it's contents are 3.611012322014015
+L___audio_targets is a dataset with size (652,)
+L___deltas_back is a dataset with size (652,)
+L___deltas_fwd is a dataset with size (652,)
+L___osu_tokens is a dataset with size (2900,)
+L___speed is a dataset with size () it's contents are 3.0637589621712906
+L___stars is a dataset with size () it's contents are 6.896933475590666
+  47 attributes are:
+  diff_name: ak+q - Excelsia (Sotarks) [BOUYAAA's Extra].osu
+L_47 is a group:
+L___aim is a dataset with size () it's contents are 3.0623283774392225
+L___audio_targets is a dataset with size (731,)
+L___deltas_back is a dataset with size (731,)
+L___deltas_fwd is a dataset with size (731,)
+L___osu_tokens is a dataset with size (3356,)
+L___speed is a dataset with size () it's contents are 3.0431147298499743
+L___stars is a dataset with size () it's contents are 6.259975267554102
+  48 attributes are:
+  diff_name: ak+q - Excelsia (Sotarks) [Irre's Extra].osu
+L_48 is a group:
+L___aim is a dataset with size () it's contents are 3.612236936682825
+L___audio_targets is a dataset with size (726,)
+L___deltas_back is a dataset with size (726,)
+L___deltas_fwd is a dataset with size (726,)
+L___osu_tokens is a dataset with size (2972,)
+L___speed is a dataset with size () it's contents are 3.028877342045826
+L___stars is a dataset with size () it's contents are 6.86992316128759
+L_audio_feat is a dataset with size (80, 15399, 3)
+603561 attributes are:
+diffs: 2
+end_range: 50
+start_range: 49
+603561 is a group:
+  49 attributes are:
+  diff_name: lapix - Debug Dance (Super Arrow) [AAABRLBAAL].osu
+L_49 is a group:
+L___aim is a dataset with size () it's contents are 3.794667868500384
+L___audio_targets is a dataset with size (722,)
+L___deltas_back is a dataset with size (722,)
+L___deltas_fwd is a dataset with size (722,)
+L___osu_tokens is a dataset with size (2843,)
+L___speed is a dataset with size () it's contents are 3.108211292784807
+L___stars is a dataset with size () it's contents are 7.158228851408454
+  50 attributes are:
+  diff_name: lapix - Debug Dance (Super Arrow) [Livia's Dance].osu
+L_50 is a group:
+L___aim is a dataset with size () it's contents are 3.5050882876884333
+L___audio_targets is a dataset with size (631,)
+L___deltas_back is a dataset with size (631,)
+L___deltas_fwd is a dataset with size (631,)
+L___osu_tokens is a dataset with size (4181,)
+L___speed is a dataset with size () it's contents are 2.6365931918486623
+L___stars is a dataset with size () it's contents are 6.440684840746137
+L_audio_feat is a dataset with size (80, 12571, 3)
+1229471 attributes are:
+diffs: 2
+end_range: 52
+start_range: 51
+1229471 is a group:
+  51 attributes are:
+  diff_name: HyuN feat. YURI - Disorder (eiri-) [Acyl's Extra].osu
+L_51 is a group:
+L___aim is a dataset with size () it's contents are 3.336624338349913
+L___audio_targets is a dataset with size (709,)
+L___deltas_back is a dataset with size (709,)
+L___deltas_fwd is a dataset with size (709,)
+L___osu_tokens is a dataset with size (4016,)
+L___speed is a dataset with size () it's contents are 2.7915094827513807
+L___stars is a dataset with size () it's contents are 6.340761793334546
+  52 attributes are:
+  diff_name: HyuN feat. YURI - Disorder (eiri-) [Eternity].osu
+L_52 is a group:
+L___aim is a dataset with size () it's contents are 3.657570993354924
+L___audio_targets is a dataset with size (713,)
+L___deltas_back is a dataset with size (713,)
+L___deltas_fwd is a dataset with size (713,)
+L___osu_tokens is a dataset with size (3365,)
+L___speed is a dataset with size () it's contents are 3.278024297185057
+L___stars is a dataset with size () it's contents are 7.135835833615024
+L_audio_feat is a dataset with size (80, 13465, 3)
+1013719 attributes are:
+diffs: 1
+end_range: 53
+start_range: 53
+1013719 is a group:
+  53 attributes are:
+  diff_name: PSYQUI feat. mikanzil - Bye or not (Typ4) [Typ4 x Aqua-FISH's Final Farewell].osu
+L_53 is a group:
+L___aim is a dataset with size () it's contents are 3.6217229291827393
+L___audio_targets is a dataset with size (599,)
+L___deltas_back is a dataset with size (599,)
+L___deltas_fwd is a dataset with size (599,)
+L___osu_tokens is a dataset with size (5309,)
+L___speed is a dataset with size () it's contents are 2.816354959884947
+L___stars is a dataset with size () it's contents are 6.719330577595436
+L_audio_feat is a dataset with size (80, 11586, 3)
+2091798 attributes are:
+diffs: 1
+end_range: 54
+start_range: 54
+2091798 is a group:
+  54 attributes are:
+  diff_name: Okabe Keiichi - MONACA - Ammobium (lewski) [Mankai].osu
+L_54 is a group:
+L___aim is a dataset with size () it's contents are 3.1773521923558965
+L___audio_targets is a dataset with size (852,)
+L___deltas_back is a dataset with size (852,)
+L___deltas_fwd is a dataset with size (852,)
+L___osu_tokens is a dataset with size (3992,)
+L___speed is a dataset with size () it's contents are 2.703833795415409
+L___stars is a dataset with size () it's contents are 6.075374137510664
+L_audio_feat is a dataset with size (80, 17343, 3)
+1084205 attributes are:
+diffs: 2
+end_range: 56
+start_range: 55
+1084205 is a group:
+  55 attributes are:
+  diff_name: ak+q - Ignotus (Extended ver.) (ScubDomino) [[acyl's_expertfeat.iljaaz]].osu
+L_55 is a group:
+L___aim is a dataset with size () it's contents are 3.2754532862011607
+L___audio_targets is a dataset with size (1479,)
+L___deltas_back is a dataset with size (1479,)
+L___deltas_fwd is a dataset with size (1479,)
+L___osu_tokens is a dataset with size (7772,)
+L___speed is a dataset with size () it's contents are 2.7969556746786184
+L___stars is a dataset with size () it's contents are 6.27092479849
+  56 attributes are:
+  diff_name: ak+q - Ignotus (Extended ver.) (ScubDomino) [[[[#340000_cyiorliaalt.remix]]]_UnResponsive].osu
+L_56 is a group:
+L___aim is a dataset with size () it's contents are 3.4169664655089678
+L___audio_targets is a dataset with size (1238,)
+L___deltas_back is a dataset with size (1238,)
+L___deltas_fwd is a dataset with size (1238,)
+L___osu_tokens is a dataset with size (6635,)
+L___speed is a dataset with size () it's contents are 2.8499611175808934
+L___stars is a dataset with size () it's contents are 6.486359994684545
+L_audio_feat is a dataset with size (80, 27988, 3)
+915322 attributes are:
+diffs: 2
+end_range: 58
+start_range: 57
+915322 is a group:
+  57 attributes are:
+  diff_name: Paul Bazooka - DrunkenStein (Nao Tomori) [Collab Extreme].osu
+L_57 is a group:
+L___aim is a dataset with size () it's contents are 3.6561675123273396
+L___audio_targets is a dataset with size (689,)
+L___deltas_back is a dataset with size (689,)
+L___deltas_fwd is a dataset with size (689,)
+L___osu_tokens is a dataset with size (3320,)
+L___speed is a dataset with size () it's contents are 2.7530258550402897
+L___stars is a dataset with size () it's contents are 6.720090364489034
+  58 attributes are:
+  diff_name: Paul Bazooka - DrunkenStein (Nao Tomori) [Ayaya's rea,k].osu
+L_58 is a group:
+L___aim is a dataset with size () it's contents are 4.207669857627308
+L___audio_targets is a dataset with size (641,)
+L___deltas_back is a dataset with size (641,)
+L___deltas_fwd is a dataset with size (641,)
+L___osu_tokens is a dataset with size (5165,)
+L___speed is a dataset with size () it's contents are 2.727472247405325
+L___stars is a dataset with size () it's contents are 7.4681039395506215
+L_audio_feat is a dataset with size (80, 12730, 3)
+346964 attributes are:
+diffs: 3
+end_range: 61
+start_range: 59
+346964 is a group:
+  59 attributes are:
+  diff_name: Glunwald - Bloody Scarlet Nightmare (RikiH_) [Ultimate Nightmare].osu
+L_59 is a group:
+L___aim is a dataset with size () it's contents are 3.123846007393739
+L___audio_targets is a dataset with size (1065,)
+L___deltas_back is a dataset with size (1065,)
+L___deltas_fwd is a dataset with size (1065,)
+L___osu_tokens is a dataset with size (4856,)
+L___speed is a dataset with size () it's contents are 3.239428334319609
+L___stars is a dataset with size () it's contents are 6.526773772467215
+  60 attributes are:
+  diff_name: Glunwald - Bloody Scarlet Nightmare (RikiH_) [topdiff hitsounds].osu
+L_60 is a group:
+L___aim is a dataset with size () it's contents are 3.123846019643946
+L___audio_targets is a dataset with size (1065,)
+L___deltas_back is a dataset with size (1065,)
+L___deltas_fwd is a dataset with size (1065,)
+L___osu_tokens is a dataset with size (4856,)
+L___speed is a dataset with size () it's contents are 3.2394283397983306
+L___stars is a dataset with size () it's contents are 6.5267737903427365
+  61 attributes are:
+  diff_name: Glunwald - Bloody Scarlet Nightmare (RikiH_) [Hathz's Expert].osu
+L_61 is a group:
+L___aim is a dataset with size () it's contents are 2.927824889769411
+L___audio_targets is a dataset with size (746,)
+L___deltas_back is a dataset with size (746,)
+L___deltas_fwd is a dataset with size (746,)
+L___osu_tokens is a dataset with size (3782,)
+L___speed is a dataset with size () it's contents are 2.994096192616705
+L___stars is a dataset with size () it's contents are 6.072628351224773
+L_audio_feat is a dataset with size (80, 15794, 3)
+1103463 attributes are:
+diffs: 5
+end_range: 66
+start_range: 62
+1103463 is a group:
+  62 attributes are:
+  diff_name: Getty vs. DJ DiA - Antifront Gears (Realazy) [Altai's Extra].osu
+L_62 is a group:
+L___aim is a dataset with size () it's contents are 3.6156453586926585
+L___audio_targets is a dataset with size (770,)
+L___deltas_back is a dataset with size (770,)
+L___deltas_fwd is a dataset with size (770,)
+L___osu_tokens is a dataset with size (4721,)
+L___speed is a dataset with size () it's contents are 2.7842951217634146
+L___stars is a dataset with size () it's contents are 6.6885561579375885
+  63 attributes are:
+  diff_name: Getty vs. DJ DiA - Antifront Gears (Realazy) [Assault].osu
+L_63 is a group:
+L___aim is a dataset with size () it's contents are 3.927039069117109
+L___audio_targets is a dataset with size (830,)
+L___deltas_back is a dataset with size (830,)
+L___deltas_fwd is a dataset with size (830,)
+L___osu_tokens is a dataset with size (5195,)
+L___speed is a dataset with size () it's contents are 3.0591710078486853
+L___stars is a dataset with size () it's contents are 7.289502872001694
+  64 attributes are:
+  diff_name: Getty vs. DJ DiA - Antifront Gears (Realazy) [Heilia's Extra].osu
+L_64 is a group:
+L___aim is a dataset with size () it's contents are 3.8193412841569305
+L___audio_targets is a dataset with size (696,)
+L___deltas_back is a dataset with size (696,)
+L___deltas_fwd is a dataset with size (696,)
+L___osu_tokens is a dataset with size (5048,)
+L___speed is a dataset with size () it's contents are 3.122664606431945
+L___stars is a dataset with size () it's contents are 7.200271516191638
+  65 attributes are:
+  diff_name: Getty vs. DJ DiA - Antifront Gears (Realazy) [Cubby's Extreme].osu
+L_65 is a group:
+L___aim is a dataset with size () it's contents are 3.1661746720176134
+L___audio_targets is a dataset with size (758,)
+L___deltas_back is a dataset with size (758,)
+L___deltas_fwd is a dataset with size (758,)
+L___osu_tokens is a dataset with size (4643,)
+L___speed is a dataset with size () it's contents are 2.7146529128578303
+L___stars is a dataset with size () it's contents are 6.070920910515239
+  66 attributes are:
+  diff_name: Getty vs. DJ DiA - Antifront Gears (Realazy) [captin's Extra].osu
+L_66 is a group:
+L___aim is a dataset with size () it's contents are 3.7552441760021504
+L___audio_targets is a dataset with size (809,)
+L___deltas_back is a dataset with size (809,)
+L___deltas_fwd is a dataset with size (809,)
+L___osu_tokens is a dataset with size (4799,)
+L___speed is a dataset with size () it's contents are 2.9683334544612423
+L___stars is a dataset with size () it's contents are 7.002084591745509
+L_audio_feat is a dataset with size (80, 14461, 3)
+1169533 attributes are:
+diffs: 3
+end_range: 69
+start_range: 67
+1169533 is a group:
+  67 attributes are:
+  diff_name: Nekomata Master+ - chaos eater -IIDX edition- (fanzhen0019) [LeggendariA].osu
+L_67 is a group:
+L___aim is a dataset with size () it's contents are 4.480338930281037
+L___audio_targets is a dataset with size (659,)
+L___deltas_back is a dataset with size (659,)
+L___deltas_fwd is a dataset with size (659,)
+L___osu_tokens is a dataset with size (3194,)
+L___speed is a dataset with size () it's contents are 3.2739618900651797
+L___stars is a dataset with size () it's contents are 8.168049043833927
+  68 attributes are:
+  diff_name: Nekomata Master+ - chaos eater -IIDX edition- (fanzhen0019) [captin's Extra].osu
+L_68 is a group:
+L___aim is a dataset with size () it's contents are 3.7624828460052915
+L___audio_targets is a dataset with size (706,)
+L___deltas_back is a dataset with size (706,)
+L___deltas_fwd is a dataset with size (706,)
+L___osu_tokens is a dataset with size (3647,)
+L___speed is a dataset with size () it's contents are 3.123604567546361
+L___stars is a dataset with size () it's contents are 7.13050070969494
+  69 attributes are:
+  diff_name: Nekomata Master+ - chaos eater -IIDX edition- (fanzhen0019) [NeilPerry's Extra].osu
+L_69 is a group:
+L___aim is a dataset with size () it's contents are 3.631177802702193
+L___audio_targets is a dataset with size (622,)
+L___deltas_back is a dataset with size (622,)
+L___deltas_fwd is a dataset with size (622,)
+L___osu_tokens is a dataset with size (3155,)
+L___speed is a dataset with size () it's contents are 3.0387213988054325
+L___stars is a dataset with size () it's contents are 6.901058092366956
+L_audio_feat is a dataset with size (80, 11544, 3)
+1251070 attributes are:
+diffs: 3
+end_range: 72
+start_range: 70
+1251070 is a group:
+  70 attributes are:
+  diff_name: Memme - China Dress (Mir) [Serenity].osu
+L_70 is a group:
+L___aim is a dataset with size () it's contents are 3.4415574997581073
+L___audio_targets is a dataset with size (770,)
+L___deltas_back is a dataset with size (770,)
+L___deltas_fwd is a dataset with size (770,)
+L___osu_tokens is a dataset with size (3197,)
+L___speed is a dataset with size () it's contents are 3.0886908453747575
+L___stars is a dataset with size () it's contents are 6.718226802801542
+  71 attributes are:
+  diff_name: Memme - China Dress (Mir) [Disruption].osu
+L_71 is a group:
+L___aim is a dataset with size () it's contents are 3.541865121684619
+L___audio_targets is a dataset with size (765,)
+L___deltas_back is a dataset with size (765,)
+L___deltas_fwd is a dataset with size (765,)
+L___osu_tokens is a dataset with size (3143,)
+L___speed is a dataset with size () it's contents are 3.0848983263627723
+L___stars is a dataset with size () it's contents are 6.831945254730314
+  72 attributes are:
+  diff_name: Memme - China Dress (Mir) [Zer0's Extra].osu
+L_72 is a group:
+L___aim is a dataset with size () it's contents are 3.131512769830544
+L___audio_targets is a dataset with size (766,)
+L___deltas_back is a dataset with size (766,)
+L___deltas_fwd is a dataset with size (766,)
+L___osu_tokens is a dataset with size (3227,)
+L___speed is a dataset with size () it's contents are 2.7321956017901248
+L___stars is a dataset with size () it's contents are 6.044516833512608
+L_audio_feat is a dataset with size (80, 12482, 3)
+749591 attributes are:
+diffs: 1
+end_range: 73
+start_range: 73
+749591 is a group:
+  73 attributes are:
+  diff_name: Kanon - Hoshizora Travel (Battle) [Celestial].osu
+L_73 is a group:
+L___aim is a dataset with size () it's contents are 3.5280803428924536
+L___audio_targets is a dataset with size (680,)
+L___deltas_back is a dataset with size (680,)
+L___deltas_fwd is a dataset with size (680,)
+L___osu_tokens is a dataset with size (3950,)
+L___speed is a dataset with size () it's contents are 3.043950716102016
+L___stars is a dataset with size () it's contents are 6.780742133100018
+L_audio_feat is a dataset with size (80, 12772, 3)
+1052766 attributes are:
+diffs: 1
+end_range: 74
+start_range: 74
+1052766 is a group:
+  74 attributes are:
+  diff_name: Boogaboo - Bugabuga Chew Chew (emu1337) [Multi-Track Drifting].osu
+L_74 is a group:
+L___aim is a dataset with size () it's contents are 3.2787075615978063
+L___audio_targets is a dataset with size (954,)
+L___deltas_back is a dataset with size (954,)
+L___deltas_fwd is a dataset with size (954,)
+L___osu_tokens is a dataset with size (3725,)
+L___speed is a dataset with size () it's contents are 3.1412796481846788
+L___stars is a dataset with size () it's contents are 6.585930213445648
+L_audio_feat is a dataset with size (80, 16037, 3)
+2088576 attributes are:
+diffs: 1
+end_range: 75
+start_range: 75
+2088576 is a group:
+  75 attributes are:
+  diff_name: polysha - Endverse (captin1) [Encore].osu
+L_75 is a group:
+L___aim is a dataset with size () it's contents are 3.9597915790846545
+L___audio_targets is a dataset with size (1711,)
+L___deltas_back is a dataset with size (1711,)
+L___deltas_fwd is a dataset with size (1711,)
+L___osu_tokens is a dataset with size (9764,)
+L___speed is a dataset with size () it's contents are 3.331373109634694
+L___stars is a dataset with size () it's contents are 7.539814874525827
+L_audio_feat is a dataset with size (80, 30539, 3)
+712957 attributes are:
+diffs: 1
+end_range: 76
+start_range: 76
+712957 is a group:
+  76 attributes are:
+  diff_name: Gram (DJ Genki) - ARCADIA (Sabudo) [The Requiem].osu
+L_76 is a group:
+L___aim is a dataset with size () it's contents are 3.586992141019054
+L___audio_targets is a dataset with size (1365,)
+L___deltas_back is a dataset with size (1365,)
+L___deltas_fwd is a dataset with size (1365,)
+L___osu_tokens is a dataset with size (6860,)
+L___speed is a dataset with size () it's contents are 3.07087004973537
+L___stars is a dataset with size () it's contents are 6.873871721840311
+L_audio_feat is a dataset with size (80, 29971, 3)
+1228557 attributes are:
+diffs: 2
+end_range: 78
+start_range: 77
+1228557 is a group:
+  77 attributes are:
+  diff_name: koushirou - Amata no Mai -Dance of many- (IOException) [Expert].osu
+L_77 is a group:
+L___aim is a dataset with size () it's contents are 3.3144474042639724
+L___audio_targets is a dataset with size (901,)
+L___deltas_back is a dataset with size (901,)
+L___deltas_fwd is a dataset with size (901,)
+L___osu_tokens is a dataset with size (3572,)
+L___speed is a dataset with size () it's contents are 2.7290725396342235
+L___stars is a dataset with size () it's contents are 6.263646476250641
+  78 attributes are:
+  diff_name: koushirou - Amata no Mai -Dance of many- (IOException) [Expert cs4.8].osu
+L_78 is a group:
+L___aim is a dataset with size () it's contents are 3.451344579294855
+L___audio_targets is a dataset with size (901,)
+L___deltas_back is a dataset with size (901,)
+L___deltas_fwd is a dataset with size (901,)
+L___osu_tokens is a dataset with size (3572,)
+L___speed is a dataset with size () it's contents are 2.765422203371292
+L___stars is a dataset with size () it's contents are 6.463416538947338
+L_audio_feat is a dataset with size (80, 16965, 3)
+2206869 attributes are:
+diffs: 3
+end_range: 81
+start_range: 79
+2206869 is a group:
+  79 attributes are:
+  diff_name: isonosuke - Baka Tsuushin (feat. Chis-A) (Astrolis) [sb].osu
+L_79 is a group:
+L___aim is a dataset with size () it's contents are 4.40750776478025
+L___audio_targets is a dataset with size (873,)
+L___deltas_back is a dataset with size (873,)
+L___deltas_fwd is a dataset with size (873,)
+L___osu_tokens is a dataset with size (5969,)
+L___speed is a dataset with size () it's contents are 2.9548800701973317
+L___stars is a dataset with size () it's contents are 7.875256027813498
+  80 attributes are:
+  diff_name: isonosuke - Baka Tsuushin (feat. Chis-A) (Astrolis) [Extreme].osu
+L_80 is a group:
+L___aim is a dataset with size () it's contents are 3.760391308488658
+L___audio_targets is a dataset with size (802,)
+L___deltas_back is a dataset with size (802,)
+L___deltas_fwd is a dataset with size (802,)
+L___osu_tokens is a dataset with size (3959,)
+L___speed is a dataset with size () it's contents are 2.890192194723109
+L___stars is a dataset with size () it's contents are 6.952302377994192
+  81 attributes are:
+  diff_name: isonosuke - Baka Tsuushin (feat. Chis-A) (Astrolis) [newton's Extra].osu
+L_81 is a group:
+L___aim is a dataset with size () it's contents are 3.282445590949118
+L___audio_targets is a dataset with size (764,)
+L___deltas_back is a dataset with size (764,)
+L___deltas_fwd is a dataset with size (764,)
+L___osu_tokens is a dataset with size (4118,)
+L___speed is a dataset with size () it's contents are 2.888472652617368
+L___stars is a dataset with size () it's contents are 6.357056871064749
+L_audio_feat is a dataset with size (80, 14875, 3)
+862297 attributes are:
+diffs: 1
+end_range: 82
+start_range: 82
+862297 is a group:
+  82 attributes are:
+  diff_name: K A Z M A S A - Bon Appetit S (Oldskool HappyHardcore Remix) (BarkingMadDog) [Blend S].osu
+L_82 is a group:
+L___aim is a dataset with size () it's contents are 3.080074126817339
+L___audio_targets is a dataset with size (2870,)
+L___deltas_back is a dataset with size (2870,)
+L___deltas_fwd is a dataset with size (2870,)
+L___osu_tokens is a dataset with size (12752,)
+L___speed is a dataset with size () it's contents are 3.0418672966491758
+L___stars is a dataset with size () it's contents are 6.2771045787155355
+L_audio_feat is a dataset with size (80, 37334, 3)
+1759673 attributes are:
+diffs: 3
+end_range: 85
+start_range: 83
+1759673 is a group:
+  83 attributes are:
+  diff_name: rei sirose - Hakidasu (Lunicia) [Ascens' Expert].osu
+L_83 is a group:
+L___aim is a dataset with size () it's contents are 3.2214891824453877
+L___audio_targets is a dataset with size (769,)
+L___deltas_back is a dataset with size (769,)
+L___deltas_fwd is a dataset with size (769,)
+L___osu_tokens is a dataset with size (4328,)
+L___speed is a dataset with size () it's contents are 2.5685790959201507
+L___stars is a dataset with size () it's contents are 6.023544010415461
+  84 attributes are:
+  diff_name: rei sirose - Hakidasu (Lunicia) [SHOGUN'S Extreme].osu
+L_84 is a group:
+L___aim is a dataset with size () it's contents are 3.419157152110019
+L___audio_targets is a dataset with size (803,)
+L___deltas_back is a dataset with size (803,)
+L___deltas_fwd is a dataset with size (803,)
+L___osu_tokens is a dataset with size (4253,)
+L___speed is a dataset with size () it's contents are 2.860070064881988
+L___stars is a dataset with size () it's contents are 6.497184012122656
+  85 attributes are:
+  diff_name: rei sirose - Hakidasu (Lunicia) [splooge].osu
+L_85 is a group:
+L___aim is a dataset with size () it's contents are 3.6786912981823683
+L___audio_targets is a dataset with size (867,)
+L___deltas_back is a dataset with size (867,)
+L___deltas_fwd is a dataset with size (867,)
+L___osu_tokens is a dataset with size (4082,)
+L___speed is a dataset with size () it's contents are 3.050022851869056
+L___stars is a dataset with size () it's contents are 6.968524468554928
+L_audio_feat is a dataset with size (80, 16517, 3)
+1491737 attributes are:
+diffs: 1
+end_range: 86
+start_range: 86
+1491737 is a group:
+  86 attributes are:
+  diff_name: Centimillimental - Bokura dake no Shudaika (sped up version) (she luv lando) [Mendokusai (normal speed)].osu
+L_86 is a group:
+L___aim is a dataset with size () it's contents are 4.074027560970349
+L___audio_targets is a dataset with size (1155,)
+L___deltas_back is a dataset with size (1155,)
+L___deltas_fwd is a dataset with size (1155,)
+L___osu_tokens is a dataset with size (5942,)
+L___speed is a dataset with size () it's contents are 2.5605076207678015
+L___stars is a dataset with size () it's contents are 7.190423197632404
+L_audio_feat is a dataset with size (80, 32121, 3)
+405474 attributes are:
+diffs: 1
+end_range: 87
+start_range: 87
+405474 is a group:
+  87 attributes are:
+  diff_name: namirin - Amatsu Kitsune (Meg) [Extra].osu
+L_87 is a group:
+L___aim is a dataset with size () it's contents are 3.5927227810405284
+L___audio_targets is a dataset with size (1002,)
+L___deltas_back is a dataset with size (1002,)
+L___deltas_fwd is a dataset with size (1002,)
+L___osu_tokens is a dataset with size (4178,)
+L___speed is a dataset with size () it's contents are 2.9561422329251412
+L___stars is a dataset with size () it's contents are 6.7878108957480965
+L_audio_feat is a dataset with size (80, 23451, 3)
+896510 attributes are:
+diffs: 1
+end_range: 88
+start_range: 88
+896510 is a group:
+  88 attributes are:
+  diff_name: BUTAOTOME - In za Burakku (BarkingMadDog) [Extreme].osu
+L_88 is a group:
+L___aim is a dataset with size () it's contents are 3.6638566458446897
+L___audio_targets is a dataset with size (911,)
+L___deltas_back is a dataset with size (911,)
+L___deltas_fwd is a dataset with size (911,)
+L___osu_tokens is a dataset with size (4025,)
+L___speed is a dataset with size () it's contents are 3.1076180639551985
+L___stars is a dataset with size () it's contents are 6.997047252570446
+L_audio_feat is a dataset with size (80, 17067, 3)
+1077601 attributes are:
+diffs: 1
+end_range: 89
+start_range: 89
+1077601 is a group:
+  89 attributes are:
+  diff_name: Yorushika - Aruku (Axarious) [Normal].osu
+L_89 is a group:
+L___aim is a dataset with size () it's contents are 3.4873308257180837
+L___audio_targets is a dataset with size (1161,)
+L___deltas_back is a dataset with size (1161,)
+L___deltas_fwd is a dataset with size (1161,)
+L___osu_tokens is a dataset with size (5117,)
+L___speed is a dataset with size () it's contents are 3.175163306750955
+L___stars is a dataset with size () it's contents are 6.848525421646492
+L_audio_feat is a dataset with size (80, 20631, 3)
+637085 attributes are:
+diffs: 2
+end_range: 91
+start_range: 90
+637085 is a group:
+  90 attributes are:
+  diff_name: A-F-R-O - Definition of a Rap Flow (Ali-) [Endurance].osu
+L_90 is a group:
+L___aim is a dataset with size () it's contents are 3.7320134580372044
+L___audio_targets is a dataset with size (800,)
+L___deltas_back is a dataset with size (800,)
+L___deltas_fwd is a dataset with size (800,)
+L___osu_tokens is a dataset with size (3344,)
+L___speed is a dataset with size () it's contents are 3.2296731529343132
+L___stars is a dataset with size () it's contents are 7.180923589418517
+  91 attributes are:
+  diff_name: A-F-R-O - Definition of a Rap Flow (Ali-) [CS2].osu
+L_91 is a group:
+L___aim is a dataset with size () it's contents are 3.4296741029328293
+L___audio_targets is a dataset with size (795,)
+L___deltas_back is a dataset with size (795,)
+L___deltas_fwd is a dataset with size (795,)
+L___osu_tokens is a dataset with size (3347,)
+L___speed is a dataset with size () it's contents are 3.199969244829233
+L___stars is a dataset with size () it's contents are 6.806888903814212
+L_audio_feat is a dataset with size (80, 15796, 3)
+845333 attributes are:
+diffs: 1
+end_range: 92
+start_range: 92
+845333 is a group:
+  92 attributes are:
+  diff_name: DJ Command feat. Ranko - CRAZY YOU (Sakura Airi) [Eclipse of Hell].osu
+L_92 is a group:
+L___aim is a dataset with size () it's contents are 3.4417477083822545
+L___audio_targets is a dataset with size (2386,)
+L___deltas_back is a dataset with size (2386,)
+L___deltas_fwd is a dataset with size (2386,)
+L___osu_tokens is a dataset with size (11108,)
+L___speed is a dataset with size () it's contents are 3.1224775751708
+L___stars is a dataset with size () it's contents are 6.748849014139592
+L_audio_feat is a dataset with size (80, 34248, 3)
+526627 attributes are:
+diffs: 1
+end_range: 93
+start_range: 93
+526627 is a group:
+  93 attributes are:
+  diff_name: LeaF - Alice in Misanthrope -Ensei Alice- (Anxient) [Hidden wonderland].osu
+L_93 is a group:
+L___aim is a dataset with size () it's contents are 3.4058585078751986
+L___audio_targets is a dataset with size (798,)
+L___deltas_back is a dataset with size (798,)
+L___deltas_fwd is a dataset with size (798,)
+L___osu_tokens is a dataset with size (3197,)
+L___speed is a dataset with size () it's contents are 2.8277437294267878
+L___stars is a dataset with size () it's contents are 6.454910726147788
+L_audio_feat is a dataset with size (80, 14596, 3)
+1067029 attributes are:
+diffs: 3
+end_range: 96
+start_range: 94
+1067029 is a group:
+  94 attributes are:
+  diff_name: SakiZ - In the soil, daily life with a sardine (eiri-) [Yooh's Extra].osu
+L_94 is a group:
+L___aim is a dataset with size () it's contents are 3.3025572839699993
+L___audio_targets is a dataset with size (349,)
+L___deltas_back is a dataset with size (349,)
+L___deltas_fwd is a dataset with size (349,)
+L___osu_tokens is a dataset with size (1442,)
+L___speed is a dataset with size () it's contents are 3.0755041882887286
+L___stars is a dataset with size () it's contents are 6.549096215137653
+  95 attributes are:
+  diff_name: SakiZ - In the soil, daily life with a sardine (eiri-) [Expert].osu
+L_95 is a group:
+L___aim is a dataset with size () it's contents are 3.096788581735544
+L___audio_targets is a dataset with size (298,)
+L___deltas_back is a dataset with size (298,)
+L___deltas_fwd is a dataset with size (298,)
+L___osu_tokens is a dataset with size (1367,)
+L___speed is a dataset with size () it's contents are 2.811927007694315
+L___stars is a dataset with size () it's contents are 6.074641497742366
+  96 attributes are:
+  diff_name: SakiZ - In the soil, daily life with a sardine (eiri-) [Sardine].osu
+L_96 is a group:
+L___aim is a dataset with size () it's contents are 3.8478167247974557
+L___audio_targets is a dataset with size (345,)
+L___deltas_back is a dataset with size (345,)
+L___deltas_fwd is a dataset with size (345,)
+L___osu_tokens is a dataset with size (1460,)
+L___speed is a dataset with size () it's contents are 3.345511398842662
+L___stars is a dataset with size () it's contents are 7.417028277904434
+L_audio_feat is a dataset with size (80, 5837, 3)
+628446 attributes are:
+diffs: 2
+end_range: 98
+start_range: 97
+628446 is a group:
+  97 attributes are:
+  diff_name: Ribonnu - -ERROR (Toumei Dragon) [Lost].osu
+L_97 is a group:
+L___aim is a dataset with size () it's contents are 3.7886878088793416
+L___audio_targets is a dataset with size (1038,)
+L___deltas_back is a dataset with size (1038,)
+L___deltas_fwd is a dataset with size (1038,)
+L___osu_tokens is a dataset with size (6278,)
+L___speed is a dataset with size () it's contents are 2.60336688698288
+L___stars is a dataset with size () it's contents are 6.806130483943657
+  98 attributes are:
+  diff_name: Ribonnu - -ERROR (Toumei Dragon) [Reillia's Extra].osu
+L_98 is a group:
+L___aim is a dataset with size () it's contents are 3.495519657763052
+L___audio_targets is a dataset with size (1086,)
+L___deltas_back is a dataset with size (1086,)
+L___deltas_fwd is a dataset with size (1086,)
+L___osu_tokens is a dataset with size (5837,)
+L___speed is a dataset with size () it's contents are 2.6542054285169914
+L___stars is a dataset with size () it's contents are 6.4401210033217495
+L_audio_feat is a dataset with size (80, 23951, 3)
+821798 attributes are:
+diffs: 1
+end_range: 99
+start_range: 99
+821798 is a group:
+  99 attributes are:
+  diff_name: Seiryu - AO-Infinity (_RyuK) [Refraction].osu
+L_99 is a group:
+L___aim is a dataset with size () it's contents are 3.404021017287261
+L___audio_targets is a dataset with size (1140,)
+L___deltas_back is a dataset with size (1140,)
+L___deltas_fwd is a dataset with size (1140,)
+L___osu_tokens is a dataset with size (5318,)
+L___speed is a dataset with size () it's contents are 3.31844632137823
+L___stars is a dataset with size () it's contents are 6.893841933857377
+L_audio_feat is a dataset with size (80, 21613, 3)
+1223222 attributes are:
+diffs: 1
+end_range: 100
+start_range: 100
+1223222 is a group:
+  100 attributes are:
+  diff_name: Katagiri - Ao To Natsu (Katagiri Bootleg) (Aimnai) [Summer begins].osu
+L_100 is a group:
+L___aim is a dataset with size () it's contents are 3.9940898249967005
+L___audio_targets is a dataset with size (1098,)
+L___deltas_back is a dataset with size (1098,)
+L___deltas_fwd is a dataset with size (1098,)
+L___osu_tokens is a dataset with size (6278,)
+L___speed is a dataset with size () it's contents are 2.7244205221702162
+L___stars is a dataset with size () it's contents are 7.1633199559769105
+L_audio_feat is a dataset with size (80, 24813, 3)
+1279878 attributes are:
+diffs: 1
+end_range: 101
+start_range: 101
+1279878 is a group:
+  101 attributes are:
+  diff_name: P4koo - Forbidden Light (Gibune) [ak74 & Garden's Ultra].osu
+L_101 is a group:
+L___aim is a dataset with size () it's contents are 3.5568646012752536
+L___audio_targets is a dataset with size (824,)
+L___deltas_back is a dataset with size (824,)
+L___deltas_fwd is a dataset with size (824,)
+L___osu_tokens is a dataset with size (3986,)
+L___speed is a dataset with size () it's contents are 3.070129232703566
+L___stars is a dataset with size () it's contents are 6.83719368089942
+L_audio_feat is a dataset with size (80, 13063, 3)
+2122064 attributes are:
+diffs: 1
+end_range: 102
+start_range: 102
+2122064 is a group:
+  102 attributes are:
+  diff_name: SALTY DOG - CHRONUS ANCHOR (Pincus) [Fatal Answer].osu
+L_102 is a group:
+L___aim is a dataset with size () it's contents are 3.7538641474437586
+L___audio_targets is a dataset with size (1050,)
+L___deltas_back is a dataset with size (1050,)
+L___deltas_fwd is a dataset with size (1050,)
+L___osu_tokens is a dataset with size (4985,)
+L___speed is a dataset with size () it's contents are 2.8899824114822446
+L___stars is a dataset with size () it's contents are 6.943635258525349
+L_audio_feat is a dataset with size (80, 24252, 3)
+1801589 attributes are:
+diffs: 2
+end_range: 104
+start_range: 103
+1801589 is a group:
+  103 attributes are:
+  diff_name: BlackYooh vs. siromaru - Infinite Strife, (Cubby) [extra].osu
+L_103 is a group:
+L___aim is a dataset with size () it's contents are 3.3193412558585904
+L___audio_targets is a dataset with size (827,)
+L___deltas_back is a dataset with size (827,)
+L___deltas_fwd is a dataset with size (827,)
+L___osu_tokens is a dataset with size (4217,)
+L___speed is a dataset with size () it's contents are 2.84986399469347
+L___stars is a dataset with size () it's contents are 6.367826691199814
+  104 attributes are:
+  diff_name: BlackYooh vs. siromaru - Infinite Strife, (Cubby) [Conflict].osu
+L_104 is a group:
+L___aim is a dataset with size () it's contents are 3.5213866107149423
+L___audio_targets is a dataset with size (986,)
+L___deltas_back is a dataset with size (986,)
+L___deltas_fwd is a dataset with size (986,)
+L___osu_tokens is a dataset with size (5729,)
+L___speed is a dataset with size () it's contents are 3.0808995435633952
+L___stars is a dataset with size () it's contents are 6.804335779585173
+L_audio_feat is a dataset with size (80, 17254, 3)
+945019 attributes are:
+diffs: 2
+end_range: 106
+start_range: 105
+945019 is a group:
+  105 attributes are:
+  diff_name: Akira Complex - Ether Strike (Mun) [Mir's Aethereal Expert].osu
+L_105 is a group:
+L___aim is a dataset with size () it's contents are 3.1179385149988086
+L___audio_targets is a dataset with size (598,)
+L___deltas_back is a dataset with size (598,)
+L___deltas_fwd is a dataset with size (598,)
+L___osu_tokens is a dataset with size (3473,)
+L___speed is a dataset with size () it's contents are 2.756752331738048
+L___stars is a dataset with size () it's contents are 6.049852575233812
+  106 attributes are:
+  diff_name: Akira Complex - Ether Strike (Mun) [Luminiferous].osu
+L_106 is a group:
+L___aim is a dataset with size () it's contents are 3.3888815868775253
+L___audio_targets is a dataset with size (574,)
+L___deltas_back is a dataset with size (574,)
+L___deltas_fwd is a dataset with size (574,)
+L___osu_tokens is a dataset with size (4265,)
+L___speed is a dataset with size () it's contents are 2.6070218575180695
+L___stars is a dataset with size () it's contents are 6.267325522300834
+L_audio_feat is a dataset with size (80, 13950, 3)
+385427 attributes are:
+diffs: 1
+end_range: 107
+start_range: 107
+385427 is a group:
+  107 attributes are:
+  diff_name: Nizikawa - F.K.S. (Pho) [OVERDRIVE].osu
+L_107 is a group:
+L___aim is a dataset with size () it's contents are 3.462780348283252
+L___audio_targets is a dataset with size (571,)
+L___deltas_back is a dataset with size (571,)
+L___deltas_fwd is a dataset with size (571,)
+L___osu_tokens is a dataset with size (3542,)
+L___speed is a dataset with size () it's contents are 3.033630841393114
+L___stars is a dataset with size () it's contents are 6.694557432466264
+L_audio_feat is a dataset with size (80, 10736, 3)
+752257 attributes are:
+diffs: 1
+end_range: 108
+start_range: 108
+752257 is a group:
+  108 attributes are:
+  diff_name: Galdeira - Almagest (Realazy) [Omniscient].osu
+L_108 is a group:
+L___aim is a dataset with size () it's contents are 3.220974450621609
+L___audio_targets is a dataset with size (825,)
+L___deltas_back is a dataset with size (825,)
+L___deltas_fwd is a dataset with size (825,)
+L___osu_tokens is a dataset with size (3167,)
+L___speed is a dataset with size () it's contents are 3.1610434994066066
+L___stars is a dataset with size () it's contents are 6.544149431364826
+L_audio_feat is a dataset with size (80, 10030, 3)
+479108 attributes are:
+diffs: 1
+end_range: 109
+start_range: 109
+479108 is a group:
+  109 attributes are:
+  diff_name: Camellia - Enantiomorphs (-kevincela-) [Optical Isomer].osu
+L_109 is a group:
+L___aim is a dataset with size () it's contents are 3.4220637014701007
+L___audio_targets is a dataset with size (1049,)
+L___deltas_back is a dataset with size (1049,)
+L___deltas_fwd is a dataset with size (1049,)
+L___osu_tokens is a dataset with size (7178,)
+L___speed is a dataset with size () it's contents are 2.890829627720091
+L___stars is a dataset with size () it's contents are 6.525729115017263
+L_audio_feat is a dataset with size (80, 31383, 3)
+40344 attributes are:
+diffs: 4
+end_range: 113
+start_range: 110
+40344 is a group:
+  110 attributes are:
+  diff_name: Hatsune Miku - Atama no Taisou (val0108) [Lucifer x 0108].osu
+L_110 is a group:
+L___aim is a dataset with size () it's contents are 3.3430691045894396
+L___audio_targets is a dataset with size (559,)
+L___deltas_back is a dataset with size (559,)
+L___deltas_fwd is a dataset with size (559,)
+L___osu_tokens is a dataset with size (2783,)
+L___speed is a dataset with size () it's contents are 2.8817098004829993
+L___stars is a dataset with size () it's contents are 6.422990256326284
+  111 attributes are:
+  diff_name: Hatsune Miku - Atama no Taisou (val0108) [Nogard].osu
+L_111 is a group:
+L___aim is a dataset with size () it's contents are 4.006326610631735
+L___audio_targets is a dataset with size (670,)
+L___deltas_back is a dataset with size (670,)
+L___deltas_fwd is a dataset with size (670,)
+L___osu_tokens is a dataset with size (3041,)
+L___speed is a dataset with size () it's contents are 3.296459362199263
+L___stars is a dataset with size () it's contents are 7.56910259409479
+  112 attributes are:
+  diff_name: Hatsune Miku - Atama no Taisou (val0108) [0108].osu
+L_112 is a group:
+L___aim is a dataset with size () it's contents are 3.274050506797073
+L___audio_targets is a dataset with size (634,)
+L___deltas_back is a dataset with size (634,)
+L___deltas_fwd is a dataset with size (634,)
+L___osu_tokens is a dataset with size (2915,)
+L___speed is a dataset with size () it's contents are 3.1547437731080756
+L___stars is a dataset with size () it's contents are 6.594088255075736
+  113 attributes are:
+  diff_name: Hatsune Miku - Atama no Taisou (val0108) [AngelHoney].osu
+L_113 is a group:
+L___aim is a dataset with size () it's contents are 3.4029093641006454
+L___audio_targets is a dataset with size (508,)
+L___deltas_back is a dataset with size (508,)
+L___deltas_fwd is a dataset with size (508,)
+L___osu_tokens is a dataset with size (2591,)
+L___speed is a dataset with size () it's contents are 2.4533917184034912
+L___stars is a dataset with size () it's contents are 6.183236401784742
+L_audio_feat is a dataset with size (80, 17971, 3)
+720558 attributes are:
+diffs: 1
+end_range: 114
+start_range: 114
+720558 is a group:
+  114 attributes are:
+  diff_name: YUC'e - Future Cider (deadcode) [Future Sliders].osu
+L_114 is a group:
+L___aim is a dataset with size () it's contents are 3.503109885577994
+L___audio_targets is a dataset with size (1192,)
+L___deltas_back is a dataset with size (1192,)
+L___deltas_fwd is a dataset with size (1192,)
+L___osu_tokens is a dataset with size (7775,)
+L___speed is a dataset with size () it's contents are 2.924695523043877
+L___stars is a dataset with size () it's contents are 6.652177482482083
+L_audio_feat is a dataset with size (80, 24321, 3)
+862371 attributes are:
+diffs: 1
+end_range: 115
+start_range: 115
+862371 is a group:
+  115 attributes are:
+  diff_name: Camellia - Crystallized (Saika-) [Solidify].osu
+L_115 is a group:
+L___aim is a dataset with size () it's contents are 3.9230630277121814
+L___audio_targets is a dataset with size (985,)
+L___deltas_back is a dataset with size (985,)
+L___deltas_fwd is a dataset with size (985,)
+L___osu_tokens is a dataset with size (5951,)
+L___speed is a dataset with size () it's contents are 3.092228294791377
+L___stars is a dataset with size () it's contents are 7.308468913800837
+L_audio_feat is a dataset with size (80, 27659, 3)
+823380 attributes are:
+diffs: 1
+end_range: 116
+start_range: 116
+823380 is a group:
+  116 attributes are:
+  diff_name: Diao Ye Zong feat. Meramipop - Ibun 'Seigi no Mikata' (ailv) [Advent].osu
+L_116 is a group:
+L___aim is a dataset with size () it's contents are 3.64620530997404
+L___audio_targets is a dataset with size (1412,)
+L___deltas_back is a dataset with size (1412,)
+L___deltas_fwd is a dataset with size (1412,)
+L___osu_tokens is a dataset with size (7841,)
+L___speed is a dataset with size () it's contents are 2.7595541987286007
+L___stars is a dataset with size () it's contents are 6.711391286214875
+L_audio_feat is a dataset with size (80, 32225, 3)
+857638 attributes are:
+diffs: 2
+end_range: 118
+start_range: 117
+857638 is a group:
+  117 attributes are:
+  diff_name: DJ TOTTO - DORNWALD ~Der Junge im Kaefig~ (Azer) [ΓÇáLEGGENDARIA].osu
+L_117 is a group:
+L___aim is a dataset with size () it's contents are 3.7133433417947677
+L___audio_targets is a dataset with size (1870,)
+L___deltas_back is a dataset with size (1870,)
+L___deltas_fwd is a dataset with size (1870,)
+L___osu_tokens is a dataset with size (7790,)
+L___speed is a dataset with size () it's contents are 3.245297480360949
+L___stars is a dataset with size () it's contents are 7.172164929051102
+  118 attributes are:
+  diff_name: DJ TOTTO - DORNWALD ~Der Junge im Kaefig~ (Azer) [BMD's Extreme].osu
+L_118 is a group:
+L___aim is a dataset with size () it's contents are 3.434343352395869
+L___audio_targets is a dataset with size (2042,)
+L___deltas_back is a dataset with size (2042,)
+L___deltas_fwd is a dataset with size (2042,)
+L___osu_tokens is a dataset with size (7883,)
+L___speed is a dataset with size () it's contents are 3.128548654567515
+L___stars is a dataset with size () it's contents are 6.745956452399935
+L_audio_feat is a dataset with size (80, 31842, 3)
+1267294 attributes are:
+diffs: 2
+end_range: 120
+start_range: 119
+1267294 is a group:
+  119 attributes are:
+  diff_name: Crimsona - Hyper Fiber World Spectrum (Icekalt) [Down's Extra].osu
+L_119 is a group:
+L___aim is a dataset with size () it's contents are 2.980869872920143
+L___audio_targets is a dataset with size (941,)
+L___deltas_back is a dataset with size (941,)
+L___deltas_fwd is a dataset with size (941,)
+L___osu_tokens is a dataset with size (5414,)
+L___speed is a dataset with size () it's contents are 3.048471079670046
+L___stars is a dataset with size () it's contents are 6.182785091113416
+  120 attributes are:
+  diff_name: Crimsona - Hyper Fiber World Spectrum (Icekalt) [Festival].osu
+L_120 is a group:
+L___aim is a dataset with size () it's contents are 3.5386717570423367
+L___audio_targets is a dataset with size (1009,)
+L___deltas_back is a dataset with size (1009,)
+L___deltas_fwd is a dataset with size (1009,)
+L___osu_tokens is a dataset with size (4685,)
+L___speed is a dataset with size () it's contents are 2.9571837734191537
+L___stars is a dataset with size () it's contents are 6.721949360927203
+L_audio_feat is a dataset with size (80, 17755, 3)
+2214967 attributes are:
+diffs: 1
+end_range: 121
+start_range: 121
+2214967 is a group:
+  121 attributes are:
+  diff_name: Fu've - Einherjar (9ami) [Heroic Odyssey].osu
+L_121 is a group:
+L___aim is a dataset with size () it's contents are 4.23855390497857
+L___audio_targets is a dataset with size (730,)
+L___deltas_back is a dataset with size (730,)
+L___deltas_fwd is a dataset with size (730,)
+L___osu_tokens is a dataset with size (6077,)
+L___speed is a dataset with size () it's contents are 3.1869993159025656
+L___stars is a dataset with size () it's contents are 7.787036978899736
+L_audio_feat is a dataset with size (80, 13353, 3)
+1112439 attributes are:
+diffs: 2
+end_range: 123
+start_range: 122
+1112439 is a group:
+  122 attributes are:
+  diff_name: ELFENSJoN - Akayake no Majo (Hey lululu) [Kalibe x lu^3's Extra].osu
+L_122 is a group:
+L___aim is a dataset with size () it's contents are 3.210699524788393
+L___audio_targets is a dataset with size (1081,)
+L___deltas_back is a dataset with size (1081,)
+L___deltas_fwd is a dataset with size (1081,)
+L___osu_tokens is a dataset with size (7022,)
+L___speed is a dataset with size () it's contents are 2.7744857601517023
+L___stars is a dataset with size () it's contents are 6.17450923823856
+  123 attributes are:
+  diff_name: ELFENSJoN - Akayake no Majo (Hey lululu) [Scarlet World].osu
+L_123 is a group:
+L___aim is a dataset with size () it's contents are 3.763037598020295
+L___audio_targets is a dataset with size (1225,)
+L___deltas_back is a dataset with size (1225,)
+L___deltas_fwd is a dataset with size (1225,)
+L___osu_tokens is a dataset with size (7136,)
+L___speed is a dataset with size () it's contents are 3.0538286691354077
+L___stars is a dataset with size () it's contents are 7.076478161073056
+L_audio_feat is a dataset with size (80, 26304, 3)
+316445 attributes are:
+diffs: 1
+end_range: 124
+start_range: 124
+316445 is a group:
+  124 attributes are:
+  diff_name: Azel - -Astraia- (ktgster) [the_End].osu
+L_124 is a group:
+L___aim is a dataset with size () it's contents are 3.0272765688470775
+L___audio_targets is a dataset with size (1297,)
+L___deltas_back is a dataset with size (1297,)
+L___deltas_fwd is a dataset with size (1297,)
+L___osu_tokens is a dataset with size (4151,)
+L___speed is a dataset with size () it's contents are 3.234770044481443
+L___stars is a dataset with size () it's contents are 6.42870489553123
+L_audio_feat is a dataset with size (80, 15469, 3)
+529749 attributes are:
+diffs: 1
+end_range: 125
+start_range: 125
+529749 is a group:
+  125 attributes are:
+  diff_name: witch's slave - artefatto vita (09kami) [Master].osu
+L_125 is a group:
+L___aim is a dataset with size () it's contents are 4.4632550878087835
+L___audio_targets is a dataset with size (1388,)
+L___deltas_back is a dataset with size (1388,)
+L___deltas_fwd is a dataset with size (1388,)
+L___osu_tokens is a dataset with size (8381,)
+L___speed is a dataset with size () it's contents are 2.9458102419256718
+L___stars is a dataset with size () it's contents are 7.949373995437651
+L_audio_feat is a dataset with size (80, 33866, 3)
+649623 attributes are:
+diffs: 2
+end_range: 127
+start_range: 126
+649623 is a group:
+  126 attributes are:
+  diff_name: dj TAKA - Colors (sasakure.UK Futurelogic Remix) (peng) [Epileptic v2].osu
+L_126 is a group:
+L___aim is a dataset with size () it's contents are 3.4294644161717955
+L___audio_targets is a dataset with size (705,)
+L___deltas_back is a dataset with size (705,)
+L___deltas_fwd is a dataset with size (705,)
+L___osu_tokens is a dataset with size (2951,)
+L___speed is a dataset with size () it's contents are 2.8696236635164913
+L___stars is a dataset with size () it's contents are 6.517518943717621
+  127 attributes are:
+  diff_name: dj TAKA - Colors (sasakure.UK Futurelogic Remix) (peng) [Epileptic].osu
+L_127 is a group:
+L___aim is a dataset with size () it's contents are 3.5869610116870625
+L___audio_targets is a dataset with size (1014,)
+L___deltas_back is a dataset with size (1014,)
+L___deltas_fwd is a dataset with size (1014,)
+L___osu_tokens is a dataset with size (4616,)
+L___speed is a dataset with size () it's contents are 2.7913796873596786
+L___stars is a dataset with size () it's contents are 6.656335852871352
+L_audio_feat is a dataset with size (80, 27503, 3)
+694173 attributes are:
+diffs: 1
+end_range: 128
+start_range: 128
+694173 is a group:
+  128 attributes are:
+  diff_name: Hommarju - Crazy Jackpot (Jean-Michel Jr) [Jackpot!].osu
+L_128 is a group:
+L___aim is a dataset with size () it's contents are 3.4018812797887557
+L___audio_targets is a dataset with size (717,)
+L___deltas_back is a dataset with size (717,)
+L___deltas_fwd is a dataset with size (717,)
+L___osu_tokens is a dataset with size (3005,)
+L___speed is a dataset with size () it's contents are 3.0619012778026247
+L___stars is a dataset with size () it's contents are 6.648672003564139
+L_audio_feat is a dataset with size (80, 12073, 3)
+774760 attributes are:
+diffs: 1
+end_range: 129
+start_range: 129
+774760 is a group:
+  129 attributes are:
+  diff_name: Tanchiky - ENERGY SYNERGY MATRIX (Cassu2) [FUSION w Nowa].osu
+L_129 is a group:
+L___aim is a dataset with size () it's contents are 3.970055695734825
+L___audio_targets is a dataset with size (1370,)
+L___deltas_back is a dataset with size (1370,)
+L___deltas_fwd is a dataset with size (1370,)
+L___osu_tokens is a dataset with size (9221,)
+L___speed is a dataset with size () it's contents are 2.9621936027189726
+L___stars is a dataset with size () it's contents are 7.278413104280507
+L_audio_feat is a dataset with size (80, 23666, 3)
+1622117 attributes are:
+diffs: 1
+end_range: 130
+start_range: 130
+1622117 is a group:
+  130 attributes are:
+  diff_name: Team Grimoire - Dantalion (Down) [Conflict].osu
+L_130 is a group:
+L___aim is a dataset with size () it's contents are 3.2234322383174963
+L___audio_targets is a dataset with size (1058,)
+L___deltas_back is a dataset with size (1058,)
+L___deltas_fwd is a dataset with size (1058,)
+L___osu_tokens is a dataset with size (5447,)
+L___speed is a dataset with size () it's contents are 3.1294846675700354
+L___stars is a dataset with size () it's contents are 6.515303212573224
+L_audio_feat is a dataset with size (80, 15206, 3)
+2040106 attributes are:
+diffs: 2
+end_range: 132
+start_range: 131
+2040106 is a group:
+  131 attributes are:
+  diff_name: Shirakami Fubuki - Daishikyu Daishuki (Sparhten) [Shiratoemi footbuki].osu
+L_131 is a group:
+L___aim is a dataset with size () it's contents are 3.2442885157335377
+L___audio_targets is a dataset with size (955,)
+L___deltas_back is a dataset with size (955,)
+L___deltas_fwd is a dataset with size (955,)
+L___osu_tokens is a dataset with size (4343,)
+L___speed is a dataset with size () it's contents are 2.7265097363593944
+L___stars is a dataset with size () it's contents are 6.175235611395008
+  132 attributes are:
+  diff_name: Shirakami Fubuki - Daishikyu Daishuki (Sparhten) [hs].osu
+L_132 is a group:
+L___aim is a dataset with size () it's contents are 3.508718971534054
+L___audio_targets is a dataset with size (737,)
+L___deltas_back is a dataset with size (737,)
+L___deltas_fwd is a dataset with size (737,)
+L___osu_tokens is a dataset with size (2213,)
+L___speed is a dataset with size () it's contents are 3.86706254374806
+L___stars is a dataset with size () it's contents are 7.583146676476729
+L_audio_feat is a dataset with size (80, 21240, 3)
+1271938 attributes are:
+diffs: 3
+end_range: 135
+start_range: 133
+1271938 is a group:
+  133 attributes are:
+  diff_name: Kero Kero Bonito - Flamingo (WTN3 Remix) (Cubby) [Edit].osu
+L_133 is a group:
+L___aim is a dataset with size () it's contents are 3.513599391752171
+L___audio_targets is a dataset with size (932,)
+L___deltas_back is a dataset with size (932,)
+L___deltas_fwd is a dataset with size (932,)
+L___osu_tokens is a dataset with size (4094,)
+L___speed is a dataset with size () it's contents are 2.781601863952452
+L___stars is a dataset with size () it's contents are 6.5547821304423515
+  134 attributes are:
+  diff_name: Kero Kero Bonito - Flamingo (WTN3 Remix) (Cubby) [ar8].osu
+L_134 is a group:
+L___aim is a dataset with size () it's contents are 3.386258687747601
+L___audio_targets is a dataset with size (932,)
+L___deltas_back is a dataset with size (932,)
+L___deltas_fwd is a dataset with size (932,)
+L___osu_tokens is a dataset with size (4094,)
+L___speed is a dataset with size () it's contents are 2.7772694464270278
+L___stars is a dataset with size () it's contents are 6.390747888098189
+  135 attributes are:
+  diff_name: Kero Kero Bonito - Flamingo (WTN3 Remix) (cubby) [Expert].osu
+L_135 is a group:
+L___aim is a dataset with size () it's contents are 3.386258687747601
+L___audio_targets is a dataset with size (932,)
+L___deltas_back is a dataset with size (932,)
+L___deltas_fwd is a dataset with size (932,)
+L___osu_tokens is a dataset with size (4094,)
+L___speed is a dataset with size () it's contents are 2.7772694464270278
+L___stars is a dataset with size () it's contents are 6.390747888098189
+L_audio_feat is a dataset with size (80, 20111, 3)
+1432314 attributes are:
+diffs: 3
+end_range: 138
+start_range: 136
+1432314 is a group:
+  136 attributes are:
+  diff_name: Hoshimachi Suisei - GHOST (Amateurre) [captin & Kalibe's Extra].osu
+L_136 is a group:
+L___aim is a dataset with size () it's contents are 3.0792775157010506
+L___audio_targets is a dataset with size (1306,)
+L___deltas_back is a dataset with size (1306,)
+L___deltas_fwd is a dataset with size (1306,)
+L___osu_tokens is a dataset with size (7085,)
+L___speed is a dataset with size () it's contents are 2.839623893206601
+L___stars is a dataset with size () it's contents are 6.080270196253679
+  137 attributes are:
+  diff_name: Hoshimachi Suisei - GHOST (Amateurre) [Shooting Star].osu
+L_137 is a group:
+L___aim is a dataset with size () it's contents are 3.4711176760723386
+L___audio_targets is a dataset with size (1459,)
+L___deltas_back is a dataset with size (1459,)
+L___deltas_fwd is a dataset with size (1459,)
+L___osu_tokens is a dataset with size (6218,)
+L___speed is a dataset with size () it's contents are 3.1740059894648325
+L___stars is a dataset with size () it's contents are 6.829116330839676
+  138 attributes are:
+  diff_name: Hoshimachi Suisei - GHOST (Amateurre) [Mayu's Extreme].osu
+L_138 is a group:
+L___aim is a dataset with size () it's contents are 3.250071624889014
+L___audio_targets is a dataset with size (1242,)
+L___deltas_back is a dataset with size (1242,)
+L___deltas_fwd is a dataset with size (1242,)
+L___osu_tokens is a dataset with size (7667,)
+L___speed is a dataset with size () it's contents are 2.9510771771361592
+L___stars is a dataset with size () it's contents are 6.375275617078612
+L_audio_feat is a dataset with size (80, 28204, 3)
+595127 attributes are:
+diffs: 2
+end_range: 140
+start_range: 139
+595127 is a group:
+  139 attributes are:
+  diff_name: Seiryu - AO-INFINITY (Mordred) [Vill's EXHAUST].osu
+L_139 is a group:
+L___aim is a dataset with size () it's contents are 3.465611885608169
+L___audio_targets is a dataset with size (1031,)
+L___deltas_back is a dataset with size (1031,)
+L___deltas_fwd is a dataset with size (1031,)
+L___osu_tokens is a dataset with size (4196,)
+L___speed is a dataset with size () it's contents are 3.176616382617375
+L___stars is a dataset with size () it's contents are 6.825300723600603
+  140 attributes are:
+  diff_name: Seiryu - AO-INFINITY (Mordred) [Infinity].osu
+L_140 is a group:
+L___aim is a dataset with size () it's contents are 3.730645154785711
+L___audio_targets is a dataset with size (1113,)
+L___deltas_back is a dataset with size (1113,)
+L___deltas_fwd is a dataset with size (1113,)
+L___osu_tokens is a dataset with size (4094,)
+L___speed is a dataset with size () it's contents are 3.396433679243891
+L___stars is a dataset with size () it's contents are 7.326093199278075
+L_audio_feat is a dataset with size (80, 21613, 3)
+1733957 attributes are:
+diffs: 1
+end_range: 141
+start_range: 141
+1733957 is a group:
+  141 attributes are:
+  diff_name: Feryquitous feat. Aitsuki Nakuru - Fake (-Kirigiri) [OUTCRY].osu
+L_141 is a group:
+L___aim is a dataset with size () it's contents are 3.9123113022385843
+L___audio_targets is a dataset with size (1062,)
+L___deltas_back is a dataset with size (1062,)
+L___deltas_fwd is a dataset with size (1062,)
+L___osu_tokens is a dataset with size (5213,)
+L___speed is a dataset with size () it's contents are 2.509402716541194
+L___stars is a dataset with size () it's contents are 6.9305152732685515
+L_audio_feat is a dataset with size (80, 23604, 3)
+307677 attributes are:
+diffs: 1
+end_range: 142
+start_range: 142
+307677 is a group:
+  142 attributes are:
+  diff_name: orangentle  Yu_Asahina - HAELEQUIN (Extended ver.) (DoKito) [DoKo].osu
+L_142 is a group:
+L___aim is a dataset with size () it's contents are 3.3776804082329637
+L___audio_targets is a dataset with size (1691,)
+L___deltas_back is a dataset with size (1691,)
+L___deltas_fwd is a dataset with size (1691,)
+L___osu_tokens is a dataset with size (6764,)
+L___speed is a dataset with size () it's contents are 3.030419262463738
+L___stars is a dataset with size () it's contents are 6.592697223442326
+L_audio_feat is a dataset with size (80, 31226, 3)
+1542813 attributes are:
+diffs: 1
+end_range: 143
+start_range: 143
+1542813 is a group:
+  143 attributes are:
+  diff_name: KISIDA KYODAN & THE AKEBOSI ROCKETS - Colorful (apoq) [Vibrance].osu
+L_143 is a group:
+L___aim is a dataset with size () it's contents are 3.547410250110101
+L___audio_targets is a dataset with size (941,)
+L___deltas_back is a dataset with size (941,)
+L___deltas_fwd is a dataset with size (941,)
+L___osu_tokens is a dataset with size (4229,)
+L___speed is a dataset with size () it's contents are 2.695377441246037
+L___stars is a dataset with size () it's contents are 6.536914361173852
+L_audio_feat is a dataset with size (80, 21528, 3)
+1374943 attributes are:
+diffs: 1
+end_range: 144
+start_range: 144
+1374943 is a group:
+  144 attributes are:
+  diff_name: nameless - 3331 (Nightlys) [Expert+].osu
+L_144 is a group:
+L___aim is a dataset with size () it's contents are 3.7824599819897533
+L___audio_targets is a dataset with size (1049,)
+L___deltas_back is a dataset with size (1049,)
+L___deltas_fwd is a dataset with size (1049,)
+L___osu_tokens is a dataset with size (5423,)
+L___speed is a dataset with size () it's contents are 2.7585500959180034
+L___stars is a dataset with size () it's contents are 6.892685997448068
+L_audio_feat is a dataset with size (80, 25939, 3)
+830986 attributes are:
+diffs: 1
+end_range: 145
+start_range: 145
+830986 is a group:
+  145 attributes are:
+  diff_name: Camellia - epimerization (J1_) [J1 x Frontier's Equatorial].osu
+L_145 is a group:
+L___aim is a dataset with size () it's contents are 3.967188916525249
+L___audio_targets is a dataset with size (1374,)
+L___deltas_back is a dataset with size (1374,)
+L___deltas_fwd is a dataset with size (1374,)
+L___osu_tokens is a dataset with size (11279,)
+L___speed is a dataset with size () it's contents are 3.1538732515251833
+L___stars is a dataset with size () it's contents are 7.410553452993786
+L_audio_feat is a dataset with size (80, 32905, 3)
+1790020 attributes are:
+diffs: 1
+end_range: 146
+start_range: 146
+1790020 is a group:
+  146 attributes are:
+  diff_name: Hommarju - Crazy Jackpot (Phynta) [Crazy Bonanza].osu
+L_146 is a group:
+L___aim is a dataset with size () it's contents are 3.941966059897164
+L___audio_targets is a dataset with size (839,)
+L___deltas_back is a dataset with size (839,)
+L___deltas_fwd is a dataset with size (839,)
+L___osu_tokens is a dataset with size (4109,)
+L___speed is a dataset with size () it's contents are 3.3213193451293646
+L___stars is a dataset with size () it's contents are 7.509906586402008
+L_audio_feat is a dataset with size (80, 11983, 3)
+1116399 attributes are:
+diffs: 2
+end_range: 148
+start_range: 147
+1116399 is a group:
+  147 attributes are:
+  diff_name: TAROLIN feat. Katakiri Rekka - Cardinal Rave (Yusomi) [Landed in the Dogwood].osu
+L_147 is a group:
+L___aim is a dataset with size () it's contents are 3.9871868415779725
+L___audio_targets is a dataset with size (1477,)
+L___deltas_back is a dataset with size (1477,)
+L___deltas_fwd is a dataset with size (1477,)
+L___osu_tokens is a dataset with size (8897,)
+L___speed is a dataset with size () it's contents are 3.277005552140557
+L___stars is a dataset with size () it's contents are 7.530033382772699
+  148 attributes are:
+  diff_name: TAROLIN feat. Katakiri Rekka - Cardinal Rave (Yusomi) [Expert].osu
+L_148 is a group:
+L___aim is a dataset with size () it's contents are 3.4857902891828605
+L___audio_targets is a dataset with size (1309,)
+L___deltas_back is a dataset with size (1309,)
+L___deltas_fwd is a dataset with size (1309,)
+L___osu_tokens is a dataset with size (7184,)
+L___speed is a dataset with size () it's contents are 2.8283447790383076
+L___stars is a dataset with size () it's contents are 6.55483271185626
+L_audio_feat is a dataset with size (80, 24774, 3)
+821998 attributes are:
+diffs: 3
+end_range: 151
+start_range: 149
+821998 is a group:
+  149 attributes are:
+  diff_name: HyuN - Infinity Heaven (BarkingMadDog) [Extreme].osu
+L_149 is a group:
+L___aim is a dataset with size () it's contents are 3.0716234914984337
+L___audio_targets is a dataset with size (974,)
+L___deltas_back is a dataset with size (974,)
+L___deltas_fwd is a dataset with size (974,)
+L___osu_tokens is a dataset with size (3788,)
+L___speed is a dataset with size () it's contents are 2.969289043702001
+L___stars is a dataset with size () it's contents are 6.195820031874283
+  150 attributes are:
+  diff_name: HyuN - Infinity Heaven (BarkingMadDog) [200BPM].osu
+L_150 is a group:
+L___aim is a dataset with size () it's contents are 3.7391698751102176
+L___audio_targets is a dataset with size (974,)
+L___deltas_back is a dataset with size (974,)
+L___deltas_fwd is a dataset with size (974,)
+L___osu_tokens is a dataset with size (3788,)
+L___speed is a dataset with size () it's contents are 3.6696537090543604
+L___stars is a dataset with size () it's contents are 7.597037323078265
+  151 attributes are:
+  diff_name: HyuN - Infinity Heaven (BarkingMadDog) [180BPM].osu
+L_151 is a group:
+L___aim is a dataset with size () it's contents are 3.3857746469983607
+L___audio_targets is a dataset with size (974,)
+L___deltas_back is a dataset with size (974,)
+L___deltas_fwd is a dataset with size (974,)
+L___osu_tokens is a dataset with size (3788,)
+L___speed is a dataset with size () it's contents are 3.3059577747178728
+L___stars is a dataset with size () it's contents are 6.862165075494275
+L_audio_feat is a dataset with size (80, 15308, 3)
