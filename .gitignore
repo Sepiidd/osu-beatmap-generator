@@ -1,4 +1,8 @@
 data/
 datasets/
+music/
+onset_checkpoints/
+onset_saved/
+todo.txt
 __pycache__/
 *.swp

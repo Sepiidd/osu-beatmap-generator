@@ -5,6 +5,7 @@ import torch.nn.functional as F
 from models.position_encoding import PositionalEncoding
 from models.layer_norm import LayerNorm
 from models.onset.transformer_block import EncoderBlock
+from models.difficulty_encoding_film import DifficultyEncodingFilm
 from configs.onset_config import OnsetConfig
 
 class OnsetModel(nn.Module):
@@ -30,11 +31,13 @@ class OnsetModel(nn.Module):
         #project to transformer embedding size
         self.lin1 = nn.Linear(config.conv_out_size, config.n_embd)
 
+        #TODO: star rating, aim, speed features added into encoding (FiLM layer after attention heads)
         #multi-head attention, encoder only
         self.encoder = nn.ModuleDict(dict(
-                pe = PositionalEncoding(config.n_embd, max_len=config.block_size),
+                pe = PositionalEncoding(config.n_embd, max_len=config.block_size), 
                 drop = nn.Dropout(config.dropout),
                 ah = nn.ModuleList([EncoderBlock(config) for _ in range(config.n_layer)]),
+                diff_condition = DifficultyEncodingFilm(config.n_embd, config.n_conditioning),
                 ln = LayerNorm(config.n_embd, bias=config.bias)
             ))
 
@@ -48,10 +51,10 @@ class OnsetModel(nn.Module):
         for pn, p in self.named_parameters():
             if pn.endswith("c_proj"):
                 #gpt2 scaled init for residual projections (for attention)
-                torch.nn.init._normal(p, mean=0.0, std=0.02/math.sqrt(2 * config)) #2 comes from amount of residual connections performed
+                torch.nn.init._normal(p, mean=0.0, std=0.02/math.sqrt(2 * config.n_layer)) #2 comes from amount of residual connections performed
 
 
-    def forward(self, x):
+    def forward(self, x, difficulty_conditioning):
         """ 
         input <x> is expected to come in with shape (B, S, 15, 80, 3)
         """
@@ -92,6 +95,7 @@ class OnsetModel(nn.Module):
         x = self.encoder.drop(x)
         for block in self.encoder.ah:
             x = block(x)
+            x = self.encoder.diff_condition(x, difficulty_conditioning)
         x = self.encoder.ln(x)
         
         #obtain logits from attended info
