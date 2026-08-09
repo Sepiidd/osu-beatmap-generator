@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).parent
 if __name__ == "__main__":
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-    model_name = "500iters-metrics-freqnormalization"
+    model_name = "1100diff_film"
     model_path = BASE_DIR.parent.parent / 'onset_saved' / model_name
     model_config = OnsetConfig()
     model = OnsetModel(model_config)
@@ -38,31 +38,18 @@ if __name__ == "__main__":
     #create dataloader
     config = TrainingConfig()
     train_set = OBGAudioDataset(config.train_path, config.sequence_len, benchmark=True)
-    loader_t = DataLoader(
-        train_set,
-        batch_size=1,
-        shuffle=config.shuffle,
-        pin_memory=config.pin_memory,
-    )
-
     val_set = OBGAudioDataset(config.validation_path, config.sequence_len, benchmark=True)
-    loader_v = DataLoader(
-        val_set,
-        batch_size=1,
-        shuffle=config.shuffle,
-        pin_memory=config.pin_memory,
-    )
-
-    gen_t = make_generator(loader_t, device=device)
-    gen_v = make_generator(loader_v, device=device)
 
     #get specific input, targets
-    test_idx = 357
-    inputs, targets = train_set[test_idx]
+#    test_idx = 0
+    test_idx = 4
+#    test_idx = 357
+    inputs, difficulty, targets = train_set[test_idx]
 
     #produce predictions
-    audio_filename = "s-heaven.mp3"
 #    audio_filename = "we-are-dreamers.mp3"
+    audio_filename = "saint_catastrophe.mp3"
+#    audio_filename = "s-heaven.mp3"
     audio_input_dir = BASE_DIR.parent.parent / 'music' 
     output_dir = osu_songs_dir / 'test'
     difficulty_args = {
@@ -73,7 +60,7 @@ if __name__ == "__main__":
         "SliderMultiplier": '2',
         "SliderTickRate": '1'
     }
-    hitsound_gen.generate_hitsound_map(audio_input_dir, audio_filename, difficulty_args, output_dir, features=inputs)
+    hitsound_gen.generate_hitsound_map(audio_input_dir, audio_filename, difficulty_args, output_dir, features=inputs, map_difficulty=difficulty)
 
     
 

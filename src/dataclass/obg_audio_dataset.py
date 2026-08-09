@@ -33,6 +33,9 @@ class OBGAudioDataset(Dataset):
         sample, _ = self.sample_bin_search(idx)
         audio_feat = sample["audio_feat"]
         audio_targets = sample["audio_targets"]
+        stars = sample["stars"]
+        aim = sample["aim"]
+        speed = sample["speed"]
 
         if self.augment:
             option_select = np.random.randint(0, len(self.augmentations))
@@ -53,9 +56,9 @@ class OBGAudioDataset(Dataset):
         targets = self.gen_targets(start_idx, audio_targets)
 
         if self.benchmark:
-            return torch.tensor(audio_feat), torch.tensor(targets)
+            return torch.tensor(audio_feat), torch.tensor([stars, aim, speed], dtype=torch.float32), torch.tensor(targets)
 
-        return torch.tensor(window_seq), torch.tensor(targets)
+        return torch.tensor(window_seq), torch.tensor([stars, aim, speed], dtype=torch.float32), torch.tensor(targets)
 
     def gen_targets(self, start_idx, audio_targets, lenience=5):
         '''
@@ -144,12 +147,18 @@ class OBGAudioDataset(Dataset):
                     osu_tokens = grp.get("osu_tokens")[:]
                     deltas_fwd = grp.get("deltas_fwd")[:]
                     deltas_back = grp.get("deltas_back")[:]
+                    stars = grp.get("stars")[()]
+                    aim = grp.get("aim")[()]
+                    speed = grp.get("speed")[()]
                     sample = {
                             "audio_feat": audio_feat,
                             "audio_targets": audio_targets,
-                            "osu_tokens": osu_tokens,
+                            "aim": aim,
                             "deltas_fwd": deltas_fwd,
-                            "deltas_back": deltas_back
+                            "deltas_back": deltas_back,
+                            "osu_tokens": osu_tokens,
+                            "stars": stars,
+                            "speed": speed
                             }
                     found = True
                 elif target < start_range:

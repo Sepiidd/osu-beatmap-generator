@@ -43,9 +43,9 @@ def eval_loss(model, train_loader, validation_loader, config):
             if i >= eval_iters:
                 break
 
-            inputs, targets = next(loader)
+            inputs, difficulty, targets = next(loader)
             with ctx:
-                logits = model(inputs).squeeze()
+                logits = model(inputs, difficulty).squeeze()
                 targets = targets.squeeze().to(config.pt_dtype) #match type of logits
                 loss = criterion(logits, targets)
             losses[i] = loss.item()
@@ -119,11 +119,12 @@ def make_generator(dataloader, device):
     returns a single batch from <dataloader>, automatically reshuffling the batch when exhausted
     '''
     while True:
-        for inputs, targets in dataloader:
+        for inputs, difficulty, targets in dataloader:
             #asynchronously move inputs and targets to gpu
             i = inputs.to(device, non_blocking=True)
+            d = difficulty.to(device, non_blocking=True)
             t = targets.to(device, non_blocking=True)
-            yield i, t
+            yield i, d, t
 
 def get_lr(it, config):
     '''
@@ -175,13 +176,19 @@ def train(model, train_loader, optimizer, config, starting_idx=0):
     train_gen = make_generator(train_loader, device)
     idx = starting_idx
 
-    inputs, targets = next(train_gen) #first batch
+    inputs, difficulty, targets = next(train_gen) #first batch
 
     #for eval_loss function
     eval_train_gen = make_generator(train_loader, device)
     eval_val_gen = make_generator(config.validation_loader, device)
+    
+    track_train_aucpr = []
+    track_train_fscore = []
+    track_val_aucpr = []
+    track_val_fscore = []
+    track_time = []
+
     while True:
-        #TODO: debug
         if idx >= max_iters:
             break
 
@@ -194,11 +201,11 @@ def train(model, train_loader, optimizer, config, starting_idx=0):
         for microstep in range(grad_accumulation_steps):
             with ctx: #autocast type gpu work 
 
-                logits = model(inputs).squeeze()
+                logits = model(inputs, difficulty).squeeze()
                 targets = targets.squeeze().to(config.pt_dtype) #match type of logits
                 loss = criterion(logits, targets)
                 loss = loss / grad_accumulation_steps #manipulate algebra, simulate larger batch
-            inputs, targets = next(train_gen)
+            inputs, difficulty, targets = next(train_gen)
             scaler.scale(loss).backward()
        #gradient clipping
         if grad_clip != 0.0:
@@ -247,6 +254,13 @@ def train(model, train_loader, optimizer, config, starting_idx=0):
                 "val_loss_best": val_loss_best,
             }
 
+            
+            track_train_aucpr.append(stats_checkpoint["train_aucpr"])
+            track_val_aucpr.append(stats_checkpoint["val_aucpr"])
+            track_train_fscore.append(stats_checkpoint["train_f_score"])
+            track_valf_score.append(stats_checkpoint["val_f_score"])
+            track_time.append(dt)
+
             print(f"evaluation step {idx} - loss: train {losses['train']:.4f}, val {losses['val']:.4f} | f-score: train {train_f_score} val {val_f_score} | aucpr: train {stats['train']['aucpr']} val {stats['val']['aucpr']} gap {stats['train']['aucpr']-stats['val']['aucpr']} | precision: train {stats['train']['precision']} val {stats['val']['precision']} | recall: train {stats['train']['recall']} val {stats['val']['recall']}")  
 
             if idx % checkpoint_iters == 0:
@@ -255,5 +269,16 @@ def train(model, train_loader, optimizer, config, starting_idx=0):
                 write_checkpoints(idx, model, optimizer, stats_checkpoint, config)
 
         idx+=1
+    #plot auc pr and f score over time
+    plot_thing_over_time(track_train_aucpr, track_val_aucpr, track_time, "aucpr")
+    plot_thing_over_time(track_train_fscore, track_val_fscore, track_time, "fscore")
+    
 
-
+def plot_thing_over_time(aucpr_t, aucpr_v, time, filename):
+    plt.plot(aucpr_t, alpha=0.7)
+    plt.plot(aucpr_v, alpha=0.7)
+    plt.xlabel(f"Time")
+    plt.ylabel("AUC-PR")
+    plt.ylim(0,1)
+    plt.title("AUC-PR Over Time")
+    plt.savefig(filename + ".png")

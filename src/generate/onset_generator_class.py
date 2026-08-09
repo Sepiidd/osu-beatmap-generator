@@ -7,12 +7,14 @@ from librosa import load
 from configs.audio_config import AudioConfig
 from configs.training_config import TrainingConfig
 from configs.gen_config import GenConfig 
+from configs.onset_config import OnsetConfig 
 from preprocess.audio_utils import get_frames_at_idx
 
 #globals
 configA = AudioConfig()
 configT = TrainingConfig()
 configG = GenConfig()
+configO = OnsetConfig()
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -28,16 +30,29 @@ class OnsetGenerator():
 
         self.model.eval()
 
-    def batch_to_onsets(self, inputs):
+    def batch_to_onsets(self, inputs, difficulties):
         '''
         converts a batch of input data into onset probabilities, along with post model prediction operations e.g. hamming window
+
+        <difficulties>: tensor containing [stars, aim, speed]
         '''
         inp = torch.from_numpy(inputs)
         inp = inp.to(device)
+        diff = difficulties.to(device)
         with torch.no_grad():
-            logits = self.model(inp)
+            logits = self.model(inp, diff)
         #apply sigmoid for binary classification probabilities
         return F.sigmoid(logits) 
+
+    def make_batch_diff(self, diff, batch_size):
+        '''
+        clone <diff> to batch size <batch_size>
+        '''
+        if batch_size == 1: #final batch NOTE: bandaid fix kind of solution tbh
+            new = diff[0:1, :]
+        else:
+            new = diff.expand(batch_size, -1)
+        return new
 
     def make_batch_sequence(self, features, start, end):
         '''
@@ -64,19 +79,25 @@ class OnsetGenerator():
             batch_seq = np.reshape(batch_seq, (self.batch_size, self.sequence_len, 15, configA.n_mel, len(configA.n_fft)))
         return batch_seq
 
-    def path_to_onsets(self, path):
+    def path_to_onsets(self, path, difficulty=None):
         '''
         convert entire song found at <path> into a list of onset probabilities
         '''
         audio, sr = load(path=path, sr=configA.sr)
         features = process_audio(audio, sr)
-        return self.song_to_onsets(features)
+        return self.song_to_onsets(features, difficulty)
 
-    def song_to_onsets(self, features):
+    def song_to_onsets(self, features, difficulty=None):
         '''
         convert features spectrogram to list of onset probabilities
         NOTE: expects input in form of (m, t, w) as describedc directly below
         '''
+        if difficulty is None:
+            stars_default = 7.0
+            aim = stars_default/2
+            speed = stars_default/2
+            difficulty = torch.tensor([stars_default, aim, speed], dtype=torch.float32)
+
         m, t, w = features.shape #shape of: mel bins, time (frame idx), window length
 
         num_predictions = torch.zeros(t).to(device)
@@ -89,9 +110,11 @@ class OnsetGenerator():
         while idx < t:
             #batch, splice, index features
             batch_seq = self.make_batch_sequence(features, idx, idx+len_batch) #reshaped to (t, m, w)
+            bsize = batch_seq.shape[0]
+            difficulty = self.make_batch_diff(difficulty, bsize)
 
             #perform model predictions
-            batch_predictions = self.batch_to_onsets(batch_seq)
+            batch_predictions = self.batch_to_onsets(batch_seq, difficulty)
             batch_predictions = batch_predictions.view(-1) #flatten batch into one sequence again
 
             predictions_len = batch_predictions.shape[0]
@@ -111,7 +134,7 @@ class OnsetGenerator():
         predictions = predictions / num_predictions 
 
         #plot for testing
-#        self.plot_thresholds(predictions, "plot_test")
+        self.plot_thresholds(predictions, "plot_test")
 
         #apply hamming window across batch
         ham_window = torch.hamming_window(self.hamming_window_len, periodic=False).to(device)
@@ -125,14 +148,17 @@ class OnsetGenerator():
         predictions_idx = torch.nonzero(predictions_bool, as_tuple=True)[0] 
         
         times = predictions_idx * configA.hop_len / configA.sr #calculation described by <https://librosa.org/doc/latest/generated/librosa.frames_to_time.html>
-        times = times * 1000
+        times = times * 1000 #time in ms
         return times, predictions
 
-    def plot_thresholds(self, probabilities, file_name, timestamps=[], alpha=0.7, start_plot_from=2000, plot_first_many=2000):
+    def plot_thresholds(self, probabilities, file_name, timestamps=[], alpha=0.7, start_plot_from=None, plot_first_many=None):
         '''
         plots predictions' onset probabilities on a line graph, save to <file_name>.png
         '''
-        plt.plot(probabilities.cpu().detach().numpy()[start_plot_from:start_plot_from+plot_first_many], alpha=alpha)
+        if start_plot_from is None and plot_first_many is None:
+            plt.plot(probabilities.cpu().detach().numpy(), alpha=alpha)
+        else:
+            plt.plot(probabilities.cpu().detach().numpy()[start_plot_from:start_plot_from+plot_first_many], alpha=alpha)
         plt.xlabel(f"First {plot_first_many} Indices From Index {start_plot_from}")
         plt.ylabel("Onset Probability")
         plt.ylim(0,1)

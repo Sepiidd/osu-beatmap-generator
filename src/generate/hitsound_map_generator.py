@@ -12,7 +12,7 @@ class HitsoundGenerator():
         self.onset_generator = onset_generator
         self.osu_songs_dir = osu_songs_dir
 
-    def generate_hitsound_map(self, audio_dir, audio_filename, difficulty_args, output_dir, features=None):
+    def generate_hitsound_map(self, audio_dir, audio_filename, difficulty_args, output_dir, features=None, map_difficulty=None):
         '''
         <difficulty_args>: dict containing <HPDrainRate>, <CircleSize>, <OverallDifficulty>, <ApproachRate>, <SliderMultiplier>, <SliderTickRate>
         '''
@@ -23,8 +23,14 @@ class HitsoundGenerator():
         difficulty = self.generate_difficulty(**difficulty_args)
         events = self.generate_events()
         colours = self.generate_colours()
-        timestamps, _ = self.onset_generator.path_to_onsets(audio_dir / audio_filename) if features is not None else self.onset_generator.song_to_onsets(features)
+
+        timestamps = None
+        if features is not None:
+            timestamps, _ = self.onset_generator.path_to_onsets(audio_dir / audio_filename, difficulty=map_difficulty)
+        else:
+            timestamps, _ = self.onset_generator.song_to_onsets(features, difficulty=map_difficulty)
         hitobjects = self.generate_hitobjects(timestamps)
+
         timing_points = self.generate_timing_points(audio_dir / audio_filename, timestamps[0])
 
         osu_file_content += general+'\n'
@@ -81,7 +87,6 @@ class HitsoundGenerator():
         return events 
 
     def generate_timing_points(self, audio_path, first_timestamp):
-        #TODO: 
         timing_points='[TimingPoints]\n'
 
         #default, song-wide bpm

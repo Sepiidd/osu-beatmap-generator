@@ -31,7 +31,6 @@ class OnsetModel(nn.Module):
         #project to transformer embedding size
         self.lin1 = nn.Linear(config.conv_out_size, config.n_embd)
 
-        #TODO: star rating, aim, speed features added into encoding (FiLM layer after attention heads)
         #multi-head attention, encoder only
         self.encoder = nn.ModuleDict(dict(
                 pe = PositionalEncoding(config.n_embd, max_len=config.block_size), 
