@@ -23,13 +23,14 @@ class TrainingConfig():
         #==========STATIC VALUES==========
         #training iteration breakpoints
         self.sequence_len = SEQ_LEN
-        self.max_iters = 2500
+        self.max_iters = None #set to None if using early stopping via aucpr_goal
         self.log_interval = 10
         self.eval_interval = 10 #not used (?)
         self.eval_iters = 50 #factor of checkpoint_iters
         self.warmup_iters = 500 #experiment with this and decay_iters
         self.lr_decay_iters = 2000
         self.checkpoint_iters = 100 #multiple of eval_iters
+        self.aucpr_goal = 0.8 #early stopping threshold
         #model training specifics
         self.weight_decay = 0.05 #adamw
         self.lr = 3e-3
@@ -53,6 +54,8 @@ class TrainingConfig():
 #        self.crit_gamma = 2.0
 #        self.crit_reduction = "mean" 
 #        self.criterion = lambda logits, targets: ops.sigmoid_focal_loss(logits, targets, alpha=self.crit_alpha, gamma=self.crit_gamma, reduction=self.crit_reduction) #focal loss
+        #checkpointing
+        self.max_checkpoints = 5
 
         #==========COMPUTED VALUES==========
         #check if cuda is available

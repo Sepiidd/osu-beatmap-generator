@@ -1,1 +1,1 @@
-uv run -m training.train
+uv run -m training.train 2> error.txt

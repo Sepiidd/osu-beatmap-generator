@@ -14,10 +14,12 @@ BASE_DIR = Path(__file__).parent
 if __name__ == "__main__":
     config = TrainingConfig()
 
-    fresh_input = input("1 for fresh training, 2 for loading model for training: ")
+    print("1 for fresh training, 2 for loading model for training: ")
+    fresh_input = input()
     is_fresh_model = True if fresh_input == "1" else False
 
     model = OnsetModel(OnsetConfig()) #also sends to gpu if possible
+    optimizer = model.configure_optimizer(config.weight_decay, config.lr, (config.beta1, config.beta2), config.device)
 
     starting_idx = 0
     if not is_fresh_model:
@@ -28,11 +30,11 @@ if __name__ == "__main__":
             print("model_path after resolving is:", model_path)
             checkpoint = torch.load(model_path, weights_only=True)
             model.load_state_dict(checkpoint['model_state_dict'])
+            optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
             starting_idx = checkpoint['iter_idx']
         except Exception as e:
             print("exception encountered:", e)
             exit(1)
 
     model = model.to(config.device)
-    optimizer = model.configure_optimizer(config.weight_decay, config.lr, (config.beta1, config.beta2), config.device)
     train(model, config.train_loader, optimizer, config, starting_idx)
