@@ -8,26 +8,27 @@ from training.helpers_train import train
 import torch.nn as nn
 import torch
 import easydict
+import os
+import sys
 
 BASE_DIR = Path(__file__).parent
 
 if __name__ == "__main__":
     config = TrainingConfig()
 
-    print("1 for fresh training, 2 for loading model for training: ")
-    fresh_input = input()
-    is_fresh_model = True if fresh_input == "1" else False
+    print("note: pass path to model state dict if training from existing model")
+    is_fresh_model = True if len(sys.argv) < 2 else False
 
     model = OnsetModel(OnsetConfig()) #also sends to gpu if possible
+    model = model.to(config.device)
     optimizer = model.configure_optimizer(config.weight_decay, config.lr, (config.beta1, config.beta2), config.device)
 
     starting_idx = 0
     if not is_fresh_model:
-        model_path = input("path to model state dict: ")
-        print("model_path before resolving is:", model_path)
+        model_path = sys.argv[1]
         try:
             model_path = Path(model_path).resolve()
-            print("model_path after resolving is:", model_path)
+            print("model path is", model_path)
             checkpoint = torch.load(model_path, weights_only=True)
             model.load_state_dict(checkpoint['model_state_dict'])
             optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
@@ -36,5 +37,4 @@ if __name__ == "__main__":
             print("exception encountered:", e)
             exit(1)
 
-    model = model.to(config.device)
     train(model, config.train_loader, optimizer, config, starting_idx)

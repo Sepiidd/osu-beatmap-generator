@@ -19,6 +19,8 @@ class OnsetModel(nn.Module):
                     out_channels=config.n_out1,
                     kernel_size=(config.k_len1, config.k_wid1)
                 )
+        #TODO: add relu
+
         self.maxpool1 = nn.MaxPool1d(config.pool1_width, stride=config.pool1_stride)
 
         self.conv2 = nn.Conv2d(
@@ -26,6 +28,8 @@ class OnsetModel(nn.Module):
                     out_channels=config.n_out2,
                     kernel_size=(config.k_len2, config.k_wid2)
                 )
+        #TODO: add relu
+
         self.maxpool2 = nn.MaxPool1d(config.pool2_width, stride=config.pool2_stride)
 
         #project to transformer embedding size
@@ -43,6 +47,7 @@ class OnsetModel(nn.Module):
         #final linear layers
 #        self.lin2 = nn.Linear(config.n_embd, 1, bias=False)
         self.lin2 = nn.Linear(config.n_embd, config.n_embd // 2, bias=False)
+        #TODO: add relu
         self.lin3 = nn.Linear(config.n_embd // 2, 1, bias=False)
 
         #initial weight randomization

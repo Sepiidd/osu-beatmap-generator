@@ -19,7 +19,7 @@ class HitsoundGenerator():
         osu_file_content = 'osu file format v14\n\n'
         general = self.generate_general(audio_filename)
         editor = self.generate_editor()
-        metadata = self.generate_metadata()
+        metadata = self.generate_metadata(audio_filename)
         difficulty = self.generate_difficulty(**difficulty_args)
         events = self.generate_events()
         colours = self.generate_colours()
@@ -49,7 +49,7 @@ class HitsoundGenerator():
         dirpath = Path(output_dir).resolve()
         audiodir = Path(audio_dir).resolve()
 
-        osupath = dirpath / "test - test (test) [test].osu"
+        osupath = dirpath / f"test - {audio_filename} (test) [test].osu"
         audiopath = dirpath / audio_filename
         shutil.copy(audiodir / audio_filename, audiopath)
         with open(osupath, 'w') as f:
@@ -65,9 +65,9 @@ class HitsoundGenerator():
         editor='[Editor]\n'
         return editor 
 
-    def generate_metadata(self):
+    def generate_metadata(self, audio_filename):
         metadata='[Metadata]\n'
-        metadata+='Title:test\n'
+        metadata+=f'Title:{audio_filename}\n'
         metadata+='Artist:test\n'
         metadata+='Version:test\n'
         return metadata

@@ -228,7 +228,7 @@ def train(model, train_loader, optimizer, config, starting_idx=0):
     model.train()
     try:
         while True:
-            if max_iters is not None and idx >= max_iters
+            if max_iters is not None and idx >= max_iters:
                 break
 
             #variable learning rate
@@ -327,6 +327,7 @@ def train(model, train_loader, optimizer, config, starting_idx=0):
         #plot auc pr and f score over time
         print("plotting auc-pr and f-score over time")
         plot_thing_over_time(track_train_aucpr, track_val_aucpr, track_time, "aucpr")
+        plt.figure()
         plot_thing_over_time(track_train_fscore, track_val_fscore, track_time, "fscore")
 
 def plot_thing_over_time(aucpr_t, aucpr_v, time, filename):
