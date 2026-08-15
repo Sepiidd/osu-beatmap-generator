@@ -38,7 +38,7 @@ class OnsetConfig:
     n_layer: int = 12 #number of transformer layers (EncoderBlock module)
     n_head: int = 12 #number of attention heads per EncoderBlock, NOTE: n_embd % n_head = 0
     n_embd: int = 768 #embedding layer size, NOTE: n_embd % n_head = 0
-    dropout: float = 0.2
+    dropout: float = 0.5
     bias: bool = True #copied over from csc413 example
 
     #difficulty conditioning (FiLM)

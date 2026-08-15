@@ -6,3 +6,5 @@ onset_saved/
 todo.txt
 __pycache__/
 *.swp
+*.txt
+*.png

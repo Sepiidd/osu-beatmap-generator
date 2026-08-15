@@ -24,6 +24,8 @@ def read_group(f, indent=0):
 
 if __name__ == "__main__":
     split = 'train'
+#    split = 'validation'
+#    split = 'test'
     path = Path(__file__).parent.parent / "datasets" / split 
     with h5py.File(path, "r") as f:
         print("f attrs are:")

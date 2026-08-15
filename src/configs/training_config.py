@@ -29,11 +29,11 @@ class TrainingConfig():
         self.eval_iters = 50 #factor of checkpoint_iters
         self.warmup_iters = 500 #experiment with this and decay_iters
         self.lr_decay_iters = 2000
-        self.checkpoint_iters = 100 #multiple of eval_iters
+        self.checkpoint_iters = 50 #multiple of eval_iters
         self.aucpr_goal = 0.8 #early stopping threshold
         #model training specifics
-        self.weight_decay = 0.05 #adamw
-        self.lr = 3e-3
+        self.weight_decay = 0.1 #adamw
+        self.lr = 3e-4
         self.beta1 = 0.9 #adamw
         self.beta2 = 0.99 #adamw
         self.min_lr = 3e-5

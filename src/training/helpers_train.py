@@ -90,7 +90,7 @@ def eval_loss(model, train_loader, validation_loader, config):
     return out, stats 
 
 def write_checkpoints(iter_idx, model, optimizer, stats, config):
-    path = Path(config.checkpoint_path) / f"iter{iter_idx}_tlossb{stats['train_loss_best']:.4f}vlossb{stats['val_loss_best']:.4f}_tfb{stats['train_f_score_best']}vfb{stats['val_f_score_best']}_date{datetime.now().strftime('%Y-%m-%d|%H:%M:%S')}"
+    path = Path(config.checkpoint_path) / f"iter{iter_idx}_tauc{stats['train_aucpr']:.4f}vauc{stats['val_aucpr']:.4f}_tf{stats['train_f_score']}vf{stats['val_f_score']}_date{datetime.now().strftime('%Y-%m-%d|%H:%M:%S')}"
     model_dict = model.state_dict()
     opt_dict = optimizer.state_dict()
 
@@ -260,7 +260,7 @@ def train(model, train_loader, optimizer, config, starting_idx=0):
             dt = t1 - t0
             if idx % log_interval == 0:
                 loss_scaled = loss.item() * grad_accumulation_steps
-                print(f"iter {idx}: loss {loss_scaled:.4f}, time {dt*1000:.2f}ms")
+                print(f"iter {idx}: loss {loss_scaled:.4f}, time {dt*1000:.2f}ms, curr lr {lr}")
             if idx % eval_interval == 0:
                 losses, stats = eval_loss(model, eval_train_gen, eval_val_gen, config)
 

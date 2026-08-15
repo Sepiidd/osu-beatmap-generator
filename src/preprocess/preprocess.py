@@ -45,11 +45,15 @@ def in_h5(path, song_id, diff_name):
 
 def process_osu(osz):
     line = ""
-    while not line.startswith("AudioFilename: "):
+    while not line.startswith("AudioFilename:"):
         line = osz.readline()
-    mp3 = line.strip()[15:]
+    end_idx = line.find(':')
+    mp3 = line.strip()[end_idx+1:]
+    mp3 = mp3.strip()
     while not line.startswith("[HitObjects]"):
         line = osz.readline()
+
+
     hitobj_idx = osz.tell()
     line = osz.readlines()
     tokens = converter.hitobject_seq_to_tok(line)
@@ -131,11 +135,13 @@ def process_one(data_path, h5path, song_name, diff_name):
     aim = ratings.aim
     speed = ratings.speed
 
+
     #audio
     #NOTE: pitch/time-shift audio augmentation must be performed here (no way to delay augmentation to data loader stage)
     song_path = data_path / song_name / mp3
     audio, sr = load(path=song_path, sr=SR)
     features = process_audio(audio, sr)
+    
 
     to_save = []
     to_save.append((song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas, stars, aim, speed))

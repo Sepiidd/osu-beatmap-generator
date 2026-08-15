@@ -1,4 +1,5 @@
 import inspect
+import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -13,14 +14,13 @@ class OnsetModel(nn.Module):
         super().__init__()
         assert config.block_size is not None
         self.config = config
+        self.relu = nn.ReLU()
         #convolutions
         self.conv1 = nn.Conv2d(
                     in_channels=config.n_in1,
                     out_channels=config.n_out1,
                     kernel_size=(config.k_len1, config.k_wid1)
                 )
-        #TODO: add relu
-
         self.maxpool1 = nn.MaxPool1d(config.pool1_width, stride=config.pool1_stride)
 
         self.conv2 = nn.Conv2d(
@@ -28,8 +28,6 @@ class OnsetModel(nn.Module):
                     out_channels=config.n_out2,
                     kernel_size=(config.k_len2, config.k_wid2)
                 )
-        #TODO: add relu
-
         self.maxpool2 = nn.MaxPool1d(config.pool2_width, stride=config.pool2_stride)
 
         #project to transformer embedding size
@@ -37,25 +35,31 @@ class OnsetModel(nn.Module):
 
         #multi-head attention, encoder only
         self.encoder = nn.ModuleDict(dict(
+                diff_condition = DifficultyEncodingFilm(config.n_embd, config.n_conditioning),
                 pe = PositionalEncoding(config.n_embd, max_len=config.block_size), 
                 drop = nn.Dropout(config.dropout),
                 ah = nn.ModuleList([EncoderBlock(config) for _ in range(config.n_layer)]),
-                diff_condition = DifficultyEncodingFilm(config.n_embd, config.n_conditioning),
                 ln = LayerNorm(config.n_embd, bias=config.bias)
             ))
 
         #final linear layers
 #        self.lin2 = nn.Linear(config.n_embd, 1, bias=False)
         self.lin2 = nn.Linear(config.n_embd, config.n_embd // 2, bias=False)
-        #TODO: add relu
         self.lin3 = nn.Linear(config.n_embd // 2, 1, bias=False)
 
-        #initial weight randomization
+        #initial weight randomization across all modules
         self.apply(self._init_weights)
+        #fine tune initialization for specific modules
         for pn, p in self.named_parameters():
-            if pn.endswith("c_proj"):
+            if pn.endswith("c_proj.weight"): #attention projection
                 #gpt2 scaled init for residual projections (for attention)
-                torch.nn.init._normal(p, mean=0.0, std=0.02/math.sqrt(2 * config.n_layer)) #2 comes from amount of residual connections performed
+                torch.nn.init.normal_(p, mean=0.0, std=0.02/math.sqrt(2 * config.n_layer)) #2 comes from amount of residual connections performed
+            if pn.endswith("film_gen.weight"): #film gen weight
+                nn.init.zeros_(p)
+            if pn.endswith("film_gen.bias"): #film gen bias
+                with torch.no_grad():
+                    p[:config.n_embd] = 1
+                    p[config.n_embd:] = 0
 
 
     def forward(self, x, difficulty_conditioning):
@@ -69,6 +73,7 @@ class OnsetModel(nn.Module):
 
         #convolutions
         x = self.conv1(x)
+        x = self.relu(x)
         #reshape, fold
         BS, C, T, F = x.shape #batch size * seq len, output channels, stft time, mel freq
         x = x.permute(0, 2, 1, 3) #move stft time dimension next to batch/seq_len dimension
@@ -79,6 +84,7 @@ class OnsetModel(nn.Module):
         x = x.permute(0, 2, 1, 3)
 
         x = self.conv2(x)
+        x = self.relu(x)
         #reshape, fold
         BS, C, T, F = x.shape
         x = x.permute(0, 2, 1, 3)
@@ -93,17 +99,18 @@ class OnsetModel(nn.Module):
 
         #project size, encode info
         x = self.lin1(x)
+        x = self.encoder.diff_condition(x, difficulty_conditioning)
         x = self.encoder.pe(x)
 
         #attention blocks
         x = self.encoder.drop(x)
         for block in self.encoder.ah:
             x = block(x)
-            x = self.encoder.diff_condition(x, difficulty_conditioning)
         x = self.encoder.ln(x)
         
         #obtain logits from attended info
         x = self.lin2(x)
+        x = self.relu(x)
         logits = self.lin3(x)
         return logits
 
