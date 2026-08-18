@@ -15,9 +15,6 @@ configG = GenConfig()
 configT = TrainingConfig()
 BASE_DIR = Path(__file__).parent
 
-def apply_tolerance_window(targets, lenience=20):
-    pass
-
 @torch.no_grad()
 def eval_loss_peakpick(generator, config):
     ctx = config.ctx
@@ -47,7 +44,8 @@ def eval_loss_peakpick(generator, config):
 
     stats = {}
     out = {}
-    for split in ["train", "val"]:
+#    for split in ["train", "val"]:
+    for split in ["train"]:
         loader = train_gen if split == 'train' else val_gen 
 
         correct = 0
@@ -64,11 +62,13 @@ def eval_loss_peakpick(generator, config):
                 break
 
 #            inputs, targets = next(loader)
-            inputs, targets = train_set[0] #specific map
+            s_idx = 0
+            inputs, difficulty, targets = train_set[s_idx] #specific map
+            print("inputs, difficulty, targets have shapes", inputs.shape, difficulty.shape, targets.shape)
             inputs = inputs.squeeze()
-            times, predictions = generator.song_to_onsets(inputs) 
+            times, predictions = generator.song_to_onsets(inputs, difficulty=difficulty) 
             generator.plot_thresholds(targets.squeeze(), "plot_test_smoothed")
-            print("length of times (# of onset positive predictions) is", times.shape, "number of real onsets is", targets.sum())
+            print("for s_idx", s_idx, "length of times (# of onset positive predictions) is", times.shape, "number of real onsets is", targets.sum())
 
             #apply hamming window across batch
             ham_window = torch.hamming_window(configG.hamming_window_len, periodic=False).to(device)
@@ -110,7 +110,7 @@ def eval_loss_peakpick(generator, config):
         print(f"================{split} split: f-score {f_score} aucpr {aucpr} precision {precision} recall {recall}================")
 
 if __name__ == '__main__':
-    model_name = "500iters-metrics-freqnormalization"
+    model_name = "1000iternewset"
     model_path = BASE_DIR.parent.parent / 'onset_saved' / model_name
     model_config = OnsetConfig()
     model = OnsetModel(model_config)

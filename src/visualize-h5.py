@@ -23,10 +23,11 @@ def read_group(f, indent=0):
     return
 
 if __name__ == "__main__":
-    split = 'train'
+#    split = 'train'
 #    split = 'validation'
-#    split = 'test'
+    split = 'test'
     path = Path(__file__).parent.parent / "datasets" / split 
+#    path = Path(__file__).parent / "testing" / "datasets" /split 
     with h5py.File(path, "r") as f:
         print("f attrs are:")
         for key, val in f.attrs.items():

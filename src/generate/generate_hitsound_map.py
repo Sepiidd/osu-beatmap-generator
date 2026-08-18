@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).parent
 if __name__ == "__main__":
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-    model_name = "2500iters"
+    model_name = "1000iternewset"
     model_path = BASE_DIR.parent.parent / 'onset_saved' / model_name
     model_config = OnsetConfig()
     model = OnsetModel(model_config)
@@ -41,15 +41,15 @@ if __name__ == "__main__":
     val_set = OBGAudioDataset(config.validation_path, config.sequence_len, benchmark=True)
 
     #get specific input, targets
-#    test_idx = 0
+    test_idx = 0
 #    test_idx = 4
-    test_idx = 357
+#    test_idx = 357
     inputs, difficulty, targets = train_set[test_idx]
 
     #produce predictions
-#    audio_filename = "we-are-dreamers.mp3"
+    audio_filename = "we-are-dreamers.mp3"
 #    audio_filename = "saint_catastrophe.mp3"
-    audio_filename = "s-heaven.mp3"
+#    audio_filename = "s-heaven.mp3"
     audio_input_dir = BASE_DIR.parent.parent / 'music' 
     output_dir = osu_songs_dir / 'test'
     difficulty_args = {

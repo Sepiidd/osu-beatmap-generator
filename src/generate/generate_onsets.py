@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     print("initializing model...")
     model = OnsetModel(OnsetConfig())
-    model_state_name = "1100diff_film"
+    model_state_name = "1000iternewset"
     model_state_path = BASE_DIR.parent.parent / "onset_saved" / model_state_name
     print("loading weights into model...")
     checkpoint = torch.load(model_state_path, weights_only=True)

@@ -64,6 +64,7 @@ class OBGAudioDataset(Dataset):
         '''
         generates sequence of 0,1 representing negative and positive targets for each 10=(HOP_LEN/SR)*1000 milliseconds  found in <audio_feat>, starting from <start_time>
         '''
+        #TODO: FIX URGENT
         ms_per_frame = (HOP_LEN/SR)*1000
         targets = []
         time_ms = frames_to_time(start_idx, sr=SR, hop_length=HOP_LEN)*1000

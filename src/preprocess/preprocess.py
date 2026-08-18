@@ -43,6 +43,13 @@ def in_h5(path, song_id, diff_name):
                 return True
     return False
 
+def set_in_h5(path, song_id):
+    with h5py.File(path, 'a', track_order=True) as f:
+        if f"{song_id}" in f: #skip set if already exists 
+            print("song set already exists, skipping all diffs:", song_id)
+            return True
+    return False
+
 def process_osu(osz):
     line = ""
     while not line.startswith("AudioFilename:"):
@@ -88,6 +95,7 @@ def save_point(
         aim,
         speed
     ):
+    #TODO: reset state when exception or keyboard interrupt occurred here
     with h5py.File(path, 'a', track_order=True) as f:
         #hierarchy creation
         print("saving:", song_id, "|", diff_name)
@@ -155,11 +163,16 @@ def save_set(arg_list, h5path):
 def process_many(data_path, h5path):
     for d in data_path.iterdir():
         song_name = d.name
+        song_id = song_name.split(" ")[0]
+        if set_in_h5(h5path, song_id): #catch duplicate map sets, will mess with indexing
+            continue
+
         to_save = []
         for f in d.iterdir():
             if f.suffix == ".osu":
                 diff_name = f.name
                 to_save.extend(process_one(data_path, h5path, song_name, diff_name))
+
         #save entire mapsets at once
         for song_args in to_save:
             save_point(h5path, *song_args)

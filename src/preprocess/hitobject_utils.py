@@ -2,6 +2,15 @@
 X_MIDDLE = 256 #playfield center on x-axis
 Y_MIDDLE = 192 #playfield center on y-axis
 
+def get_hitobjects(path):
+    with open(path, 'r') as f:
+        line = ''
+        while not line.startswith("[HitObjects]"):
+            line = f.readline()
+        line = f.readline()
+        line = f.readlines()
+        return line
+
 def find_time(obj):
     obj = obj.strip()
     separated = obj.split(',')
@@ -37,7 +46,7 @@ def find_slider_type(obj):
 
 def find_num_slides(obj):
     separated = obj.strip().split(",")
-    return separated[6]
+    return int(separated[6])
 
 def first_bit_idx_int(num):
     for i in range(8):
