@@ -133,8 +133,13 @@ class obj_converter():
     def hitobject_to_ms(self, obj, slider_mult, uninherited, inherited):
         u_time, u_point = uninherited[0]
         u_time = float(u_time)
-        i_time, i_point = inherited[0]
-        i_time = float(i_time)
+
+        if len(inherited)>0:
+            i_time, i_point = inherited[0]
+            i_time = float(i_time)
+        else:
+            i_time = float('inf')
+            i_point = None
         
         u_future, u_next = uninherited[1] if len(uninherited)>1 else (float('inf'), None)
         u_future = float(u_future)
@@ -178,11 +183,6 @@ class obj_converter():
             if u_future <= ms+complete_time:
                 u_point=u_next
                 uninherited.pop(0)
-
-        if ms==1703: #TODO: wrong complete time calculation for we are dreamers slider at 1703 timestamp
-            print(f"complete_time components are s_len:{s_len}, slider_mult:{slider_mult}, sv:{sv}, beatlen:{beatlen}")
-            print(f"complete_time is {complete_time}")
-            print(f"number of slides is {slides}")
 
         if t.startswith('spinner'):
             ms_lst = []

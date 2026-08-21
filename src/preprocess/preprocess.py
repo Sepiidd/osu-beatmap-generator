@@ -79,6 +79,9 @@ def process_osu(osz):
             inherited_tpoints.append((time, line.strip()))
         line = osz.readline()
 
+#    print("uninherited", len(uninherited_tpoints))
+#    print("inherited is", len(inherited_tpoints))
+
     while not line.startswith("[HitObjects]"):
         line = osz.readline()
 
