@@ -7,14 +7,47 @@ def get_hitobjects(path):
         line = ''
         while not line.startswith("[HitObjects]"):
             line = f.readline()
-        line = f.readline()
         line = f.readlines()
         return line
+
+def find_end_time(obj):
+    #NOTE: for spinner objects
+    obj = obj.strip()
+    separated = obj.split(',')
+    end_time = int(separated[5])
+    return end_time
 
 def find_time(obj):
     obj = obj.strip()
     separated = obj.split(',')
-    return separated[2]
+    return int(separated[2])
+
+def find_len(obj):
+    obj = obj.strip()
+    separated = obj.split(',')
+    return float(separated[7])
+
+def tpoint_time_uninherited(obj):
+    obj = obj.strip()
+    separated = obj.split(',')
+    time = separated[0]
+    bit = separated[-2]
+    uninherited = True if separated[-2]=="1" else False
+    return (time, uninherited)
+
+def tpoint_beatlen(obj):
+    obj = obj.strip()
+    separated = obj.split(',')
+    beatlen = float(separated[1])
+    return beatlen
+
+def tpoint_sv(obj):
+    #NOTE: ONLY TO BE USED ON INHERITED TIMING POINTS
+    obj = obj.strip()
+    separated = obj.split(',')
+    beatlen = float(separated[1]) #percentage representing the negative inverse of the slider multiplier
+    sv = -1 * (1) / (beatlen / 100) 
+    return sv
 
 def find_type(obj):
     separated = obj.strip().split(",")

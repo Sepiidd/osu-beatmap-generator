@@ -6,17 +6,18 @@ class obg_tokenizer:
 	def __init__(
 	self, 
 	load_tokens=False, 
-	special_start=["<CIRCLE>", "<SLIDER_HEAD_BEZIER>", "<SLIDER_HEAD_LINEAR>", "<SLIDER_HEAD_PERFECT>"], 
+	special_start=["<CIRCLE>", "<SLIDER_HEAD_BEZIER>", "<SLIDER_HEAD_LINEAR>", "<SLIDER_HEAD_PERFECT>", "<SPINNER>"], 
 	special_types=["<ANCHOR>", "<SLIDER_TAIL>, <SLIDER_REPEAT>"], 
 	x_min=-500,     #ingame grid min -180
-	x_max=1000,      #ingame grid max 691
-	y_min=-500,      #ingame grid min -82
-	y_max=1000):     #ingame grid max 407
+	x_max=1000,     #ingame grid max 691
+	y_min=-500,     #ingame grid min -82
+	y_max=1000      #ingame grid max 407
+    ):     
 		if load_tokens:
 			self.load_tokens()
 			return 
 
-		self.special = special_start
+		self.special = special_start.copy()
 		self.special.extend(special_types)
 		self.special.extend(["<BOS>", "<EOS>", "<PAD>"])
 
@@ -60,9 +61,9 @@ class obg_tokenizer:
 				"special_types": self.special_types, 
 				"special": self.special, 
 				"x_from": self.x_from,
-				"x_positions": self.x_positions, 
+				"x_max": self.x_positions-1, 
 				"y_from": self.y_from,
-				"y_positions": self.y_positions, 
+				"y_max": self.y_positions-1, 
 				"num_t": self.num_t}, 
 				f
 			)

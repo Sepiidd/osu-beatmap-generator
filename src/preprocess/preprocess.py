@@ -15,6 +15,7 @@ from configs.preprocess_config import PreprocessConfig
 from preprocess.hitobject_utils import augment_reflect_x
 from preprocess.hitobject_utils import augment_reflect_y
 from preprocess.hitobject_utils import augment_reflect_xy
+from preprocess.hitobject_utils import tpoint_time_uninherited 
 from preprocess.audio_utils import augment_pitch 
 from preprocess.audio_utils import augment_speed 
 from preprocess.audio_utils import augment_frequency_mask
@@ -57,14 +58,34 @@ def process_osu(osz):
     end_idx = line.find(':')
     mp3 = line.strip()[end_idx+1:]
     mp3 = mp3.strip()
-    while not line.startswith("[HitObjects]"):
+
+    while not line.startswith("SliderMultiplier:"):
+        line = osz.readline()
+    end_idx = line.find(':')
+    slider_mult = line.strip()[end_idx+1:]
+    slider_mult = float(slider_mult.strip())
+
+    while not line.startswith("[TimingPoints]"):
+        line = osz.readline()
+    line = osz.readline() #first timing point
+    
+    uninherited_tpoints = [] #updated list, earliest timing at start  
+    inherited_tpoints = [] #updated list, earliest timing at start
+    while not line.startswith("\n"):
+        time, uninherited = tpoint_time_uninherited(line)
+        if uninherited:
+            uninherited_tpoints.append((time, line.strip()))
+        else:
+            inherited_tpoints.append((time, line.strip()))
         line = osz.readline()
 
+    while not line.startswith("[HitObjects]"):
+        line = osz.readline()
 
     hitobj_idx = osz.tell()
     line = osz.readlines()
     tokens = converter.hitobject_seq_to_tok(line)
-    ms_seq, forward_deltas, backward_deltas = converter.hitobject_seq_to_ms(line)
+    ms_seq, forward_deltas, backward_deltas = converter.hitobject_seq_to_ms(line, slider_mult, uninherited_tpoints, inherited_tpoints)
     return (np.array(tokens), np.array(ms_seq), np.array(forward_deltas), np.array(backward_deltas), mp3, hitobj_idx)
 
 def process_audio(audio, sr):
