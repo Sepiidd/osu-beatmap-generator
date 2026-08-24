@@ -136,53 +136,106 @@ class obj_converter():
 
         if len(inherited)>0:
             i_time, i_point = inherited[0]
-            i_time = float(i_time)
         else:
             i_time = float('inf')
             i_point = None
         
         u_future, u_next = uninherited[1] if len(uninherited)>1 else (float('inf'), None)
-        u_future = float(u_future)
         i_future, i_next = inherited[1] if len(inherited)>1 else (float('inf'), None)
-        i_future = float(i_future)
 
+        #timestamp of current circle or sliderhead
         ms_lst = []
         ms = int(obj.strip().split(",")[2])
         ms_lst.append(ms)
 
-        if u_future <= ms:
-            u_point = u_next
-            uninherited.pop(0)
-        i_point = i_point if i_time < ms else None
-        if i_future <= ms:
+        while True:
+#            print(f"ms is {ms}, i_time is {i_time} i_future is {i_future}")
+            if i_future > ms:
+                break
+            #next timing point is before or at ms
             i_point = i_next
-            inherited.pop(0)
+            i_time = i_future
+            if len(inherited)>2:
+                inherited.pop(0)
+                i_future, i_next = inherited[1]
+            elif len(inherited) == 2:
+                inherited.pop(0)
+                i_future, i_next = (float('inf'), None)
+            else:
+                i_future, i_next = (float('inf'), None)
+        while True:
+#            print(f"ms is {ms}, u_time is {u_time} u_future is {u_future}")
+            if u_future > ms:
+                break
+            #next timing point is before or at ms
+            u_point = u_next
+            u_time = u_future
+            if len(uninherited)>2:
+                uninherited.pop(0)
+                u_future, u_next = uninherited[1]   
+            elif len(uninherited) == 2:
+                uninherited.pop(0)
+                u_future, u_next = (float('inf'), None)
+            else:
+                u_future, u_next = (float('inf'), None)
+
+#        print(f"================================================================done advancing to ms================================================================")
+
+
+#        print(f"uninherited, inherited timing points are {u_point} and {i_point}")
+#        print(f"upcoming uninherited, inherited timing points are {u_future} and {i_future}")
+
 
         #determine ms based on type
         t, slides = find_type(obj)
-        complete_time = -1
+        complete_time = -1 #time to complete one slide
         if t.startswith('slider'):
             s_len = find_len(obj)
             beatlen = tpoint_beatlen(u_point)
             sv = tpoint_sv(i_point) if i_point else 1
             
             complete_time = s_len / (slider_mult * 100 * sv) * beatlen 
+
             slides_ms = []
             for i in range(1, slides+1):
                 slides_ms.append(ms+i*complete_time)
             ms_lst.extend(slides_ms)
             
-            #check for timing points at end of slider
-            i_future, i_next = inherited[1] if len(inherited)>1 else (float('inf'), None)
-            i_future = float(i_future)
-            if i_future <= ms+complete_time:
-                i_point=i_next
-                inherited.pop(0)
-            u_future, u_next = uninherited[1] if len(uninherited)>1 else (float('inf'), None)
-            u_future = float(u_future)
-            if u_future <= ms+complete_time:
-                u_point=u_next
-                uninherited.pop(0)
+            slider_done = ms+slides*complete_time
+
+            #pop all timing points within the slider (keep the last one)
+            while True:
+#                print(f"ms is {ms}, i_time is {i_time} i_future is {i_future}, slider_done is {slider_done}, complete time is {complete_time} with components s_len {s_len}, slider_mult {slider_mult}, sv {sv}, beatlen {beatlen}")
+                if i_future >= slider_done:
+                    break
+                i_point = i_next
+                i_time = i_future
+                if len(inherited)>2:
+                    inherited.pop(0)
+                    i_future, i_next = inherited[1]
+                elif len(inherited) == 2:
+                    inherited.pop(0)
+                    i_future, i_next = (float('inf'), None)
+                else:
+                    i_future, i_next = (float('inf'), None)
+            while True:
+#                print(f"ms is {ms}, u_time is {u_time} u_future is {u_future}")
+                if u_future >= slider_done:
+                    break
+                u_point = u_next
+                u_time = u_future
+                if len(uninherited)>2:
+                    uninherited.pop(0)
+                    u_future, u_next = uninherited[1]   
+                elif len(uninherited) == 2:
+                    uninherited.pop(0)
+                    u_future, u_next = (float('inf'), None)
+                else:
+                    u_future, u_next = (float('inf'), None)
+
+#        print(f"================================================================done advancing to slider end================================================================")
+#        print(f"uninherited, inherited timing points are {u_point} and {i_point}")
+#        print(f"upcoming uninherited, inherited timing points are {u_future} and {i_future}")
 
         if t.startswith('spinner'):
             ms_lst = []

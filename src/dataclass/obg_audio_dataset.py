@@ -1,6 +1,7 @@
 import h5py
 import numpy as np
 import torch
+import traceback
 from torch.utils.data import Dataset
 from pathlib import Path
 from librosa import frames_to_time
@@ -32,12 +33,17 @@ class OBGAudioDataset(Dataset):
         return self.num_samples
 
     def __getitem__(self, idx):
+#        idx = 2060 #NOTE: test
         sample, _ = self.sample_bin_search(idx)
         audio_feat = sample["audio_feat"]
         audio_targets = sample["audio_targets"]
         stars = sample["stars"]
         aim = sample["aim"]
         speed = sample["speed"]
+
+        name = sample["song"]
+        d = sample["diff"]
+#        print(f"song, diff are {name} and {d}, audio feat has shape {audio_feat.shape}, audio targets shape {audio_targets.shape}")
 
         if self.augment:
             option_select = np.random.randint(0, len(self.augmentations))
@@ -50,33 +56,44 @@ class OBGAudioDataset(Dataset):
             audio_feat = self.pad_feats(audio_feat)
             num_frames = audio_feat.shape[1]
 
-        start_idx = np.random.randint(0, num_frames-self.max_seq_len+1) if not (self.benchmark or self.test) else (num_frames // 2 if self.test else 0)
-#        start_idx = np.random.randint(0, num_frames-self.max_seq_len+1) if not self.benchmark else 0
-#        start_idx = 22710
-#        start_idx = 12884
-#        print("start_idx is", start_idx)
+        final_ms = audio_targets[-1]
+        final_idx = time_to_frames(final_ms/1000, sr=SR, hop_length=HOP_LEN)
+        start_limit = final_idx - self.max_seq_len + 1 
+        start_limit = 0 if start_limit < 0 else start_limit
+
+        print(f"")
+        print(f"final_ms {final_ms}, final_idx {final_idx}, start_limit {start_limit}")
+        start_idx = np.random.randint(0, start_limit+1) if not (self.benchmark or self.test) else (num_frames // 2 if self.test else 0)
+#        start_idx = np.random.randint(0, num_frames-self.max_seq_len+1) if not self.benchmark else 0 #NOTE: test random start index for onset target comparison
+#        start_idx = 19708 #NOTE: test
+        print("start idx", start_idx)
         max_len = self.max_seq_len if not self.benchmark else num_frames
 
-        window_seq = self.slice_windows(audio_feat, start_idx, max_len)
-        window_seq = np.swapaxes(window_seq, 1, 2) #swap axes bc im dumb
-        targets = self.gen_targets(start_idx, audio_targets)
+        #TODO: see error in /src, debug!!
+        try:
+            window_seq = self.slice_windows(audio_feat, start_idx, max_len)
+            window_seq = np.swapaxes(window_seq, 1, 2) #swap axes bc im dumb
+            targets = self.gen_targets(start_idx, audio_targets)
+            if self.test:
+                return torch.tensor(window_seq), torch.tensor([stars, aim, speed], dtype=torch.float32), torch.tensor(targets), start_idx
 
-        if self.test:
-            return torch.tensor(window_seq), torch.tensor([stars, aim, speed], dtype=torch.float32), torch.tensor(targets), start_idx
+            if self.benchmark:
+                return torch.tensor(audio_feat), torch.tensor([stars, aim, speed], dtype=torch.float32), torch.tensor(targets)
 
-        if self.benchmark:
-            return torch.tensor(audio_feat), torch.tensor([stars, aim, speed], dtype=torch.float32), torch.tensor(targets)
-
-        return torch.tensor(window_seq), torch.tensor([stars, aim, speed], dtype=torch.float32), torch.tensor(targets)
+            return torch.tensor(window_seq), torch.tensor([stars, aim, speed], dtype=torch.float32), torch.tensor(targets)
+        except Exception as e:
+            print("sample idx, start idx are", idx, start_idx)
+            traceback.print_exception(e)
 
     def gen_targets(self, start_idx, audio_targets):
         '''
         generates sequence of 0,1 representing negative and positive targets for each 10=(HOP_LEN/SR)*1000 milliseconds  found in <audio_feat>, starting from <start_time>
         '''
+        #TODO: if selected index is beyond first hitsound, errors get thrown, FIX
+
         frame_size = (1000/configA.sr) * configA.hop_len
         frame_side = frame_size / 2 #time to edge of frame from center
 
-        #TODO: continue fixing this bs
         max_seq_len = self.max_seq_len if not self.benchmark else self.song_num_frames
         targets = np.zeros(max_seq_len)
         start_time = frames_to_time(start_idx, sr=SR, hop_length=HOP_LEN)*1000 #in milliseconds
@@ -84,21 +101,26 @@ class OBGAudioDataset(Dataset):
         end_time = frames_to_time(start_idx+max_seq_len, sr=SR, hop_length=HOP_LEN)*1000 #in milliseconds
         end_time = end_time+frame_side #end time lines up with end of frame
 
-#        print(f"start time {start_time}, end time {end_time}")
-#        print(f"audio targets len is {len(audio_targets)}")
-
         target_idx = self.find_first(start_time, audio_targets)
         curr_target = audio_targets[target_idx] / 1000
-        count = 0
+        print(f"audio targets size {len(audio_targets)}, find first idx {target_idx} with target {curr_target*1000}")
+
+#        prev = None #NOTE: test
+#        prev_idx = None
         while curr_target*1000 < end_time and target_idx < len(audio_targets):
             curr_idx = time_to_frames(curr_target, sr=SR, hop_length=HOP_LEN)
-            
-#            print(f"curr target is {curr_target*1000}")
-
+#            print(f"start idx {start_idx} start time {start_time} end time {end_time} curr target {curr_target} curr idx {curr_idx}")
             targets[curr_idx-start_idx-1] = 1 #subtract 1 since difference tells you the distance, not the index (off by one error)
             target_idx += 1
+            if target_idx >= len(audio_targets):
+                break
+
+#            if prev_idx == curr_idx: #NOTE: test
+#                print(f"prev is {prev*1000}, curr is {curr_target*1000}")
+#            prev = curr_target
+#            prev_idx = curr_idx
+
             curr_target = audio_targets[target_idx] / 1000
-            count += 1
         return np.array(targets)
 
     def slice_windows(self, audio_feat, start_idx, max_len):
@@ -108,7 +130,9 @@ class OBGAudioDataset(Dataset):
         slices = []
         i = 0
         while i < max_len:
-            slices.append(get_frames_at_idx(audio_feat, start_idx+i))
+            idx = start_idx+i
+            s = get_frames_at_idx(audio_feat, idx)
+            slices.append(s)
             i += 1
         stacked = np.stack(slices, axis=0)
         return stacked 
@@ -183,6 +207,7 @@ class OBGAudioDataset(Dataset):
                 end_range = grp_set.attrs.get("end_range")
                 if start_range <= target <= end_range:
                     grp = grp_set.get(str(target))
+                    diff = grp.attrs.get("diff_name")
                     audio_feat = grp_set.get("audio_feat")[:]
                     audio_targets = grp.get("audio_targets")[:]
                     osu_tokens = grp.get("osu_tokens")[:]
@@ -192,6 +217,8 @@ class OBGAudioDataset(Dataset):
                     aim = grp.get("aim")[()]
                     speed = grp.get("speed")[()]
                     sample = {
+                            "song": curr_name,
+                            "diff": diff,
                             "audio_feat": audio_feat,
                             "audio_targets": audio_targets,
                             "aim": aim,

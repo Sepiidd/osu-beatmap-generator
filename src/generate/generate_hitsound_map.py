@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).parent
 if __name__ == "__main__":
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-    model_name = "1000iternewset"
+    model_name = "1500iter-fixeddata"
     model_path = BASE_DIR.parent.parent / 'onset_saved' / model_name
     model_config = OnsetConfig()
     model = OnsetModel(model_config)

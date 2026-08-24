@@ -167,13 +167,11 @@ def process_one(data_path, h5path, song_name, diff_name):
     aim = ratings.aim
     speed = ratings.speed
 
-
     #audio
     #NOTE: pitch/time-shift audio augmentation must be performed here (no way to delay augmentation to data loader stage)
     song_path = data_path / song_name / mp3
     audio, sr = load(path=song_path, sr=SR)
     features = process_audio(audio, sr)
-    
 
     to_save = []
     to_save.append((song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas, stars, aim, speed))

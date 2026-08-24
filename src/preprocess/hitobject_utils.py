@@ -30,7 +30,7 @@ def find_len(obj):
 def tpoint_time_uninherited(obj):
     obj = obj.strip()
     separated = obj.split(',')
-    time = separated[0]
+    time = float(separated[0])
     bit = separated[-2]
     uninherited = True if separated[-2]=="1" else False
     return (time, uninherited)

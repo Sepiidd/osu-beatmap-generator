@@ -43,6 +43,9 @@ if __name__ == '__main__':
     with h5py.File(h5path, 'r') as h:
         n_samples = h.attrs.get("num_samples")
         idx = random.randrange(0, n_samples)
-    idx = 1
-#    full_targets_count(idx)
-    test_targets_count(idx)
+    
+    for i in range(0, n_samples):
+        idx = i
+        full_targets_count(idx)
+        print('========================================================')
+#    test_targets_count(idx)
