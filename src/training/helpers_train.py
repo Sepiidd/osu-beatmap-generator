@@ -44,6 +44,7 @@ def eval_loss(model, train_loader, validation_loader, config):
         aucpr_calc = BinaryAveragePrecision()
 
         i=0
+
         while True:
             if i >= eval_iters:
                 break
@@ -75,7 +76,6 @@ def eval_loss(model, train_loader, validation_loader, config):
             else:
                 total += targets.shape[0]*targets.shape[1] #batch size * sequence length
             i+=1
-
         #average loss, determine stats 
         precision = (tp / (tp+fp + 1e-7)).item() #of all positive predictions, which were correct
         recall = (tp / (tp+fn + 1e-7)).item()

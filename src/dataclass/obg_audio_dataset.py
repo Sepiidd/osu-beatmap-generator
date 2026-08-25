@@ -33,7 +33,7 @@ class OBGAudioDataset(Dataset):
         return self.num_samples
 
     def __getitem__(self, idx):
-#        idx = 2060 #NOTE: test
+#        idx = 270 #NOTE: test
         sample, _ = self.sample_bin_search(idx)
         audio_feat = sample["audio_feat"]
         audio_targets = sample["audio_targets"]
@@ -61,15 +61,15 @@ class OBGAudioDataset(Dataset):
         start_limit = final_idx - self.max_seq_len + 1 
         start_limit = 0 if start_limit < 0 else start_limit
 
-        print(f"")
-        print(f"final_ms {final_ms}, final_idx {final_idx}, start_limit {start_limit}")
+#        print(f"final_ms {final_ms}, final_idx {final_idx}, start_limit {start_limit}")
         start_idx = np.random.randint(0, start_limit+1) if not (self.benchmark or self.test) else (num_frames // 2 if self.test else 0)
 #        start_idx = np.random.randint(0, num_frames-self.max_seq_len+1) if not self.benchmark else 0 #NOTE: test random start index for onset target comparison
-#        start_idx = 19708 #NOTE: test
-        print("start idx", start_idx)
+#        start_idx = 16829 #NOTE: test
+#        print("start idx", start_idx, "audio feat shape", audio_feat.shape)
         max_len = self.max_seq_len if not self.benchmark else num_frames
+        max_len = self.max_seq_len #NOTE: test
+#        print("max_len is", max_len)
 
-        #TODO: see error in /src, debug!!
         try:
             window_seq = self.slice_windows(audio_feat, start_idx, max_len)
             window_seq = np.swapaxes(window_seq, 1, 2) #swap axes bc im dumb
@@ -103,7 +103,7 @@ class OBGAudioDataset(Dataset):
 
         target_idx = self.find_first(start_time, audio_targets)
         curr_target = audio_targets[target_idx] / 1000
-        print(f"audio targets size {len(audio_targets)}, find first idx {target_idx} with target {curr_target*1000}")
+#        print(f"audio targets size {len(audio_targets)}, find first idx {target_idx} with target {curr_target*1000}")
 
 #        prev = None #NOTE: test
 #        prev_idx = None
@@ -129,6 +129,7 @@ class OBGAudioDataset(Dataset):
         '''
         slices = []
         i = 0
+
         while i < max_len:
             idx = start_idx+i
             s = get_frames_at_idx(audio_feat, idx)

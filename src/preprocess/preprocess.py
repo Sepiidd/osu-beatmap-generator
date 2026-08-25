@@ -173,6 +173,8 @@ def process_one(data_path, h5path, song_name, diff_name):
     audio, sr = load(path=song_path, sr=SR)
     features = process_audio(audio, sr)
 
+#    print(f"song name {song_name} diff name {diff_name} with shape {features.shape}")
+
     to_save = []
     to_save.append((song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas, stars, aim, speed))
 
