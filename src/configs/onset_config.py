@@ -43,3 +43,6 @@ class OnsetConfig:
 
     #difficulty conditioning (FiLM)
     n_conditioning: int = 3
+
+    #relevant info
+    prior_p = 0.06 #rounded value of positive class probability (i.e. prior probability)

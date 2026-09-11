@@ -149,7 +149,6 @@ class obj_converter():
         ms_lst.append(ms)
 
         while True:
-#            print(f"ms is {ms}, u_time is {u_time} u_future is {u_future}")
             if u_future > ms:
                 break
             #next timing point is before or at ms
@@ -164,7 +163,6 @@ class obj_converter():
             else:
                 u_future, u_next = (float('inf'), None)
         while True:
-#            print(f"ms is {ms}, i_time is {i_time} i_future is {i_future}")
             if i_future > ms:
                 #if effective timing point is strictly before effective uninherited timing point, disregard it
                 i_time, i_point = (i_time, i_point) if i_time >= u_time else (float('inf'), None)
@@ -181,14 +179,6 @@ class obj_converter():
             else:
                 i_future, i_next = (float('inf'), None)
 
-
-#        print(f"================================================================done advancing to ms================================================================")
-
-
-#        print(f"uninherited, inherited timing points are {u_point} and {i_point}")
-#        print(f"upcoming uninherited, inherited timing points are {u_future} and {i_future}")
-
-
         #determine ms based on type
         t, slides = find_type(obj)
         complete_time = -1 #time to complete one slide
@@ -199,18 +189,12 @@ class obj_converter():
             
             complete_time = s_len / (slider_mult * 100 * sv) * beatlen 
 
-#            print(f"slider at ms {ms}, complete time is {complete_time}")
-
             slides_ms = []
             for i in range(1, slides+1):
                 slides_ms.append(ms+i*complete_time)
             ms_lst.extend(slides_ms)
             
             slider_done = ms+slides*complete_time
-
-#            print(f"slider at ms {ms}, i_time is {i_time}, slider_done is {slider_done}, complete time is {complete_time} with components s_len {s_len}, slider_mult {slider_mult}, sv {sv}, beatlen {beatlen}")
-#            print(f"ms is {ms}, i_time is {i_time} i_future is {i_future}, slider_done is {slider_done}, complete time is {complete_time} with components s_len {s_len}, slider_mult {slider_mult}, sv {sv}, beatlen {beatlen}")
-
 
             #pop all timing points within the slider (keep the last one)
             while True:
@@ -227,7 +211,6 @@ class obj_converter():
                 else:
                     i_future, i_next = (float('inf'), None)
             while True:
-#                print(f"ms is {ms}, u_time is {u_time} u_future is {u_future}")
                 if u_future >= slider_done:
                     break
                 u_point = u_next
@@ -240,10 +223,6 @@ class obj_converter():
                     u_future, u_next = (float('inf'), None)
                 else:
                     u_future, u_next = (float('inf'), None)
-
-#        print(f"================================================================done advancing to slider end================================================================")
-#        print(f"uninherited, inherited timing points are {u_point} and {i_point}")
-#        print(f"upcoming uninherited, inherited timing points are {u_future} and {i_future}")
 
         if t.startswith('spinner'):
             ms_lst = []

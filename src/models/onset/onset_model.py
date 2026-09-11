@@ -45,7 +45,7 @@ class OnsetModel(nn.Module):
         #final linear layers
 #        self.lin2 = nn.Linear(config.n_embd, 1, bias=False)
         self.lin2 = nn.Linear(config.n_embd, config.n_embd // 2, bias=False)
-        self.lin3 = nn.Linear(config.n_embd // 2, 1, bias=False)
+        self.final = nn.Linear(config.n_embd // 2, 1, bias=False)
 
         #initial weight randomization across all modules
         self.apply(self._init_weights)
@@ -57,9 +57,12 @@ class OnsetModel(nn.Module):
             if pn.endswith("film_gen.weight"): #film gen weight
                 nn.init.zeros_(p)
             if pn.endswith("film_gen.bias"): #film gen bias
-                with torch.no_grad():
+                with torch.no_grad(): #direct assignment gets tracked (we dont want this)
                     p[:config.n_embd] = 1
                     p[config.n_embd:] = 0
+            if pn.endswith("final.bias"): #final linear layer
+                prior_bias = -math.log((1-config.prior_p) / config.prior_p)
+                nn.init.constant_(prior_bias)
 
 
     def forward(self, x, difficulty_conditioning):
@@ -67,6 +70,7 @@ class OnsetModel(nn.Module):
         input <x> is expected to come in with shape (B, S, 15, 80, 3)
         """
         #reorder to shape (B*S, W, T, F)
+#        print(f"in forward, x shape {x.shape} with type {type(x)}, difficulty_conditioning shape {difficulty_conditioning.shape} with type {type(difficulty_conditioning)}")
         B, S, T, F, W = x.shape #batch size, seq len, stft time, mel freq, stft window size
         x = x.view(B*S, T, F, W) #fold seq len into batch size for convolutions
         x = x.permute(0, 3, 1, 2) #reorder as required by convolutions
@@ -111,7 +115,7 @@ class OnsetModel(nn.Module):
         #obtain logits from attended info
         x = self.lin2(x)
         x = self.relu(x)
-        logits = self.lin3(x)
+        logits = self.final(x)
         return logits
 
     def _init_weights(self, module):

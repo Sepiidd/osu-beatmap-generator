@@ -17,14 +17,14 @@ SEQUENCE_LEN = configA.sequence_len #equal to roughly 5 seconds of audio
 HOP_LEN = configA.hop_len
 
 class OBGAudioDataset(Dataset):
-    def __init__(self, h5path, max_seq_len, augment=False, augmentations=[], benchmark=False, test=False):
+    def __init__(self, h5path, max_seq_len, augment=False, augmentations=[], full=False, test=False):
         self.h5path = h5path
         self.num_samples = self.get_len(h5path)
         self.max_seq_len = max_seq_len
         self.augment = augment #augmentation bool flag
         self.augmentations = augmentations.copy() #list of functions, for which each takes in inputs and targets, returns augmented inputs and targets
         self.augmentations.append(lambda x, y: (x, y))
-        self.benchmark = benchmark
+        self.full = full #TODO: if benchmark=True is passed as an argument ever, change to full=True
         self.test = test #fix start_idx for testing within getitem()
 
         self.song_num_frames = None #update per song
@@ -33,7 +33,6 @@ class OBGAudioDataset(Dataset):
         return self.num_samples
 
     def __getitem__(self, idx):
-#        idx = 270 #NOTE: test
         sample, _ = self.sample_bin_search(idx)
         audio_feat = sample["audio_feat"]
         audio_targets = sample["audio_targets"]
@@ -43,7 +42,6 @@ class OBGAudioDataset(Dataset):
 
         name = sample["song"]
         d = sample["diff"]
-#        print(f"song, diff are {name} and {d}, audio feat has shape {audio_feat.shape}, audio targets shape {audio_targets.shape}")
 
         if self.augment:
             option_select = np.random.randint(0, len(self.augmentations))
@@ -61,14 +59,9 @@ class OBGAudioDataset(Dataset):
         start_limit = final_idx - self.max_seq_len + 1 
         start_limit = 0 if start_limit < 0 else start_limit
 
-#        print(f"final_ms {final_ms}, final_idx {final_idx}, start_limit {start_limit}")
-        start_idx = np.random.randint(0, start_limit+1) if not (self.benchmark or self.test) else (num_frames // 2 if self.test else 0)
-#        start_idx = np.random.randint(0, num_frames-self.max_seq_len+1) if not self.benchmark else 0 #NOTE: test random start index for onset target comparison
-#        start_idx = 16829 #NOTE: test
-#        print("start idx", start_idx, "audio feat shape", audio_feat.shape)
-        max_len = self.max_seq_len if not self.benchmark else num_frames
-        max_len = self.max_seq_len #NOTE: test
-#        print("max_len is", max_len)
+        start_idx = np.random.randint(0, start_limit+1) if not (self.full or self.test) else (num_frames // 2 if self.test else 0)
+#        start_idx = np.random.randint(0, num_frames-self.max_seq_len+1) if not self.full else 0 #NOTE: test random start index for onset target comparison
+        max_len = self.max_seq_len if not self.full else num_frames
 
         try:
             window_seq = self.slice_windows(audio_feat, start_idx, max_len)
@@ -77,7 +70,7 @@ class OBGAudioDataset(Dataset):
             if self.test:
                 return torch.tensor(window_seq), torch.tensor([stars, aim, speed], dtype=torch.float32), torch.tensor(targets), start_idx
 
-            if self.benchmark:
+            if self.full:
                 return torch.tensor(audio_feat), torch.tensor([stars, aim, speed], dtype=torch.float32), torch.tensor(targets)
 
             return torch.tensor(window_seq), torch.tensor([stars, aim, speed], dtype=torch.float32), torch.tensor(targets)
@@ -89,12 +82,10 @@ class OBGAudioDataset(Dataset):
         '''
         generates sequence of 0,1 representing negative and positive targets for each 10=(HOP_LEN/SR)*1000 milliseconds  found in <audio_feat>, starting from <start_time>
         '''
-        #TODO: if selected index is beyond first hitsound, errors get thrown, FIX
-
         frame_size = (1000/configA.sr) * configA.hop_len
         frame_side = frame_size / 2 #time to edge of frame from center
 
-        max_seq_len = self.max_seq_len if not self.benchmark else self.song_num_frames
+        max_seq_len = self.max_seq_len if not self.full else self.song_num_frames
         targets = np.zeros(max_seq_len)
         start_time = frames_to_time(start_idx, sr=SR, hop_length=HOP_LEN)*1000 #in milliseconds
         start_time = start_time-frame_side #start time lines up with start of frame
@@ -103,22 +94,12 @@ class OBGAudioDataset(Dataset):
 
         target_idx = self.find_first(start_time, audio_targets)
         curr_target = audio_targets[target_idx] / 1000
-#        print(f"audio targets size {len(audio_targets)}, find first idx {target_idx} with target {curr_target*1000}")
-
-#        prev = None #NOTE: test
-#        prev_idx = None
         while curr_target*1000 < end_time and target_idx < len(audio_targets):
             curr_idx = time_to_frames(curr_target, sr=SR, hop_length=HOP_LEN)
-#            print(f"start idx {start_idx} start time {start_time} end time {end_time} curr target {curr_target} curr idx {curr_idx}")
-            targets[curr_idx-start_idx-1] = 1 #subtract 1 since difference tells you the distance, not the index (off by one error)
+            targets[curr_idx-start_idx] = 1 #subtract 1 since difference tells you the distance, not the index (off by one error)
             target_idx += 1
             if target_idx >= len(audio_targets):
                 break
-
-#            if prev_idx == curr_idx: #NOTE: test
-#                print(f"prev is {prev*1000}, curr is {curr_target*1000}")
-#            prev = curr_target
-#            prev_idx = curr_idx
 
             curr_target = audio_targets[target_idx] / 1000
         return np.array(targets)
@@ -166,31 +147,6 @@ class OBGAudioDataset(Dataset):
         if lst[p1] >= target:
             return p1
         return p2
-
-    def bin_search_closest(self, target, lst, lenience=5):
-        '''
-        return index of closest element (prefer lower index) to <target> within <lst>
-        *literally just binary search but more lenient on pointer assignment
-        '''
-        if len(lst) == 0:
-            return None
-        if len(lst) <= 2:
-            return 0
-
-        p1 = 0
-        p2 = len(lst)-1
-        while p1 != p2-1:
-            curr = (p1 + p2) // 2
-            val = lst[curr]
-            if val == target:
-                return curr
-            elif val < target:
-                p1 = curr
-            elif val > target:
-                p2 = curr
-        if target-lst[p1] > lenience:
-            return p2
-        return p1
 
     def sample_bin_search(self, target):
         with h5py.File(self.h5path, 'r') as f:

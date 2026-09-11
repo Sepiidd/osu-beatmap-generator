@@ -23,7 +23,7 @@ def eval_loss_peakpick(generator, config):
     device = config.device
 
     model.eval()
-    train_set = OBGAudioDataset(config.train_path, config.sequence_len, benchmark=True)
+    train_set = OBGAudioDataset(config.train_path, config.sequence_len, full=True)
     train_loader_full = DataLoader(
         train_set,
         batch_size=1,
@@ -31,7 +31,7 @@ def eval_loss_peakpick(generator, config):
         pin_memory=config.pin_memory,
     )
 
-    val_set = OBGAudioDataset(config.validation_path, config.sequence_len, benchmark=True)
+    val_set = OBGAudioDataset(config.validation_path, config.sequence_len, full=True)
     validation_loader_full = DataLoader(
         val_set,
         batch_size=1,
