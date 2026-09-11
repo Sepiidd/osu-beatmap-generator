@@ -12,7 +12,7 @@ configA = AudioConfig()
 full_data = OBGAudioDataset(
     h5path=h5path,
     max_seq_len=configA.sequence_len,
-    benchmark=True
+    full=True
 )
 
 test_data = OBGAudioDataset(

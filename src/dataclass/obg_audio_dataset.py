@@ -96,7 +96,7 @@ class OBGAudioDataset(Dataset):
         curr_target = audio_targets[target_idx] / 1000
         while curr_target*1000 < end_time and target_idx < len(audio_targets):
             curr_idx = time_to_frames(curr_target, sr=SR, hop_length=HOP_LEN)
-            targets[curr_idx-start_idx] = 1 #subtract 1 since difference tells you the distance, not the index (off by one error)
+            targets[curr_idx-start_idx] = 1
             target_idx += 1
             if target_idx >= len(audio_targets):
                 break
