@@ -36,7 +36,7 @@ class OnsetModel(nn.Module):
         #multi-head attention, encoder only
         self.encoder = nn.ModuleDict(dict(
                 diff_condition = DifficultyEncodingFilm(config.n_embd, config.n_conditioning),
-                pe = PositionalEncoding(config.n_embd, max_len=config.block_size), 
+#                pe = PositionalEncoding(config.n_embd, max_len=config.block_size), 
                 drop = nn.Dropout(config.dropout),
                 ah = nn.ModuleList([EncoderBlock(config) for _ in range(config.n_layer)]),
                 ln = LayerNorm(config.n_embd, bias=config.bias)
@@ -45,7 +45,7 @@ class OnsetModel(nn.Module):
         #final linear layers
 #        self.lin2 = nn.Linear(config.n_embd, 1, bias=False)
         self.lin2 = nn.Linear(config.n_embd, config.n_embd // 2, bias=False)
-        self.final = nn.Linear(config.n_embd // 2, 1, bias=False)
+        self.final = nn.Linear(config.n_embd // 2, 1, bias=True)
 
         #initial weight randomization across all modules
         self.apply(self._init_weights)
@@ -62,7 +62,7 @@ class OnsetModel(nn.Module):
                     p[config.n_embd:] = 0
             if pn.endswith("final.bias"): #final linear layer
                 prior_bias = -math.log((1-config.prior_p) / config.prior_p)
-                nn.init.constant_(prior_bias)
+                nn.init.constant_(p, prior_bias)
 
 
     def forward(self, x, difficulty_conditioning):
@@ -104,7 +104,7 @@ class OnsetModel(nn.Module):
         #project size, encode info
         x = self.lin1(x)
         x = self.encoder.diff_condition(x, difficulty_conditioning)
-        x = self.encoder.pe(x)
+#        x = self.encoder.pe(x)
 
         #attention blocks
         x = self.encoder.drop(x)

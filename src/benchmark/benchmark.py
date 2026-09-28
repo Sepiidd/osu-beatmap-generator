@@ -62,7 +62,7 @@ def eval_loss_peakpick(generator, config):
                 break
 
 #            inputs, targets = next(loader)
-            s_idx = 0
+            s_idx = 0 #test specific map
             inputs, difficulty, targets = train_set[s_idx] #specific map
             print("inputs, difficulty, targets have shapes", inputs.shape, difficulty.shape, targets.shape)
             inputs = inputs.squeeze()
@@ -70,17 +70,17 @@ def eval_loss_peakpick(generator, config):
             generator.plot_thresholds(targets.squeeze(), "plot_test_smoothed")
             print("for s_idx", s_idx, "length of times (# of onset positive predictions) is", times.shape, "number of real onsets is", targets.sum())
 
-            #apply hamming window across batch
-            ham_window = torch.hamming_window(configG.hamming_window_len, periodic=False).to(device)
-
-            #padding to maintain <output_len>=<input_len>
-            #normalize hamming window to sum to one, keeps output
-            smoothed = F.conv1d(predictions.view(1, 1, -1), ham_window.view(1, 1, -1) / ham_window.sum(), padding=configG.hamming_window_len//2)
-
-            smoothed = smoothed.squeeze()
+            predictions = predictions.squeeze()
             targets = targets.squeeze().to(device)
 
-            aucpr_calc.update(smoothed, targets.to(int))
+            aucpr_calc.update(predictions, targets.to(int))
+
+            #apply hamming window across batch
+            ham_window = torch.hamming_window(self.hamming_window_len, periodic=False).to(device)
+
+            #padding to maintain <output_len>=<input_len>
+            #normalize hamming window to sum to one, keeps output  
+            smoothed = F.conv1d(predictions.view(1, 1, -1), ham_window.view(1, 1, -1) / ham_window.sum(), padding=self.hamming_window_len//2) 
 
             predictions = (smoothed > configG.prediction_threshold).squeeze()
 

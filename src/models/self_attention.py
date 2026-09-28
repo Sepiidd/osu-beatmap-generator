@@ -2,6 +2,7 @@ import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from rotary_embedding_torch import RotaryEmbedding
 
 class SelfAttention(nn.Module): 
     def __init__(self, config):
@@ -15,6 +16,9 @@ class SelfAttention(nn.Module):
 
         #key, query, value linear transformations all in one layer
         self.qkv_proj = nn.Linear(config.n_embd, 3*config.n_embd, bias=config.bias)
+
+        #RoPE
+        self.rope = RotaryEmbedding(dim=config.n_embd//config.n_head)
 
         #attention
         self.attn_dropout = nn.Dropout(config.dropout)
@@ -31,6 +35,10 @@ class SelfAttention(nn.Module):
         q = q.view(B, S, self.n_head, D // self.n_head).transpose(1, 2) #reorganize according to number of attention heads, reshape to (B, num_head, S, head_size)
         k = k.view(B, S, self.n_head, D // self.n_head).transpose(1, 2) #reorganize according to number of attention heads, reshape to (B, num_head, S, head_size)
         v = v.view(B, S, self.n_head, D // self.n_head).transpose(1, 2) #reorganize according to number of attention heads, reshape to (B, num_head, S, head_size)
+
+        #RoPE embeddings
+        q = self.rope.rotate_queries_or_keys(q)
+        k = self.rope.rotate_queries_or_keys(k)
 
         if self.flash:
             y = torch.nn.functional.scaled_dot_product_attention(q, k, v, attn_mask=None, dropout_p=self.dropout if self.training else 0, is_causal=False)

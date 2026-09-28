@@ -29,7 +29,7 @@ class TrainingConfig():
         self.evaluations = 25 
         self.eval_iters = 50 #factor of checkpoint_iters
         self.warmup_iters = 500 
-        self.lr_decay_iters = 3000 #TODO: experiment with this and warmup_iters 
+        self.lr_decay_iters = 1000 #TODO: experiment with this and warmup_iters 
         self.checkpoint_iters = 50 #multiple of eval_iters
         self.aucpr_goal = 0.8 #early stopping threshold
         #model training specifics
@@ -51,7 +51,7 @@ class TrainingConfig():
         self.pin_memory = True
         #criterion
 #        self.criterion = nn.BCEWithLogitsLoss() #binary cross entropy
-        self.crit_alpha = 0.75
+        self.crit_alpha = 0.6
         self.crit_gamma = 2.0
         self.crit_reduction = "mean" 
         self.criterion = lambda logits, targets: ops.sigmoid_focal_loss(logits, targets, alpha=self.crit_alpha, gamma=self.crit_gamma, reduction=self.crit_reduction) #focal loss

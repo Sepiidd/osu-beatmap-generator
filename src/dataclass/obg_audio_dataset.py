@@ -39,9 +39,12 @@ class OBGAudioDataset(Dataset):
         stars = sample["stars"]
         aim = sample["aim"]
         speed = sample["speed"]
+        bpm = sample["bpm"]
 
         name = sample["song"]
         d = sample["diff"]
+
+        diff = torch.tensor([stars, aim, speed], dtype=torch.float32)
 
         if self.augment:
             option_select = np.random.randint(0, len(self.augmentations))
@@ -68,12 +71,12 @@ class OBGAudioDataset(Dataset):
             window_seq = np.swapaxes(window_seq, 1, 2) #swap axes bc im dumb
             targets = self.gen_targets(start_idx, audio_targets)
             if self.test:
-                return torch.tensor(window_seq), torch.tensor([stars, aim, speed], dtype=torch.float32), torch.tensor(targets), start_idx
+                return torch.tensor(window_seq), diff, torch.tensor(targets), start_idx
 
             if self.full:
-                return torch.tensor(audio_feat), torch.tensor([stars, aim, speed], dtype=torch.float32), torch.tensor(targets)
+                return torch.tensor(audio_feat), diff, torch.tensor(targets)
 
-            return torch.tensor(window_seq), torch.tensor([stars, aim, speed], dtype=torch.float32), torch.tensor(targets)
+            return torch.tensor(window_seq), diff, torch.tensor(targets)
         except Exception as e:
             print("sample idx, start idx are", idx, start_idx)
             traceback.print_exception(e)
@@ -89,7 +92,7 @@ class OBGAudioDataset(Dataset):
         targets = np.zeros(max_seq_len)
         start_time = frames_to_time(start_idx, sr=SR, hop_length=HOP_LEN)*1000 #in milliseconds
         start_time = start_time-frame_side #start time lines up with start of frame
-        end_time = frames_to_time(start_idx+max_seq_len, sr=SR, hop_length=HOP_LEN)*1000 #in milliseconds
+        end_time = frames_to_time(start_idx+max_seq_len-1, sr=SR, hop_length=HOP_LEN)*1000 #in milliseconds
         end_time = end_time+frame_side #end time lines up with end of frame
 
         target_idx = self.find_first(start_time, audio_targets)
@@ -173,6 +176,7 @@ class OBGAudioDataset(Dataset):
                     stars = grp.get("stars")[()]
                     aim = grp.get("aim")[()]
                     speed = grp.get("speed")[()]
+                    bpm = grp.get("bpm")[()]
                     sample = {
                             "song": curr_name,
                             "diff": diff,
@@ -183,7 +187,8 @@ class OBGAudioDataset(Dataset):
                             "deltas_back": deltas_back,
                             "osu_tokens": osu_tokens,
                             "stars": stars,
-                            "speed": speed
+                            "speed": speed,
+                            "bpm": bpm 
                             }
                     found = True
                 elif target < start_range:
