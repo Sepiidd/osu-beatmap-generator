@@ -8,3 +8,4 @@ torchmetrics
 torchaudio
 easydict
 rosu-pp-py
+rotary-embedding-torch

@@ -3,12 +3,15 @@ import torch.nn.functional as F
 import torch
 import matplotlib.pyplot as plt
 import numpy as np
+import librosa
 from librosa import load
 from configs.audio_config import AudioConfig
 from configs.training_config import TrainingConfig
 from configs.gen_config import GenConfig 
 from configs.onset_config import OnsetConfig 
 from preprocess.audio_utils import get_frames_at_idx
+from preprocess.audio_utils import apply_hamming_window
+from preprocess.audio_utils import apply_nms
 
 #globals
 configA = AudioConfig()
@@ -32,7 +35,7 @@ class OnsetGenerator():
 
     def batch_to_onsets(self, inputs, difficulties):
         '''
-        converts a batch of input data into onset probabilities, along with post model prediction operations e.g. hamming window
+        converts a batch of input data into onset probabilities
 
         <difficulties>: tensor containing [stars, aim, speed]
         '''
@@ -90,7 +93,7 @@ class OnsetGenerator():
     def song_to_onsets(self, features, difficulty=None):
         '''
         convert features spectrogram to list of onset probabilities
-        NOTE: expects input in form of (m, t, w) as describedc directly below
+        NOTE: expects input in form of (m, t, w) as described below
         '''
         if difficulty is None:
             stars_default = 7.0
@@ -132,35 +135,49 @@ class OnsetGenerator():
             iter_num += 1
         #average predictions
         predictions = predictions / num_predictions 
-
-        #plot for testing
-        self.plot_thresholds(predictions, "plot_test")
-
-        #apply hamming window across batch
-        ham_window = torch.hamming_window(self.hamming_window_len, periodic=False).to(device)
-
-        #padding to maintain <output_len>=<input_len>
-        #normalize hamming window to sum to one, keeps output  
-        smoothed = F.conv1d(predictions.view(1, 1, -1), ham_window.view(1, 1, -1) / ham_window.sum(), padding=self.hamming_window_len//2) 
+        smoothed = apply_hamming_window(predictions, self.hamming_window_len, device)
+        smoothed = smoothed.squeeze()
+        self.plot_thresholds(predictions, "plot_test", label="raw")
+        self.plot_thresholds(smoothed.squeeze(), "plot_test", label="smoothed")
 
         #convert positive prediction indices into timestamps
         predictions_bool = (smoothed > self.prediction_threshold).squeeze() #remove extra 1 dimensions along with boolean filter
         predictions_idx = torch.nonzero(predictions_bool, as_tuple=True)[0] 
         
+        #apply nms and get indices of true onset predictions
+        #TODO: get bpm info from somewhere
+        print("applying nms...")
+        predictions_idx = apply_nms(smoothed, self.prediction_threshold, configA.hop_len, configA.sr, bpm=None)
+
         times = predictions_idx * configA.hop_len / configA.sr #calculation described by <https://librosa.org/doc/latest/generated/librosa.frames_to_time.html>
         times = times * 1000 #time in ms
         return times, predictions
 
-    def plot_thresholds(self, probabilities, file_name, timestamps=[], alpha=0.7, start_plot_from=None, plot_first_many=None):
+    def plot_thresholds(self, probabilities, file_name, timestamps=[], alpha=0.7, start_plot_from=10000, plot_first_many=150, label=""):
         '''
         plots predictions' onset probabilities on a line graph, save to <file_name>.png
         '''
+        prob = probabilities.cpu().detach().numpy()
+
+
         if start_plot_from is None and plot_first_many is None:
-            plt.plot(probabilities.cpu().detach().numpy(), alpha=alpha)
+            plt.plot(prob, alpha=alpha, label=label)
+            crossed = np.where(prob > self.prediction_threshold)[0]
         else:
-            plt.plot(probabilities.cpu().detach().numpy()[start_plot_from:start_plot_from+plot_first_many], alpha=alpha)
+            plt.plot(prob[start_plot_from:start_plot_from+plot_first_many], alpha=alpha, label=label)
+            crossed = np.where((prob[start_plot_from:start_plot_from+plot_first_many]) > self.prediction_threshold)[0]
+
+        if label == "smoothed" and start_plot_from and plot_first_many:
+            plt.vlines(x=crossed, ymin=0, ymax=1, color='green', alpha=0.5, linewidth=1, label='predictions')
+#            print(f"{len(crossed)} frames above {self.prediction_threshold}: {crossed}")
+        plt.axhline(y=self.prediction_threshold, color='r', linestyle='-')
+
         plt.xlabel(f"First {plot_first_many} Indices From Index {start_plot_from}")
+#        if plot_first_many:
+#            plt.xticks(np.arange(0, plot_first_many, 10))
         plt.ylabel("Onset Probability")
         plt.ylim(0,1)
+        plt.yticks(np.arange(0, 1, 0.1))
         plt.title("Onset Probability Over Time")
+        plt.legend()
         plt.savefig(file_name + ".png")

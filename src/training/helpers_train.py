@@ -249,7 +249,7 @@ def train(model, train_loader, optimizer, config, starting_idx=0):
            #gradient clipping
             if grad_clip != 0.0:
                 scaler.unscale_(optimizer)
-                torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
+                total_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
 
             scaler.step(optimizer) #optimizer step
             scaler.update() #dynamically updates magnitude/scale factor of scaler
@@ -260,7 +260,7 @@ def train(model, train_loader, optimizer, config, starting_idx=0):
             dt = t1 - t0
             if idx % log_interval == 0:
                 loss_scaled = loss.item() * grad_accumulation_steps
-                print(f"iter {idx}: loss {loss_scaled:.4f}, time {dt*1000:.2f}ms, curr lr {lr}")
+                print(f"iter {idx}: loss {loss_scaled:.4f}, total norm {total_norm.item()}, time {dt*1000:.2f}ms, curr lr {lr}")
             if idx % eval_interval == 0:
                 losses, stats = eval_loss(model, eval_train_gen, eval_val_gen, config)
 

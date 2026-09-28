@@ -2,6 +2,9 @@ import librosa.effects as E
 import librosa
 import numpy as np
 import torchaudio.transforms as T
+import torch.nn.functional as F
+import torch
+import math
 from librosa import time_to_frames
 from configs.audio_config import AudioConfig
 
@@ -103,19 +106,92 @@ def augment_temporal_mask(audio_feats, max_aug=30):
         augmented[:, band_selection:band_selection+num_augmentations, :] = 0
     return augmented 
 
+def apply_hamming_window(to_smooth, ham_len, device='cpu'):
+    #apply hamming window across batch
+    ham_window = torch.hamming_window(ham_len, periodic=False).to(device)
+
+    #padding to maintain <output_len>=<input_len>
+    #normalize hamming window to sum to one, keeps output
+    smoothed = F.conv1d(to_smooth.view(1, 1, -1), ham_window.view(1, 1, -1) / ham_window.sum(), padding=ham_len//2)
+    return smoothed
+
+def nms_binary_search(lst, target, tiebreaker):
+    """
+    returns index of target, in case of duplicates uses <tiebreaker> index
+
+    <target>: single value tensor (avoid using .item() in case of numerical stability)
+    <tiebreaker>: integer representing the index in the original predictions tensor
+    """
+    p1 = 0
+    p2 = len(lst)-1
+    while p1<=p2:
+        mid = (p1+p2)//2
+        v = lst[mid][1]
+        if torch.equal(v, target):
+            #check for duplicates (VERY IMPORTANT!!)
+            l_bounded = False
+            r_bounded = False
+            dist = 1
+            while not l_bounded and not r_bounded:
+                l = mid-dist
+                r = mid+dist
+                lv = None if l < 0 else lst[l][1]
+                rv = None if r > len(lst)-1 else lst[r][1]
+                lidx = None if l < 0 else lst[l][0]             #index of value in original predictions tensor
+                ridx = None if r > len(lst)-1 else lst[r][0]    #index of value in original predictions tensor
+
+                if lv is None or not torch.equal(lv, v):
+                    l_bounded = True
+                elif lidx == tiebreaker: #lv is not none and torch.equal, use tiebreaker
+                    return l
+
+                if rv is None or not torch.equal(rv, v):
+                    r_bounded = True
+                elif ridx == tiebreaker: #rv is not none and torch.equal, use tiebreaker
+                    return r
+                dist+=1
+            #no duplicates, return mid
+            return mid
+        elif torch.gt(v, target): #v greater than target
+            p2=mid-1
+        elif torch.lt(v, target): #v less than target
+            p1=mid+1
+        num+=1
+    return None #force some error downstream, element should be in lst
+
+def apply_nms(predictions, pred_threshold, hop_len, sr, bpm=None):
+    '''
+    applies non maximum suppression via scoring, enforces a distance of the equivalent of a 1/16th beat between maximums
+
+    returns the indices of predictions after performing nms
+    '''
+    p_bool = (predictions > pred_threshold).squeeze()
+
+    #calculate minimum distance between peaks
+    time_per_beat = (60000/bpm)/16 if bpm else 25 #time in ms per 1/16th beat
+    time_per_frame = hop_len/sr * 1000 #time in ms per frame
+    frame_per_beat = time_per_beat/time_per_frame
+    r = math.floor(0.9*frame_per_beat) 
+    
+    #zip predictions and respective indices for sorting
+    zipped = list(enumerate(predictions)) #form of [(idx, probability),...]
+    zipped_f = [z for z in zipped if z[1]>pred_threshold]
+    zipped_s = sorted(zipped_f, key=lambda z: z[1]) #sort by probability
+
+    while len(zipped_s) > 0:
+        idx, confidence = zipped_s.pop(0)
+        start = 0 if idx-r < 0 else idx-r
+        end = len(predictions)-1 if idx+r >= len(predictions) else idx+r
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        for i in range(start, end+1):
+            if not p_bool[i] or i==idx:
+                continue
+            p_bool[i] = False
+            #remove tuple (i, predictions[i]) from  zipped_s
+            i_idx = nms_binary_search(zipped_s, predictions[i], i)
+            zipped_s.pop(i_idx)
+    #convert p_bool into indices of true onsets
+    predictions_idx = torch.nonzero(p_bool, as_tuple=True)[0]
+    return predictions_idx
 

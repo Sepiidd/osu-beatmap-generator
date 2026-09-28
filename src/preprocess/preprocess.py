@@ -1,3 +1,5 @@
+import librosa
+import math
 import time
 import sys
 import numpy as np
@@ -18,7 +20,6 @@ from preprocess.hitobject_utils import augment_reflect_xy
 from preprocess.hitobject_utils import tpoint_time_uninherited 
 from preprocess.audio_utils import augment_pitch 
 from preprocess.audio_utils import augment_speed 
-from preprocess.audio_utils import augment_frequency_mask
 
 #globals
 BASE_DIR = Path(__file__).parent
@@ -117,7 +118,8 @@ def save_point(
         deltas_back,
         stars,
         aim,
-        speed
+        speed,
+        bpm
     ):
     #TODO: reset state when exception or keyboard interrupt occurred here
     with h5py.File(path, 'a', track_order=True) as f:
@@ -141,6 +143,7 @@ def save_point(
         grp.create_dataset("stars", data=stars)
         grp.create_dataset("aim", data=aim)
         grp.create_dataset("speed", data=speed)
+        grp.create_dataset("bpm", data=bpm)
 
         #important metadata
         if num_diffs == 0:
@@ -172,11 +175,11 @@ def process_one(data_path, h5path, song_name, diff_name):
     song_path = data_path / song_name / mp3
     audio, sr = load(path=song_path, sr=SR)
     features = process_audio(audio, sr)
-
+    bpm = math.ceil(librosa.beat.tempo(y=audio, sr=sr)[0]*2)
 #    print(f"song name {song_name} diff name {diff_name} with shape {features.shape}")
 
     to_save = []
-    to_save.append((song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas, stars, aim, speed))
+    to_save.append((song_id, diff_name, features, ms_seq, osu, forward_deltas, backward_deltas, stars, aim, speed, bpm))
 
     return to_save
 
